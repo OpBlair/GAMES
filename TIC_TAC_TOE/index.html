@@ -9,16 +9,18 @@
 </head>
 <body>
 	<main>
-		<div class="player-selection">
-			<p>pick player's mark</p>
-			<div class="player-sign">
-				<span>x</span>
-				<span>o</span>
+		<div class="welcome-page">
+			<div class="player-selection">
+				<p>pick player's mark</p>
+				<div class="player-sign">
+					<span data-index="x" class="player-variable">x</span>
+					<span data-index="o" class="player-variable">o</span>
+				</div>
+				<p>remember: x goes first</p>
 			</div>
-			<p>remember: x goes first</p>
+			<button disabled>new game(vs computer)</button>
+			<button>new game(vs human)</button>
 		</div>
-		<button disabled>new game(vs computer)</button>
-		<button>new game(vs human)</button>
 
 		<div class="game-table">
 			<div class="game-cell" data-index="0" ></div>
