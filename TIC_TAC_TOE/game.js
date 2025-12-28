@@ -1,12 +1,4 @@
 'use strict'
-/*
-const gameCell = document.querySelectorAll('.game-cell');
-
-gameCell.forEach(cell => {
-	cell.addEventListener('click', () => {
-		console.log('I was clicked.');
-	});
-});*/
 
 //Game Array
 let gameArray = Array(9).fill("");
