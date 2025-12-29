@@ -20,8 +20,12 @@ let gameActive = true;
 //Player selection
 let selectedPlayer = null;
 
-const playerVariables = document.querySelectorAll('.playerVariable');
+const playerVariables = document.querySelectorAll('.player-variable');
+const gameTable = document.querySelector('.game-table');
+const welcomePage = document.querySelector('.welcome-page');
+const newGameBtn = document.querySelectorAll('button')[1]; // vs human
 
+//player selection
 playerVariables.forEach(player => {
 	player.addEventListener('click', () => {
 		selectedPlayer = player.dataset.index;
@@ -31,6 +35,18 @@ playerVariables.forEach(player => {
 		playerVariables.forEach(p => p.classList.remove('active'));
 		player.classList.add('active');
 	})
+})
+
+//new Game button
+newGameBtn.addEventListener('click', () => {
+	if(!selectedPlayer){
+		alert('please select X 0r O first');
+		return;
+	}
+	currentPlayer = selectedPlayer;
+	//switch screen
+	welcomePage.style.display = 'none';
+	gameTable.style.display = 'grid';
 })
 
 // Win Conditions
@@ -73,8 +89,6 @@ function handleResultValidation(){
 }
 
 //Event Delegation
-const gameTable = document.querySelector('.game-table');
-
 gameTable.addEventListener('click', (e) => {
 	//console.log(e);
 	if(!gameActive) return;
