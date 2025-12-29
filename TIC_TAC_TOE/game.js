@@ -1,4 +1,12 @@
 'use strict'
+/*
+const gameCell = document.querySelectorAll('.game-cell');
+
+gameCell.forEach(cell => {
+	cell.addEventListener('click', () => {
+		console.log('I was clicked.');
+	});
+});*/
 
 //Game Array
 let gameArray = Array(9).fill("");
@@ -8,6 +16,22 @@ let currentPlayer = 'x';
 
 //game status
 let gameActive = true;
+
+//Player selection
+let selectedPlayer = null;
+
+const playerVariables = document.querySelectorAll('.playerVariable');
+
+playerVariables.forEach(player => {
+	player.addEventListener('click', () => {
+		selectedPlayer = player.dataset.index;
+		currentPlayer = selectedPlayer;
+
+		//visual feedback
+		playerVariables.forEach(p => p.classList.remove('active'));
+		player.classList.add('active');
+	})
+})
 
 // Win Conditions
 let winPattern = [
