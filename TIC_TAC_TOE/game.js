@@ -1,12 +1,4 @@
 'use strict'
-/*
-const gameCell = document.querySelectorAll('.game-cell');
-
-gameCell.forEach(cell => {
-	cell.addEventListener('click', () => {
-		console.log('I was clicked.');
-	});
-});*/
 
 //Game Array
 let gameArray = Array(9).fill("");
@@ -24,12 +16,12 @@ const playerVariables = document.querySelectorAll('.player-variable');
 const gameTable = document.querySelector('.game-table');
 const welcomePage = document.querySelector('.welcome-page');
 const newGameBtn = document.querySelectorAll('button')[1]; // vs human
+const restartBtn = document.querySelector('.restart-btn');
 
 //player selection
 playerVariables.forEach(player => {
 	player.addEventListener('click', () => {
 		selectedPlayer = player.dataset.index;
-		currentPlayer = selectedPlayer;
 
 		//visual feedback
 		playerVariables.forEach(p => p.classList.remove('active'));
@@ -43,7 +35,7 @@ newGameBtn.addEventListener('click', () => {
 		alert('please select X 0r O first');
 		return;
 	}
-	currentPlayer = selectedPlayer;
+
 	//switch screen
 	welcomePage.style.display = 'none';
 	gameTable.style.display = 'grid';
@@ -59,14 +51,13 @@ let winPattern = [
 // Result Validation 
 function handleResultValidation(){
 	for(let i = 0; i < winPattern.length; i++){
-		console.log(winPattern[i]);
+		//console.log(winPattern[i]);
 		
 		let a = winPattern[i][0];
 		let b = winPattern[i][1];
 		let c = winPattern[i][2];
 
 		if(gameArray[a] !== "" && gameArray[a] === gameArray[b] && gameArray[b] === gameArray[c]){
-			console.log("dude, you made !");
 			gameActive = false;
 
 			setTimeout( () => {
@@ -97,10 +88,10 @@ gameTable.addEventListener('click', (e) => {
 
 		let cellNumber = parseInt(e.target.dataset.index);
 
-		console.log('Cell clicked:', cellNumber);
+		//console.log('Cell clicked:', cellNumber);
 		
 		if(gameArray[cellNumber] !== ""){
-			console.log("aye aye Captain");
+			return;
 		}else{
 			gameArray[cellNumber] = currentPlayer;
 			e.target.textContent = currentPlayer;
@@ -112,7 +103,20 @@ gameTable.addEventListener('click', (e) => {
 		}
 		
 	}
-	console.log(gameArray);
 });
 
-console.log(gameArray);
+//Reset Game Function
+function resetGame(){
+	gameArray = Array(9).fill("");
+	gameActive = true;
+	currentPlayer = "x";
+
+	document.querySelectorAll('.game-cell').forEach(cell => {
+		cell.textContent = "";
+	});
+}
+
+//restart button
+restartBtn.addEventListener('click', () => {
+	resetGame();
+})
