@@ -17,6 +17,9 @@ const gameTable = document.querySelector('.game-table');
 const welcomePage = document.querySelector('.welcome-page');
 const newGameBtn = document.querySelectorAll('button')[1]; // vs human
 const restartBtn = document.querySelector('.restart-btn');
+const turnVariable = document.querySelector('.turn-variable');
+const gameTop = document.querySelector('.game-table-top');
+const gameBottom = document.querySelector('.game-table-bottom');
 
 //player selection
 playerVariables.forEach(player => {
@@ -35,10 +38,12 @@ newGameBtn.addEventListener('click', () => {
 		alert('please select X 0r O first');
 		return;
 	}
-
+	turnVariable.textContent = currentPlayer;
 	//switch screen
 	welcomePage.style.display = 'none';
 	gameTable.style.display = 'grid';
+	gameTop.style.display = 'flex';
+	gameBottom.style.display = 'flex';
 })
 
 // Win Conditions
@@ -95,10 +100,12 @@ gameTable.addEventListener('click', (e) => {
 		}else{
 			gameArray[cellNumber] = currentPlayer;
 			e.target.textContent = currentPlayer;
+			
 			handleResultValidation();
 			
 			if(gameActive){
 				currentPlayer = currentPlayer === 'x' ? 'o' : 'x';
+				turnVariable.textContent = currentPlayer;
 			}
 		}
 		
@@ -110,6 +117,7 @@ function resetGame(){
 	gameArray = Array(9).fill("");
 	gameActive = true;
 	currentPlayer = "x";
+	turnVariable.textContent = currentPlayer;
 
 	document.querySelectorAll('.game-cell').forEach(cell => {
 		cell.textContent = "";
