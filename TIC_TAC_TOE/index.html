@@ -24,8 +24,12 @@
 
 		<div class="game-table-top">
 			<div class="logo"></div>
-			<div class="turn"></div>
-			<div class="restart-btn"></div>
+			<div class="turn">
+				<span class="turn-variable"></span>
+				<span>turn</span>
+			</div>
+			<button class="restart-btn" aria-label="Restart game"></button>
+			</div>
 		</div>
 
 		<div class="game-table">
@@ -41,9 +45,18 @@
 		</div>
 
 		<div class="game-table-bottom">
-			<div>(you)</div>
-			<div>ties</div>
-			<div>(opponent)</div>
+			<div id="you">
+				<span>(you)</span>
+				<span id="you-score">10</span>
+			</div>
+			<div id="ties">
+				<span>ties</span>
+				<span id="ties-score">2</span>
+			</div>
+			<div id="opponent">
+				<span>(opponent)</span>
+				<span id="opponent-score">4</span>
+			</div>
 		</div>
 	</main>
 </body>
