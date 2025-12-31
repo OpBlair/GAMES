@@ -21,11 +21,11 @@ body{
 	justify-content: center;
 	align-items: center;
 	height: 100vh;
-	background-color: var(--semi-dark-navy);
+	background-color: var(--dark-navy);
 }
 
 .welcome-page{
-	background-color: var(--dark-navy);
+	background-color: var(--semi-dark-navy);
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -97,6 +97,7 @@ button:last-of-type{
 	display: none;
 	grid-template-columns: repeat(3, 120px);
 	grid-template-rows: repeat(3, 120px);
+	background-color: var(--semi-dark-navy);
 }
 
 .game-cell{
@@ -113,7 +114,7 @@ button:last-of-type{
 }
 
 .game-table-top, .game-table-bottom{
-	display: flex;
+	display: none;
 	flex-direction: row;
 	justify-content: space-between;
 }
@@ -136,4 +137,34 @@ button:last-of-type{
 
 .restart-btn:hover{
 	cursor: pointer;
+}
+
+.turn{
+	text-transform: uppercase;
+	width: 100px;
+	height: 20px;
+	color: var(--silver);
+}
+
+#you, #ties, #opponent{
+	margin-top: 10px;
+	width: 100px;
+	height: 50px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	border-radius: 10px;
+}
+
+#you{
+	background-color: var(--light-blue);
+}
+
+#ties{
+	background-color: var(--silver-hover);
+}
+
+#opponent{
+	background-color: var(--light-yellow);
 }
