@@ -12,6 +12,9 @@ let gameActive = true;
 //Player selection
 let selectedPlayer = null;
 
+//score tracking 
+let scores = {x: 0, ties: 0, o: 0};
+
 const playerVariables = document.querySelectorAll('.player-variable');
 const gameTable = document.querySelector('.game-table');
 const welcomePage = document.querySelector('.welcome-page');
