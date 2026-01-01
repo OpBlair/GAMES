@@ -1,12 +1,4 @@
 'use strict'
-/*
-const gameCell = document.querySelectorAll('.game-cell');
-
-gameCell.forEach(cell => {
-	cell.addEventListener('click', () => {
-		console.log('I was clicked.');
-	});
-});*/
 
 //Game Array
 let gameArray = Array(9).fill("");
@@ -19,9 +11,6 @@ let gameActive = true;
 
 //Player selection
 let selectedPlayer = null;
-
-//tracking scores
-let scores = {x: 0, ties: 0, o: 0};
 
 const playerVariables = document.querySelectorAll('.player-variable');
 const gameTable = document.querySelector('.game-table');
@@ -78,8 +67,14 @@ function handleResultValidation(){
 		if(gameArray[a] !== "" && gameArray[a] === gameArray[b] && gameArray[b] === gameArray[c]){
 			gameActive = false;
 
+			//update score board
+			const winner = gameArray[a];
+			scores[winner]++;
+
+			updateScoreboard();
+
 			setTimeout( () => {
-				alert(`Game Over. ${gameArray[a]} won !`);
+				alert(`Game Over. ${winner.toUpperCase()} won !`);
 			}, 1000);
 
 			return; // stop the loop after a win is detected.
@@ -89,7 +84,9 @@ function handleResultValidation(){
 	// Check for a draw(after win check.)
 	if(!gameArray.includes("")){
 		gameActive = false; //stop the board.
-
+		scores.ties++; //increment the ties counter
+		updateScoreboard();
+		
 		setTimeout( () => {
 			alert(`Game Over. It's a draw!`);
 		}, 1000);
@@ -212,3 +209,11 @@ function RandomMove(){
 	return move;
 }
 
+//tracking scores
+let scores = {x: 0, ties: 0, o: 0};
+
+function updateScoreboard(){
+	document.getElementById('you-score').textContent = scores.x;
+	document.getElementById('ties-score').textContent = scores.ties;
+	document.getElementById('opponent-score').textContent = scores.o;
+}
