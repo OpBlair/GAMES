@@ -12,16 +12,20 @@ let gameActive = true;
 //Player selection
 let selectedPlayer = null;
 
+//tracking scores
+let scores = {x: 0, ties: 0, o: 0};
+
 const playerVariables = document.querySelectorAll('.player-variable');
 const gameTable = document.querySelector('.game-table');
 const welcomePage = document.querySelector('.welcome-page');
-const newGameBtn = document.querySelectorAll('button')[1]; // vs human
 const restartBtn = document.querySelector('.restart-btn');
 const turnVariable = document.querySelector('.turn-variable');
 const gameTop = document.querySelector('.game-table-top');
 const gameBottom = document.querySelector('.game-table-bottom');
 const difficultyBtn = document.querySelectorAll('.difficulty-btn');
+const newGameBtn = document.querySelectorAll('button')[1]; // vs human
 const vsComputer = document.querySelector('.vs-computer');
+const difficultyMenu = document.querySelector('.difficulty-menu');
 
 //player selection
 playerVariables.forEach(player => {
@@ -34,19 +38,44 @@ playerVariables.forEach(player => {
 	})
 })
 
+//Game Mode selection
+let gameMode;
+
 //new Game button
 newGameBtn.addEventListener('click', () => {
+	gameMode = 'human'
 	if(!selectedPlayer){
 		alert('please select X 0r O first');
 		return;
 	}
 	turnVariable.textContent = currentPlayer;
 	//switch screen
+	startGame();
+});
+
+//New game against computer
+vsComputer.addEventListener('click', () => {
+	if(!selectedPlayer){
+		alert('please select X 0r O first');
+		return;
+	}
+
+	gameMode = 'computer';
+	difficultyMenu.style.display = 'flex';
+	
+});
+
+//start game
+function startGame(){
 	welcomePage.style.display = 'none';
 	gameTable.style.display = 'grid';
 	gameTop.style.display = 'flex';
 	gameBottom.style.display = 'flex';
-})
+
+	if(gameMode === 'computer' && selectedPlayer === 'o' && currentPlayer === 'x'){
+		setTimeout(ComputerMove, 800);
+	}
+}
 
 // Win Conditions
 let winPattern = [
@@ -86,7 +115,7 @@ function handleResultValidation(){
 		gameActive = false; //stop the board.
 		scores.ties++; //increment the ties counter
 		updateScoreboard();
-		
+
 		setTimeout( () => {
 			alert(`Game Over. It's a draw!`);
 		}, 1000);
@@ -116,12 +145,13 @@ gameTable.addEventListener('click', (e) => {
 			if(gameActive){
 				currentPlayer = currentPlayer === 'x' ? 'o' : 'x';
 				turnVariable.textContent = currentPlayer;
+
+				const ComputerTurn = selectedPlayer === 'x' ? 'o' : 'x';
+				if(gameMode === 'computer' && currentPlayer === ComputerTurn){
+					setTimeout(ComputerMove, 1000);
+				}
 			}
 		}
-	}
-
-	if(currentPlayer === 'o'){
-		setTimeout(ComputerMove, 1000);
 	}
 });
 
@@ -149,8 +179,10 @@ difficultyBtn.forEach(btn => {
 		difficulty = e.target.dataset.level;
 
 		console.log(`Level: ${difficulty}`);
-	})
-})
+		startGame();
+		difficultyMenu.style.display = 'none';
+	});
+});
 
 setTimeout( () => {
 	console.log(`Selected Level: ${difficulty}`);
@@ -209,10 +241,9 @@ function RandomMove(){
 	return move;
 }
 
-//tracking scores
-let scores = {x: 0, ties: 0, o: 0};
-
+// Score Board
 function updateScoreboard(){
+
 	document.getElementById('you-score').textContent = scores.x;
 	document.getElementById('ties-score').textContent = scores.ties;
 	document.getElementById('opponent-score').textContent = scores.o;
