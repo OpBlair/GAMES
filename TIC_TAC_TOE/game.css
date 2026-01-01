@@ -168,3 +168,9 @@ button:last-of-type{
 #opponent{
 	background-color: var(--light-yellow);
 }
+
+.difficulty-menu{
+	display: none;
+	flex-direction: column;
+	position: absolute;
+}
