@@ -18,8 +18,15 @@
 				</div>
 				<p>remember: x goes first</p>
 			</div>
-			<button>new game(vs computer)</button>
+			<button class="vs-computer">new game(vs computer)</button>
 			<button>new game(vs human)</button>
+		</div>
+
+		<div class="difficulty-menu">
+			<p>select difficulty</p>
+			<button class="difficulty-btn" data-level="easy">Easy</button>
+			<button class="difficulty-btn" data-level="medium">Medium</button>
+			<button class="difficulty-btn" data-level="hard">Hard</button>
 		</div>
 
 		<div class="game-table-top">
@@ -47,15 +54,15 @@
 		<div class="game-table-bottom">
 			<div id="you">
 				<span>(you)</span>
-				<span id="you-score">10</span>
+				<span id="you-score">0</span>
 			</div>
 			<div id="ties">
 				<span>ties</span>
-				<span id="ties-score">2</span>
+				<span id="ties-score">0</span>
 			</div>
 			<div id="opponent">
 				<span>(opponent)</span>
-				<span id="opponent-score">4</span>
+				<span id="opponent-score">0</span>
 			</div>
 		</div>
 	</main>
