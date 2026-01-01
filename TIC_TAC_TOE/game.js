@@ -123,6 +123,11 @@ function handleResultValidation(){
 	}	
 }
 
+//computer mark
+function getComputerMark(){
+	return selectedPlayer === 'x' ? 'o' : 'x';
+}
+
 //Event Delegation
 gameTable.addEventListener('click', (e) => {
 	//console.log(e);
@@ -146,8 +151,8 @@ gameTable.addEventListener('click', (e) => {
 				currentPlayer = currentPlayer === 'x' ? 'o' : 'x';
 				turnVariable.textContent = currentPlayer;
 
-				const ComputerTurn = selectedPlayer === 'x' ? 'o' : 'x';
-				if(gameMode === 'computer' && currentPlayer === ComputerTurn){
+				
+				if(gameMode === 'computer' && currentPlayer === getComputerMark()){
 					setTimeout(ComputerMove, 1000);
 				}
 			}
@@ -165,6 +170,10 @@ function resetGame(){
 	document.querySelectorAll('.game-cell').forEach(cell => {
 		cell.textContent = "";
 	});
+
+	if(gameMode === 'computer' && currentPlayer === getComputerMark()){
+		setTimeout(ComputerMove, 1000);
+	}
 }
 
 //restart button
@@ -243,8 +252,8 @@ function RandomMove(){
 
 // Score Board
 function updateScoreboard(){
-
-	document.getElementById('you-score').textContent = scores.x;
+	const opponentMark = (selectedPlayer === 'x') ? 'o' : 'x';
+	document.getElementById('you-score').textContent = scores[selectedPlayer];
+	document.getElementById('opponent-score').textContent = scores[opponentMark];
 	document.getElementById('ties-score').textContent = scores.ties;
-	document.getElementById('opponent-score').textContent = scores.o;
 }
