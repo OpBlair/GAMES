@@ -1,4 +1,12 @@
 'use strict'
+/*
+const gameCell = document.querySelectorAll('.game-cell');
+
+gameCell.forEach(cell => {
+	cell.addEventListener('click', () => {
+		console.log('I was clicked.');
+	});
+});*/
 
 //Game Array
 let gameArray = Array(9).fill("");
@@ -12,7 +20,7 @@ let gameActive = true;
 //Player selection
 let selectedPlayer = null;
 
-//score tracking 
+//tracking scores
 let scores = {x: 0, ties: 0, o: 0};
 
 const playerVariables = document.querySelectorAll('.player-variable');
@@ -23,6 +31,8 @@ const restartBtn = document.querySelector('.restart-btn');
 const turnVariable = document.querySelector('.turn-variable');
 const gameTop = document.querySelector('.game-table-top');
 const gameBottom = document.querySelector('.game-table-bottom');
+const difficultyBtn = document.querySelectorAll('.difficulty-btn');
+const vsComputer = document.querySelector('.vs-computer');
 
 //player selection
 playerVariables.forEach(player => {
@@ -111,7 +121,10 @@ gameTable.addEventListener('click', (e) => {
 				turnVariable.textContent = currentPlayer;
 			}
 		}
-		
+	}
+
+	if(currentPlayer === 'o'){
+		setTimeout(ComputerMove, 1000);
 	}
 });
 
@@ -131,3 +144,71 @@ function resetGame(){
 restartBtn.addEventListener('click', () => {
 	resetGame();
 })
+
+//difficulty buttons
+let difficulty;
+difficultyBtn.forEach(btn => {
+	btn.addEventListener('click', (e) => {
+		difficulty = e.target.dataset.level;
+
+		console.log(`Level: ${difficulty}`);
+	})
+})
+
+setTimeout( () => {
+	console.log(`Selected Level: ${difficulty}`);
+}, 2000);
+
+function ComputerMove(){
+	if(!gameActive) return;
+
+	let moveIndex;
+
+	switch(difficulty){
+	case 'easy':
+		moveIndex = RandomMove();
+		break;
+	case 'medium':
+		moveIndex = SmartMove();
+		break;
+	case 'hard':
+		moveIndex = BestMove();
+		break;
+	default:
+		moveIndex = RandomMove();
+	}
+
+	if(moveIndex !== undefined){
+		gameArray[moveIndex] = currentPlayer;
+		document.querySelector(`.game-cell[data-index="${moveIndex}"]`).textContent = currentPlayer;
+
+		handleResultValidation();
+
+		if(gameActive){
+			currentPlayer = currentPlayer === 'x' ? 'o' : 'x';
+			turnVariable.textContent = currentPlayer;
+		}
+	}
+}
+
+
+function RandomMove(){
+	//get empty cells indexes
+	let emptyCells = [];
+
+	for(let i = 0; i < gameArray.length; i++){
+		if(gameArray[i] === ""){
+			emptyCells.push(i);
+		}
+	}
+
+	//no moves left
+	if(emptyCells.length === 0) return;
+
+	let randomIndex = Math.floor(Math.random() * emptyCells.length);
+	let move = emptyCells[randomIndex];
+
+	console.log(`Random Index: ${move}`);
+	return move;
+}
+
