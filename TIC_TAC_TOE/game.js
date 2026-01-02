@@ -87,7 +87,6 @@ let winPattern = [
 // Result Validation 
 function handleResultValidation(){
 	for(let i = 0; i < winPattern.length; i++){
-		//console.log(winPattern[i]);
 		
 		let a = winPattern[i][0];
 		let b = winPattern[i][1];
@@ -229,7 +228,9 @@ function ComputerMove(){
 	}
 }
 
-
+/*
+/* Difficulty: Easy = Random computer
+*/
 function RandomMove(){
 	//get empty cells indexes
 	let emptyCells = [];
@@ -246,10 +247,34 @@ function RandomMove(){
 	let randomIndex = Math.floor(Math.random() * emptyCells.length);
 	let move = emptyCells[randomIndex];
 
-	console.log(`Random Index: ${move}`);
 	return move;
 }
 
+/* 
+// Difficulty: Medium = SmartMove
+*/
+function SmartMove(){
+	// Phase 1: Try to Win
+	for(let pattern of winPattern){
+		let [a, b, c] = pattern;
+		let values = [gameArray[a], gameArray[b], gameArray[c]];
+
+		let computerCount = values.filter(val => val === getComputerMark()).length;
+
+		let emptycount = values.filter(val => val === "").length;
+
+		if(computerCount === 2 && emptycount === 1){
+			if(gameArray[a] === "") return a;
+			if(gameArray[b] === "") return b;
+			if(gameArray[c] === "") return c;
+		}
+	}
+	//Phase 2: Try to Block
+
+	return RandomMove();
+}
+
+//Opponent Mark function
 function opponentMark(){
 	return (selectedPlayer === 'x') ? 'o' : 'x';
 }
@@ -260,4 +285,3 @@ function updateScoreboard(){
 	document.getElementById('opponent-score').textContent = scores[opponentMark()];
 	document.getElementById('ties-score').textContent = scores.ties;
 }
-
