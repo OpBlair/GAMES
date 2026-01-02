@@ -254,6 +254,8 @@ function RandomMove(){
 // Difficulty: Medium = SmartMove
 */
 function SmartMove(){
+
+
 	// Phase 1: Try to Win
 	for(let pattern of winPattern){
 		let [a, b, c] = pattern;
@@ -261,9 +263,9 @@ function SmartMove(){
 
 		let computerCount = values.filter(val => val === getComputerMark()).length;
 
-		let emptycount = values.filter(val => val === "").length;
+		let emptyCount = values.filter(val => val === "").length;
 
-		if(computerCount === 2 && emptycount === 1){
+		if(computerCount === 2 && emptyCount === 1){
 			if(gameArray[a] === "") return a;
 			if(gameArray[b] === "") return b;
 			if(gameArray[c] === "") return c;
@@ -287,7 +289,39 @@ function SmartMove(){
 	return RandomMove();
 }
 
-//Opponent Mark function
+/*
+//optimized smart move
+function SmartMove() {
+    // Helper function inside SmartMove
+    const findWinningIndex = (mark) => {
+        for (let pattern of winPattern) {
+            let [a, b, c] = pattern;
+            let values = [gameArray[a], gameArray[b], gameArray[c]];
+            let markCount = values.filter(val => val === mark).length;
+            let emptyCount = values.filter(val => val === "").length;
+
+            if (markCount === 2 && emptyCount === 1) {
+                if (gameArray[a] === "") return a;
+                if (gameArray[b] === "") return b;
+                if (gameArray[c] === "") return c;
+            }
+        }
+        return null;
+    };
+
+    // 1. Try to Win
+    let move = findWinningIndex(getComputerMark());
+    if (move !== null) return move;
+
+    // 2. Try to Block
+    move = findWinningIndex(opponentMark());
+    if (move !== null) return move;
+
+    // 3. Otherwise Random
+    return RandomMove();
+}
+*/
+
 function opponentMark(){
 	return (selectedPlayer === 'x') ? 'o' : 'x';
 }
