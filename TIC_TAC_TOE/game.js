@@ -250,10 +250,14 @@ function RandomMove(){
 	return move;
 }
 
+function opponentMark(){
+	return (selectedPlayer === 'x') ? 'o' : 'x';
+}
 // Score Board
 function updateScoreboard(){
-	const opponentMark = (selectedPlayer === 'x') ? 'o' : 'x';
+	//const opponentMark = (selectedPlayer === 'x') ? 'o' : 'x';
 	document.getElementById('you-score').textContent = scores[selectedPlayer];
-	document.getElementById('opponent-score').textContent = scores[opponentMark];
+	document.getElementById('opponent-score').textContent = scores[opponentMark()];
 	document.getElementById('ties-score').textContent = scores.ties;
 }
+
