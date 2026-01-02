@@ -270,7 +270,20 @@ function SmartMove(){
 		}
 	}
 	//Phase 2: Try to Block
+	for(let pattern of winPattern){
+		let [a, b, c] = pattern;
+		let values = [gameArray[a], gameArray[b], gameArray[c]];
 
+		let opponentCount = values.filter(val => val === opponentMark()).length;
+
+		let emptyCount = values.filter(val => val === "").length;
+
+		if(opponentCount === 2 && emptyCount === 1){
+			if(gameArray[a] === "") return a;
+			if(gameArray[b] === "") return b;
+			if(gameArray[c] === "") return c;
+		}
+	}
 	return RandomMove();
 }
 
