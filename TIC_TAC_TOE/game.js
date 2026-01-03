@@ -356,3 +356,35 @@ function updateScoreboard(){
 	document.getElementById('opponent-score').textContent = scores[opponentMark()];
 	document.getElementById('ties-score').textContent = scores.ties;
 }
+
+// MINIMAX 
+function minimax(board, depth, isMaximizing, computer, opponent){
+	let result = checkMinimaxWinner(board, computer, opponent);
+	if(result === computer) return 10 - depth;
+	if(result === opponent) return depth - 10;
+	if(result === 'tie') return 0;
+
+	if(isMaximizing){
+		let bestScore = -Infinity;
+		for(let i = 0; i < 9; i++){
+			if(board[i] === ""){
+				board[i] = computer;
+				let score = minimax(board, depth + 1, false, computer, opponent);
+				board[i] = "";
+				bestScore = Math.max(score, bestScore);
+			}
+		}
+		return bestScore;
+	}else{
+		let bestScore = Infinity;
+		for(let i = 0; i < 9; i++){
+			if(board[i] === ""){
+				board[i] = computer;
+				let score = minimax(board, depth + 1, false, computer, opponent);
+				board[i] = "";
+				bestScore = Math.max(score, bestScore);
+			}
+		}
+		return bestScore;
+	}
+}
