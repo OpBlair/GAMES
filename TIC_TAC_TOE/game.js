@@ -321,7 +321,31 @@ function SmartMove() {
     return RandomMove();
 }
 */
+/*
+// Difficulty: Hard = Minimax(Unbeatable)
+*/
+function BestMove(){
+	let bestScore = -Infinity;
+	let move;
 
+	let computer = currentPlayer;
+	let opponent = opponentMark();
+
+	for(let i = 0; i < 9; i++){
+		if(gameArray[i] === ""){
+			gameArray[i] = computer;
+
+			let score = minimax(gameArray, 0, false, computer, opponent);
+			gameArray[i] = "";
+
+			if(score > bestScore){
+				bestScore = score;
+				move = i;
+			}
+		}
+	}
+	return move;
+}
 function opponentMark(){
 	return (selectedPlayer === 'x') ? 'o' : 'x';
 }
