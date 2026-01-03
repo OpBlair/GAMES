@@ -388,3 +388,15 @@ function minimax(board, depth, isMaximizing, computer, opponent){
 		return bestScore;
 	}
 }
+
+// winner check for minimax
+function checkMinimaxWinner(board, computer, opponent) {
+	for(let pattern of winPattern){
+		const [a, b, c] = pattern;
+		if(board[a] !== "" && board[a] === board[b] && board[a] === board[c]){
+			return board[a];
+		}
+	}
+	if(!board.includes("")) return 'tie';
+	return null;
+}
