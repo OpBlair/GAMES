@@ -379,7 +379,7 @@ function minimax(board, depth, isMaximizing, computer, opponent){
 		let bestScore = Infinity;
 		for(let i = 0; i < 9; i++){
 			if(board[i] === ""){
-				board[i] = computer;
+				board[i] = opponent;
 				let score = minimax(board, depth + 1, false, computer, opponent);
 				board[i] = "";
 				bestScore = Math.min(score, bestScore);
