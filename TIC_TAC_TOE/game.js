@@ -380,7 +380,7 @@ function minimax(board, depth, isMaximizing, computer, opponent){
 		for(let i = 0; i < 9; i++){
 			if(board[i] === ""){
 				board[i] = opponent;
-				let score = minimax(board, depth + 1, false, computer, opponent);
+				let score = minimax(board, depth + 1, true, computer, opponent);
 				board[i] = "";
 				bestScore = Math.min(score, bestScore);
 			}
