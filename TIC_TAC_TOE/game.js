@@ -382,7 +382,7 @@ function minimax(board, depth, isMaximizing, computer, opponent){
 				board[i] = computer;
 				let score = minimax(board, depth + 1, false, computer, opponent);
 				board[i] = "";
-				bestScore = Math.max(score, bestScore);
+				bestScore = Math.min(score, bestScore);
 			}
 		}
 		return bestScore;
