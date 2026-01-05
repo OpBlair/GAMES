@@ -328,8 +328,8 @@ function BestMove(){
 	let bestScore = -Infinity;
 	let move;
 
-	let computer = currentPlayer;
-	let opponent = opponentMark();
+	let computer = getComputerMark();
+	let opponent = (computer === 'x') ? 'o' : 'x';
 
 	for(let i = 0; i < 9; i++){
 		if(gameArray[i] === ""){
