@@ -1,1 +1,33 @@
+#game-board{
+    display: grid;
+    grid-template-columns: repeat(8, 50px);
+    grid-template-rows: repeat(8, 50px);
+    border: 1px solid black;
+    width: 400px;
+    height: 400px;
+}
 
+.square{
+    width: 40px;
+    height: 40px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.dark{
+    background-color: #6a4e23;
+}
+
+.light{
+    background-color: #f1c27d;
+}
+
+.piece{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: red;
+}
