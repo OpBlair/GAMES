@@ -34,7 +34,9 @@ function createBoard(){
         }
     }
 }
-
+gameBoard.addEventListener('click', (e) =>{
+    console.log(`Clicked Cell: ${e.target.dataset.cell}`);
+})
 createBoard();
 console.log(pieces);
 
