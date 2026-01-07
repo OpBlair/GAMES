@@ -16,18 +16,14 @@ function createBoard(){
             }else{
                 square.classList.add('dark');
                 
-                if(row < 3){
-                    let piece = document.createElement('div');
+                if(row < 3 || row > 4){
+                    const piece = document.createElement('div');
                     piece.classList.add('piece');
-                    piece.style.backgroundColor = "black";
+                    piece.dataset.cell = cellIndex;
+                    piece.dataset.player = row < 3 ? 1 : 2;
+                    piece.style.backgroundColor = row < 3 ? "black" : "rgb(249, 248, 248)";
                     square.appendChild(piece);
                     pieces.push({row, col, player: 1});
-                }else if(row > 4){
-                    let piece = document.createElement('div');
-                    piece.classList.add('piece');
-                    piece.style.backgroundColor = "rgb(249, 248, 248)";
-                    square.appendChild(piece);
-                    pieces.push({row, col, player: 2});
                 }
             }
             gameBoard.appendChild(square);
@@ -36,6 +32,12 @@ function createBoard(){
 }
 gameBoard.addEventListener('click', (e) =>{
     console.log(`Clicked Cell: ${e.target.dataset.cell}`);
+})
+pieces.forEach(p =>{
+    p.dataset.cellPiece = cellPiece;
+    p.addEventListener('click', (event) => {
+        console.log(`Cell piece: ${event.dataset.cellPiece}`);
+    })
 })
 createBoard();
 console.log(pieces);
