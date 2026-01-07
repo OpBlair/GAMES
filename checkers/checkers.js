@@ -1,12 +1,13 @@
 "use strict";
 const gameBoard = document.getElementById('game-board');
 
-let pieces = [];
+let boardState = Array.from({length: 8}, () => Array(8).fill(null));
 
 function createBoard(){
     for (let row = 0; row < 8; row++) {
         for (let col = 0; col < 8; col++){
             let  square = document.createElement('div');
+        
             square.classList.add('square');
 
             let cellIndex = row * 8  + col;
@@ -23,24 +24,28 @@ function createBoard(){
                     piece.dataset.player = row < 3 ? 1 : 2;
                     piece.style.backgroundColor = row < 3 ? "black" : "rgb(249, 248, 248)";
                     square.appendChild(piece);
-                    pieces.push({row, col, player: 1});
+                    let player = row < 3 ? 1 : 2;
+                    boardState[row][col] = {player: player, king: false};
                 }
             }
             gameBoard.appendChild(square);
         }
     }
 }
+createBoard();
 gameBoard.addEventListener('click', (e) =>{
+    //clicked a piece
+    if(e.target.classList.contains("piece")){
+        console.log("Clicked piece on cell:", e.target.dataset.cell);
+        console.log("Player:",e.target.dataset.player);
+    }else if(e.target.classList.contains("square")){
+        console.log("Clicked cell:", e.target.dataset.cell);
+    }
     console.log(`Clicked Cell: ${e.target.dataset.cell}`);
 })
-pieces.forEach(p =>{
-    p.dataset.cellPiece = cellPiece;
-    p.addEventListener('click', (event) => {
-        console.log(`Cell piece: ${event.dataset.cellPiece}`);
-    })
-})
-createBoard();
-console.log(pieces);
+
+
+console.log(gameBoard);
 
 //Index=(Row×TotalColumns)+Column
 //Row=floor(Index/8)
