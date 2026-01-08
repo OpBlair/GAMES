@@ -1,11 +1,13 @@
 "use strict";
 const gameBoard = document.getElementById('game-board');
 
-let boardState = Array.from({length: 8}, () => Array(8).fill(null));
-
+//let boardState = Array.from({length: 8}, () => Array(8).fill(null));
+let boardState = [];
 function createBoard(){
     for (let row = 0; row < 8; row++) {
+        let rowArray = []
         for (let col = 0; col < 8; col++){
+            rowArray[col] = null;
             let  square = document.createElement('div');
         
             square.classList.add('square');
@@ -21,15 +23,17 @@ function createBoard(){
                     const piece = document.createElement('div');
                     piece.classList.add('piece');
                     piece.dataset.cell = cellIndex;
-                    piece.dataset.player = row < 3 ? 1 : 2;
+                    let player = row < 3 ? 1 : 2;
+                    piece.dataset.player = player;
                     piece.style.backgroundColor = row < 3 ? "black" : "rgb(249, 248, 248)";
                     square.appendChild(piece);
-                    let player = row < 3 ? 1 : 2;
-                    boardState[row][col] = {player: player, king: false};
+                    //boardState[row][col] = {player: player, king: false};
+                    rowArray[col] = {player: player, king: false};
                 }
             }
             gameBoard.appendChild(square);
         }
+        boardState.push(rowArray);
     }
 }
 createBoard();
@@ -44,8 +48,8 @@ gameBoard.addEventListener('click', (e) =>{
     console.log(`Clicked Cell: ${e.target.dataset.cell}`);
 })
 
-
 console.log(gameBoard);
+console.log(boardState);
 
 //Index=(Row×TotalColumns)+Column
 //Row=floor(Index/8)
