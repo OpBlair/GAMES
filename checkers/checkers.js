@@ -4,6 +4,7 @@ const gameBoard = document.getElementById('game-board');
 //let boardState = Array.from({length: 8}, () => Array(8).fill(null));
 let boardState = [];
 let selectedPiece = null;
+let selectedSquare = null;
 function createBoard(){
     for (let row = 0; row < 8; row++) {
         let rowArray = []
@@ -47,11 +48,17 @@ gameBoard.addEventListener('click', (e) =>{
         const fromCol = (parseInt(e.target.dataset.cell)) % 8;
         selectedPiece = {
             fromRow: fromRow,
-            fromCol: fromCol
+            fromCol: fromCol,
             //player: player
         };
     }else if(e.target.classList.contains("square")){
         console.log("Clicked cell:", e.target.dataset.cell);
+        const toRow = Math.floor((parseInt(e.target.dataset.cell)) / 8);
+        const toCol = (parseInt(e.target.dataset.cell)) % 8;
+        selectedSquare = {
+            toRow: toRow,
+            toCol: toCol
+        }
     }
 })
 
