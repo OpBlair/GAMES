@@ -77,10 +77,26 @@ gameBoard.addEventListener('click', (e) =>{
 
 console.log(boardState);
 
+//helper function for DOM square
+function getSquare(row, col){
+    const index = row * 8 + col;
+    return gameBoard.querySelector(`[data-cell="${index}"]`);
+}
+
 function movePiece(fromRow, fromCol, toRow, toCol){
     const pieceData = boardState[fromRow][fromCol];
+    if (!pieceData) return; // if no piece exists don't move
+    if(boardState[toRow][toCol] !== null) return; //check if square is empty
+    //update boardState
     boardState[fromRow][fromCol] = null;
-    if(boardState[toRow][toCol] !== null) return;
     boardState[toRow][toCol] = pieceData;
+
+    
 }
+
+// get old square
+// remove piece
+// get new square
+// create piece
+// append
 
