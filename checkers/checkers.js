@@ -85,24 +85,23 @@ function getSquare(row, col){
 
 function movePiece(fromRow, fromCol, toRow, toCol){
     const pieceData = boardState[fromRow][fromCol];
-    if (!pieceData) return; // if no piece exists don't move
-    if(boardState[toRow][toCol] !== null) return; //check if square is empty
+
+    // 1.Validation: piece must exist and destination must be empty
+    if (!pieceData || boardState[toRow][toCol] !== null) return;
+
     //update boardState
     boardState[fromRow][fromCol] = null;
     boardState[toRow][toCol] = pieceData;
 
-    //clear old square
+    // Move the Piece.
     const oldSquare = getSquare(fromRow, fromCol);
-    const oldPiece = oldSquare.querySelector('.piece');
-    if(oldPiece) oldPiece.remove();
-
-    //Render the new Piece
     const newSquare = getSquare(toRow, toCol);
-    const newPiece = document.createElement('div');
-    newPiece.classList.add('piece');
-    newPiece.dataset.player = newPiece.player; //assign player to piece 
-    newPiece.style.backgroundColor = pieceData.player === 1 ? "black" : "rgb(249, 248, 248)";
-    newSquare.appendChild(newPiece);
+    const pieceElement = oldSquare.querySelector('.piece');
+    
+    if(pieceElement){
+        newSquare.appendChild(pieceElement);
+        pieceElement.dataset.cell = toRow * 8 + toCol;
+    }
 }
 
 // get old square
