@@ -91,7 +91,18 @@ function movePiece(fromRow, fromCol, toRow, toCol){
     boardState[fromRow][fromCol] = null;
     boardState[toRow][toCol] = pieceData;
 
-    
+    //clear old square
+    const oldSquare = getSquare(fromRow, fromCol);
+    const oldPiece = oldSquare.querySelector('.piece');
+    if(oldPiece) oldPiece.remove();
+
+    //Render the new Piece
+    const newSquare = getSquare(toRow, toCol);
+    const newPiece = document.createElement('div');
+    newPiece.classList.add('piece');
+    newPiece.dataset.player = newPiece.player; //assign player to piece 
+    newPiece.style.backgroundColor = pieceData.player === 1 ? "black" : "rgb(249, 248, 248)";
+    newSquare.appendChild(newPiece);
 }
 
 // get old square
