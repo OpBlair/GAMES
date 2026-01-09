@@ -86,6 +86,10 @@ function getSquare(row, col){
 function movePiece(fromRow, fromCol, toRow, toCol){
     const pieceData = boardState[fromRow][fromCol];
 
+    const rowDiff = Math.abs(toRow - fromRow);
+    const colDiff = Math.abs(toCol - fromCol)
+    if(rowDiff && colDiff !== 1) return;
+    
     // 1.Validation: piece must exist and destination must be empty
     if (!pieceData || boardState[toRow][toCol] !== null) return;
 
@@ -102,11 +106,8 @@ function movePiece(fromRow, fromCol, toRow, toCol){
         newSquare.appendChild(pieceElement);
         pieceElement.dataset.cell = toRow * 8 + toCol;
     }
+
 }
 
-// get old square
-// remove piece
-// get new square
-// create piece
-// append
+// |toRow - fromRow| and |toCol -fromCol| = 1
 
