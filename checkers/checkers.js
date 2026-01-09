@@ -2,6 +2,10 @@
 const gameBoard = document.getElementById('game-board');
 
 //let boardState = Array.from({length: 8}, () => Array(8).fill(null));
+//Index=(Row×TotalColumns)+Column
+//Row=floor(Index/8)
+//Col=Index(mod8)
+
 let boardState = [];
 let selectedPiece = null;
 let selectedSquare = null;
@@ -49,7 +53,6 @@ gameBoard.addEventListener('click', (e) =>{
         selectedPiece = {
             fromRow: fromRow,
             fromCol: fromCol,
-            //player: player
         };
     }else if(e.target.classList.contains("square")){
         console.log("Clicked cell:", e.target.dataset.cell);
@@ -59,12 +62,25 @@ gameBoard.addEventListener('click', (e) =>{
             toRow: toRow,
             toCol: toCol
         }
+        if(selectedPiece){
+            movePiece(
+                selectedPiece.fromRow,
+                selectedPiece.fromCol,
+                toRow,
+                toCol
+            );
+            selectedPiece = null;
+            selectedSquare = null;
+        }
     }
 })
 
 console.log(boardState);
 
+function movePiece(fromRow, fromCol, toRow, toCol){
+    const pieceData = boardState[fromRow][fromCol];
+    boardState[fromRow][fromCol] = null;
+    if(boardState[toRow][toCol] !== null) return;
+    boardState[toRow][toCol] = pieceData;
+}
 
-//Index=(Row×TotalColumns)+Column
-//Row=floor(Index/8)
-//Col=Index(mod8)
