@@ -75,8 +75,6 @@ gameBoard.addEventListener('click', (e) =>{
     }
 })
 
-console.log(boardState);
-
 //helper function for DOM square
 function getSquare(row, col){
     const index = row * 8 + col;
@@ -85,7 +83,6 @@ function getSquare(row, col){
 
 function movePiece(fromRow, fromCol, toRow, toCol){
     const pieceData = boardState[fromRow][fromCol];
-
     const rowDiff = Math.abs(toRow - fromRow);
     const colDiff = Math.abs(toCol - fromCol)
     const midRow = (fromRow + toRow) / 2;
@@ -97,22 +94,18 @@ function movePiece(fromRow, fromCol, toRow, toCol){
     if (!pieceData || boardState[toRow][toCol] !== null) return;
 
     if(rowDiff === 2){
-        if(boardState[fromRow][fromCol].player === 1 || boardState[midRow][midCol].player === 2){
-            console.log("yeah it looks true though");
-        }
+        if((boardState[fromRow][fromCol].player === 1 && boardState[midRow][midCol].player === 1) || (boardState[fromRow][fromCol].player === 2 && boardState[midRow][midCol].player === 2)) return;
+        boardState[midRow][midCol] = null;
+        getSquare(midRow, midCol).querySelector('.piece').remove();
     }
 
     //update boardState
     boardState[fromRow][fromCol] = null;
     boardState[toRow][toCol] = pieceData;
 
-    
-
     //Logic of a Move.
     if(((toRow - fromRow) < 0 || boardState[toRow][toCol].player === 1) && ((toRow - fromRow) > 0 || boardState[toRow][toCol].player === 2)){
-        
         // Move the Piece.
-        console.log("True");
         const oldSquare = getSquare(fromRow, fromCol);
         const newSquare = getSquare(toRow, toCol);
         const pieceElement = oldSquare.querySelector('.piece');
@@ -121,11 +114,5 @@ function movePiece(fromRow, fromCol, toRow, toCol){
             newSquare.appendChild(pieceElement);
             pieceElement.dataset.cell = toRow * 8 + toCol;
         }
-    }else{
-        console.log("Invalid move, only move in the right direction.")
     }
-
 }
-
-// |toRow - fromRow| and |toCol -fromCol| = 1
-
