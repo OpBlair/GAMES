@@ -88,17 +88,29 @@ function movePiece(fromRow, fromCol, toRow, toCol){
 
     const rowDiff = Math.abs(toRow - fromRow);
     const colDiff = Math.abs(toCol - fromCol)
-    if(rowDiff !== 1 || colDiff !== 1) return;
+    const midRow = (fromRow + toRow) / 2;
+    const midCol = (fromCol + toCol) / 2;
+
+    if((rowDiff !== 1 && rowDiff !== 2) || (colDiff !== 1 && colDiff !== 2)) return;
 
     // 1.Validation: piece must exist and destination must be empty
     if (!pieceData || boardState[toRow][toCol] !== null) return;
+
+    if(rowDiff === 2){
+        if(boardState[fromRow][fromCol].player === 1 || boardState[midRow][midCol].player === 2){
+            console.log("yeah it looks true though");
+        }
+    }
 
     //update boardState
     boardState[fromRow][fromCol] = null;
     boardState[toRow][toCol] = pieceData;
 
+    
+
     //Logic of a Move.
     if(((toRow - fromRow) < 0 || boardState[toRow][toCol].player === 1) && ((toRow - fromRow) > 0 || boardState[toRow][toCol].player === 2)){
+        
         // Move the Piece.
         console.log("True");
         const oldSquare = getSquare(fromRow, fromCol);
