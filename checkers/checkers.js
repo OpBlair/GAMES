@@ -88,8 +88,8 @@ function movePiece(fromRow, fromCol, toRow, toCol){
 
     const rowDiff = Math.abs(toRow - fromRow);
     const colDiff = Math.abs(toCol - fromCol)
-    if(rowDiff && colDiff !== 1) return;
-    
+    if(rowDiff !== 1 || colDiff !== 1) return;
+
     // 1.Validation: piece must exist and destination must be empty
     if (!pieceData || boardState[toRow][toCol] !== null) return;
 
@@ -97,14 +97,20 @@ function movePiece(fromRow, fromCol, toRow, toCol){
     boardState[fromRow][fromCol] = null;
     boardState[toRow][toCol] = pieceData;
 
-    // Move the Piece.
-    const oldSquare = getSquare(fromRow, fromCol);
-    const newSquare = getSquare(toRow, toCol);
-    const pieceElement = oldSquare.querySelector('.piece');
-    
-    if(pieceElement){
-        newSquare.appendChild(pieceElement);
-        pieceElement.dataset.cell = toRow * 8 + toCol;
+    //Logic of a Move.
+    if(((toRow - fromRow) < 0 || boardState[toRow][toCol].player === 1) && ((toRow - fromRow) > 0 || boardState[toRow][toCol].player === 2)){
+        // Move the Piece.
+        console.log("True");
+        const oldSquare = getSquare(fromRow, fromCol);
+        const newSquare = getSquare(toRow, toCol);
+        const pieceElement = oldSquare.querySelector('.piece');
+        
+        if(pieceElement){
+            newSquare.appendChild(pieceElement);
+            pieceElement.dataset.cell = toRow * 8 + toCol;
+        }
+    }else{
+        console.log("Invalid move, only move in the right direction.")
     }
 
 }
