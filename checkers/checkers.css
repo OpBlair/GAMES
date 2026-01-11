@@ -14,7 +14,8 @@ body{
     display: grid;
     grid-template-columns: repeat(8, 50px);
     grid-template-rows: repeat(8, 50px);
-    border: 1px solid black;
+    border: 5px solid #3e2723;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 .square{
     width: 50px;
