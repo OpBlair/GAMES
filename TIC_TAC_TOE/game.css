@@ -174,7 +174,14 @@ button:last-of-type{
 }
 
 .difficulty-menu{
-	display: none;
+	display: flex;
 	flex-direction: column;
 	position: absolute;
+	margin: -100px;
+	gap: 5px;
+	background-color:rgb(37, 37, 19);
+	width: 150px;
+}
+.difficulty-menu p{
+	color: whitesmoke;
 }
