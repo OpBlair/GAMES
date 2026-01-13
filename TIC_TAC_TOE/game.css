@@ -181,12 +181,16 @@ button:last-of-type{
 	flex-direction: column;
 	position: absolute;
 	margin: -50px 0 0 68px;
-	gap: 5px;
+	gap: 8px;
 	background-color:rgb(37, 37, 19);
 	width: 150px;
-	padding: 5px;
+	padding: 8px;
 	border-radius: 8px;
 }
 .difficulty-menu p{
 	color: whitesmoke;
+	text-align: center;
+}
+.difficulty-menu button{
+	align-self: center;
 }
