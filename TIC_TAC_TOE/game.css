@@ -36,7 +36,10 @@ body{
 	height: 250px;
 	gap: 8px;
 }
-
+.welcome-page p{
+	padding: 0 5px;
+	text-transform: uppercase;
+}
 .player-selection{
 	background-color: var(--dark-navy);
 	color: white;
