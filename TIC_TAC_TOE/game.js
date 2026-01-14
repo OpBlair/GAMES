@@ -254,8 +254,6 @@ function RandomMove(){
 // Difficulty: Medium = SmartMove
 */
 function SmartMove(){
-
-
 	// Phase 1: Try to Win
 	for(let pattern of winPattern){
 		let [a, b, c] = pattern;
