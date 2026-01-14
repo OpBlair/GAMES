@@ -80,7 +80,7 @@ function getSquare(row, col){
     const index = row * 8 + col;
     return gameBoard.querySelector(`[data-cell="${index}"]`);
 }
-
+// MOve piece function
 function movePiece(fromRow, fromCol, toRow, toCol){
     const pieceData = boardState[fromRow][fromCol];
     const rowDiff = Math.abs(toRow - fromRow);
