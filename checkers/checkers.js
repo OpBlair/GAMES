@@ -9,6 +9,8 @@ const gameBoard = document.getElementById('game-board');
 let boardState = [];
 let selectedPiece = null;
 let selectedSquare = null;
+let currentPlayer = gameBoard.querySelector(`[data-player="${1}"]`);
+let gameActive = true;
 function createBoard(){
     for (let row = 0; row < 8; row++) {
         let rowArray = []
@@ -33,7 +35,6 @@ function createBoard(){
                     piece.dataset.player = player;
                     piece.style.backgroundColor = row < 3 ? "black" : "rgb(249, 248, 248)";
                     square.appendChild(piece);
-                    //boardState[row][col] = {player: player, king: false};
                     rowArray[col] = {player: player, king: false};
                 }
             }
@@ -62,15 +63,18 @@ gameBoard.addEventListener('click', (e) =>{
             toRow: toRow,
             toCol: toCol
         }
-        if(selectedPiece){
-            movePiece(
-                selectedPiece.fromRow,
-                selectedPiece.fromCol,
-                toRow,
-                toCol
-            );
-            selectedPiece = null;
-            selectedSquare = null;
+        if(gameActive){
+            currentPlayer = currentPlayer === gameBoard.querySelector(`[data-player="${1}"]`) ? gameBoard.querySelector(`[data-player="${2}"]`) : gameBoard.querySelector(`[data-player="${1}"]`) ;
+            if(selectedPiece){
+                movePiece(
+                    selectedPiece.fromRow,
+                    selectedPiece.fromCol,
+                    toRow,
+                    toCol
+                );
+                selectedPiece = null;
+                selectedSquare = null;
+            }
         }
     }
 })
