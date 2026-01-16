@@ -13,18 +13,31 @@ body{
     background-color: black;
     height: 500px;
     width: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 #horizontal-path{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     background-color: red;
-    align-items: center;
     align-self: center;
+    width: 100%;
+    height: 90px;
+    position: relative;
+    z-index: 2;
 }
 #vertical-path{
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
     background-color: yellow;
     align-items: center;
     align-self: center;
+    height: inherit;
+    width: 90px;
+    position: absolute;
+}
+.path-way{
+    border: 1px solid black;
+    height: 30px;
 }
