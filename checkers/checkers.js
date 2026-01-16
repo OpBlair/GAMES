@@ -9,8 +9,7 @@ const gameBoard = document.getElementById('game-board');
 let boardState = [];
 let selectedPiece = null;
 let selectedSquare = null;
-let currentPlayer = gameBoard.querySelector(`[data-player="${1}"]`);
-let gameActive = true;
+let currentPlayer;
 function createBoard(){
     for (let row = 0; row < 8; row++) {
         let rowArray = []
@@ -44,6 +43,8 @@ function createBoard(){
     }
 }
 createBoard();
+console.log(currentPlayer);
+console.log("hello")
 gameBoard.addEventListener('click', (e) =>{
     //clicked a piece
     if(e.target.classList.contains("piece")){
@@ -63,18 +64,15 @@ gameBoard.addEventListener('click', (e) =>{
             toRow: toRow,
             toCol: toCol
         }
-        if(gameActive){
-            currentPlayer = currentPlayer === gameBoard.querySelector(`[data-player="${1}"]`) ? gameBoard.querySelector(`[data-player="${2}"]`) : gameBoard.querySelector(`[data-player="${1}"]`) ;
-            if(selectedPiece){
-                movePiece(
-                    selectedPiece.fromRow,
-                    selectedPiece.fromCol,
-                    toRow,
-                    toCol
-                );
-                selectedPiece = null;
-                selectedSquare = null;
-            }
+       if(selectedPiece){
+            movePiece(
+                selectedPiece.fromRow,
+                selectedPiece.fromCol,
+                toRow,
+                toCol
+            );
+            selectedPiece = null;
+            selectedSquare = null;
         }
     }
 })
@@ -117,6 +115,7 @@ function movePiece(fromRow, fromCol, toRow, toCol){
         if(pieceElement){
             newSquare.appendChild(pieceElement);
             pieceElement.dataset.cell = toRow * 8 + toCol;
+            currentPlayer = currentPlayer === 1 ? 2 : 1;
         }
     }
 }
