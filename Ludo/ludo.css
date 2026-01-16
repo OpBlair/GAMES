@@ -9,3 +9,22 @@ body{
     justify-content: center;
     align-items: center;
 }
+.game-container{
+    background-color: black;
+    height: 500px;
+    width: 500px;
+}
+#horizontal-path{
+    display: flex;
+    flex-direction: row;
+    background-color: red;
+    align-items: center;
+    align-self: center;
+}
+#vertical-path{
+    display: flex;
+    flex-direction: column;
+    background-color: yellow;
+    align-items: center;
+    align-self: center;
+}
