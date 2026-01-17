@@ -10,7 +10,7 @@ body{
     align-items: center;
 }
 .game-container{
-    background-color: black;
+    background-color: whitesmoke;
     height: 500px;
     width: 500px;
     display: flex;
@@ -41,4 +41,15 @@ body{
 .path-way{
     border: 1px solid black;
     height: 30px;
+}
+#game-board{
+    background-color: red;
+    display: grid;
+    grid-template-columns: repeat(11, 40px);
+    /*grid-template-rows: repeat(11, 40px);*/
+}
+.square{
+    border: 1px solid black;
+    height: 40px;
+    width: 40px;
 }
