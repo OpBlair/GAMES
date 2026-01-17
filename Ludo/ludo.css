@@ -16,6 +16,7 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
+    position: absolute;
 }
 #horizontal-path{
     display: flex;
@@ -28,8 +29,8 @@ body{
     z-index: 2;
 }
 #vertical-path{
-    display: grid;
-    grid-template-rows: 1fr 1fr 1fr;
+    display: flex;
+    flex-direction: row;
     background-color: yellow;
     align-items: center;
     align-self: center;
