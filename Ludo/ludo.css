@@ -18,32 +18,8 @@ body{
     align-items: center;
     position: absolute;
 }
-#horizontal-path{
-    display: flex;
-    flex-direction: column;
-    background-color: red;
-    align-self: center;
-    width: 100%;
-    height: 90px;
-    position: relative;
-    z-index: 2;
-}
-#vertical-path{
-    display: flex;
-    flex-direction: row;
-    background-color: yellow;
-    align-items: center;
-    align-self: center;
-    height: inherit;
-    width: 90px;
-    position: absolute;
-}
-.path-way{
-    border: 1px solid black;
-    height: 30px;
-}
 #game-board{
-    background-color: red;
+    background-color: whitesmoke;
     display: grid;
     grid-template-columns: repeat(15, 1fr);
     grid-template-rows: repeat(15, 1fr);
@@ -53,7 +29,7 @@ body{
     border: 2px solid #333;
 }
 .square{
-    border: o.5px solid rgba(0, 0, 0, 0.1);
+    border: 0.5px solid rgba(0, 0, 0, 0.1);
     display: flex;
     justify-content: center;
     align-items: center;
