@@ -9,7 +9,7 @@ const gameBoard = document.getElementById('game-board');
 let boardState = [];
 let selectedPiece = null;
 let selectedSquare = null;
-let currentPlayer;
+let currentPlayer = 2;
 function createBoard(){
     for (let row = 0; row < 8; row++) {
         let rowArray = []
@@ -43,11 +43,11 @@ function createBoard(){
     }
 }
 createBoard();
-console.log(currentPlayer);
-console.log("hello")
+
 gameBoard.addEventListener('click', (e) =>{
     //clicked a piece
     if(e.target.classList.contains("piece")){
+        if(parseInt(e.target.dataset.player) !== currentPlayer) return;
         console.log("Clicked piece on cell:", e.target.dataset.cell);
         console.log("Player:",e.target.dataset.player);
         const fromRow = Math.floor((parseInt(e.target.dataset.cell)) / 8);
@@ -90,32 +90,37 @@ function movePiece(fromRow, fromCol, toRow, toCol){
     const midRow = (fromRow + toRow) / 2;
     const midCol = (fromCol + toCol) / 2;
 
+    if(rowDiff !== colDiff) return;
+    if((toRow + toCol) % 2 === 0) return;
     if((rowDiff !== 1 && rowDiff !== 2) || (colDiff !== 1 && colDiff !== 2)) return;
 
     // 1.Validation: piece must exist and destination must be empty
     if (!pieceData || boardState[toRow][toCol] !== null) return;
 
     if(rowDiff === 2){
-        if((boardState[fromRow][fromCol].player === 1 && boardState[midRow][midCol].player === 1) || (boardState[fromRow][fromCol].player === 2 && boardState[midRow][midCol].player === 2)) return;
+        //if((boardState[fromRow][fromCol].player === 1 && boardState[midRow][midCol].player === 1) || (boardState[fromRow][fromCol].player === 2 && boardState[midRow][midCol].player === 2)) return;
+        const jumpedPiece = boardState[midRow][midCol];
+        if(!jumpedPiece || jumpedPiece.player === pieceData.player) return;
         boardState[midRow][midCol] = null;
         getSquare(midRow, midCol).querySelector('.piece').remove();
     }
+
+    //Logic of a Move. black moves down, white moves up
+    if(pieceData.player === 1 && toRow <= fromRow) return;
+    if(pieceData.player === 2 && toRow >= fromRow) return;
 
     //update boardState
     boardState[fromRow][fromCol] = null;
     boardState[toRow][toCol] = pieceData;
 
-    //Logic of a Move.
-    if(((toRow - fromRow) < 0 || boardState[toRow][toCol].player === 1) && ((toRow - fromRow) > 0 || boardState[toRow][toCol].player === 2)){
-        // Move the Piece.
-        const oldSquare = getSquare(fromRow, fromCol);
-        const newSquare = getSquare(toRow, toCol);
-        const pieceElement = oldSquare.querySelector('.piece');
+    // Move the Piece.
+    const oldSquare = getSquare(fromRow, fromCol);
+    const newSquare = getSquare(toRow, toCol);
+    const pieceElement = oldSquare.querySelector('.piece');
         
-        if(pieceElement){
-            newSquare.appendChild(pieceElement);
-            pieceElement.dataset.cell = toRow * 8 + toCol;
-            currentPlayer = currentPlayer === 1 ? 2 : 1;
-        }
+    if(pieceElement){
+        newSquare.appendChild(pieceElement);
+        pieceElement.dataset.cell = toRow * 8 + toCol;
+        currentPlayer = currentPlayer === 1 ? 2 : 1;
     }
 }
