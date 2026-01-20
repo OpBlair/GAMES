@@ -8,7 +8,9 @@ This repository is a curated collection of games I've developed and still develo
 
 | Game | Tech Stack | Status |
 | :--- | :--- | :--- |
-| [Tic-Tac-Toe](./TIC_TAC_TOE) | HTML, CSS, JS | 🏗️ In Progress |
+| [Tic-Tac-Toe](./TIC_TAC_TOE) | HTML, CSS, JS | 🏗️ Completed |
+| [checkers](./checkers) | HTML, CSS, JS | 🏗️ In progress|
+| [Ludo](./Ludo) | HTML, CSS, JS | 🏗️ In progress|
 
 ## 🛠️ Global Concepts Explored
 * **Game Loops:** Managing state updates and renders.
