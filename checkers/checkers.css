@@ -39,3 +39,12 @@ body{
     border-radius: 50%;
     background-color: rgb(249, 248, 248);
 }
+.turn-indicator{
+    background-color: aquamarine;
+    height: 40px;
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+}
