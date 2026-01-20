@@ -1,6 +1,6 @@
 "use strict";
 const gameBoard = document.getElementById('game-board');
-
+const playIndication = document.querySelector('.turn-indicator');
 //let boardState = Array.from({length: 8}, () => Array(8).fill(null));
 //Index=(Row×TotalColumns)+Column
 //Row=floor(Index/8)
@@ -97,6 +97,10 @@ function movePiece(fromRow, fromCol, toRow, toCol){
     // 1.Validation: piece must exist and destination must be empty
     if (!pieceData || boardState[toRow][toCol] !== null) return;
 
+        //Logic of a Move. black moves down, white moves up
+    if(pieceData.player === 1 && toRow <= fromRow) return;
+    if(pieceData.player === 2 && toRow >= fromRow) return;
+
     if(rowDiff === 2){
         //if((boardState[fromRow][fromCol].player === 1 && boardState[midRow][midCol].player === 1) || (boardState[fromRow][fromCol].player === 2 && boardState[midRow][midCol].player === 2)) return;
         const jumpedPiece = boardState[midRow][midCol];
@@ -104,10 +108,6 @@ function movePiece(fromRow, fromCol, toRow, toCol){
         boardState[midRow][midCol] = null;
         getSquare(midRow, midCol).querySelector('.piece').remove();
     }
-
-    //Logic of a Move. black moves down, white moves up
-    if(pieceData.player === 1 && toRow <= fromRow) return;
-    if(pieceData.player === 2 && toRow >= fromRow) return;
 
     //update boardState
     boardState[fromRow][fromCol] = null;
@@ -122,5 +122,11 @@ function movePiece(fromRow, fromCol, toRow, toCol){
         newSquare.appendChild(pieceElement);
         pieceElement.dataset.cell = toRow * 8 + toCol;
         currentPlayer = currentPlayer === 1 ? 2 : 1;
+        playIndication.textContent = `Player ${currentPlayer}'s turn`;
+        if(currentPlayer === 1){
+            playIndication.textContent = `Player ${currentPlayer}'s turn`;
+        }else{
+            playIndication.textContent = `Player ${currentPlayer}'s turn`;
+        }
     }
 }
