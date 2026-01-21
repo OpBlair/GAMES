@@ -101,6 +101,14 @@ function movePiece(fromRow, fromCol, toRow, toCol){
     if(pieceData.player === 1 && toRow <= fromRow) return;
     if(pieceData.player === 2 && toRow >= fromRow) return;
 
+    //piece promotion
+    if(pieceData.player === 1 && toRow === 7){
+        pieceData.king = true;
+    }
+    if(pieceData.player === 2 && toRow === 0){
+        pieceData.king = true;
+    }
+
     if(rowDiff === 2){
         //if((boardState[fromRow][fromCol].player === 1 && boardState[midRow][midCol].player === 1) || (boardState[fromRow][fromCol].player === 2 && boardState[midRow][midCol].player === 2)) return;
         const jumpedPiece = boardState[midRow][midCol];
