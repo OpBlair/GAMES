@@ -97,7 +97,7 @@ function movePiece(fromRow, fromCol, toRow, toCol){
     // 1.Validation: piece must exist and destination must be empty
     if (!pieceData || boardState[toRow][toCol] !== null) return;
 
-        //Logic of a Move. black moves down, white moves up
+    //Logic of a Move. black moves down, white moves up
     if(pieceData.player === 1 && toRow <= fromRow) return;
     if(pieceData.player === 2 && toRow >= fromRow) return;
 
@@ -123,10 +123,5 @@ function movePiece(fromRow, fromCol, toRow, toCol){
         pieceElement.dataset.cell = toRow * 8 + toCol;
         currentPlayer = currentPlayer === 1 ? 2 : 1;
         playIndication.textContent = `Player ${currentPlayer}'s turn`;
-        if(currentPlayer === 1){
-            playIndication.textContent = `Player ${currentPlayer}'s turn`;
-        }else{
-            playIndication.textContent = `Player ${currentPlayer}'s turn`;
-        }
     }
 }
