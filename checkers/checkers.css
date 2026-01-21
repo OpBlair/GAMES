@@ -39,6 +39,11 @@ body{
     border-radius: 50%;
     background-color: rgb(249, 248, 248);
 }
+.piece:hover{
+    transform: scale(1.1);
+    box-shadow: 0 0 10px white;
+    transition: all 0.2s ease;
+}
 .turn-indicator{
     background-color: aquamarine;
     height: 40px;
@@ -47,4 +52,9 @@ body{
     justify-content: center;
     align-items: center;
     border-radius: 10px;
+}
+.selected-piece{
+    outline: 3px solid #3498db;
+    outline-offset: 1px;
+    box-shadow: 0 0 15px #3498db;
 }

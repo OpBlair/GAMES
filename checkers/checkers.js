@@ -50,12 +50,14 @@ gameBoard.addEventListener('click', (e) =>{
         if(parseInt(e.target.dataset.player) !== currentPlayer) return;
         console.log("Clicked piece on cell:", e.target.dataset.cell);
         console.log("Player:",e.target.dataset.player);
+        document.querySelectorAll('.piece').forEach(p => p.classList.remove('selected-piece'));
         const fromRow = Math.floor((parseInt(e.target.dataset.cell)) / 8);
         const fromCol = (parseInt(e.target.dataset.cell)) % 8;
         selectedPiece = {
             fromRow: fromRow,
             fromCol: fromCol,
         };
+        e.target.classList.add('selected-piece');
     }else if(e.target.classList.contains("square")){
         console.log("Clicked cell:", e.target.dataset.cell);
         const toRow = Math.floor((parseInt(e.target.dataset.cell)) / 8);
@@ -73,6 +75,7 @@ gameBoard.addEventListener('click', (e) =>{
             );
             selectedPiece = null;
             selectedSquare = null;
+            document.querySelectorAll('.piece').forEach(p => p.classList.remove('selected-piece'));
         }
     }
 })
@@ -97,10 +100,12 @@ function movePiece(fromRow, fromCol, toRow, toCol){
     // 1.Validation: piece must exist and destination must be empty
     if (!pieceData || boardState[toRow][toCol] !== null) return;
 
-    //Logic of a Move. black moves down, white moves up
-    if(pieceData.player === 1 && toRow <= fromRow) return;
-    if(pieceData.player === 2 && toRow >= fromRow) return;
-
+    // 2.Logic of a Move. black moves down, white moves up
+    // if NOt a king enforce above rules.
+    if(!pieceData.king){
+        if(pieceData.player === 1 && toRow <= fromRow) return;
+        if(pieceData.player === 2 && toRow >= fromRow) return;
+    }
     //piece promotion
     if(pieceData.player === 1 && toRow === 7){
         pieceData.king = true;
@@ -129,6 +134,11 @@ function movePiece(fromRow, fromCol, toRow, toCol){
     if(pieceElement){
         newSquare.appendChild(pieceElement);
         pieceElement.dataset.cell = toRow * 8 + toCol;
+
+        //Visual feedback for King
+        if(pieceData.king){
+            pieceElement.style.border = "4px solid gold";
+        }
         currentPlayer = currentPlayer === 1 ? 2 : 1;
         playIndication.textContent = `Player ${currentPlayer}'s turn`;
     }
