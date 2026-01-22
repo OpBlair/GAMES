@@ -23,29 +23,29 @@ function createBoard(){
         gameBoard.appendChild(square);
 
         if(redBase.includes(i)){
-            square.style.backgroundColor = 'red';
+            square.classList.add('red-path-base');
         }
         if(greenBase.includes(i)){
-            square.style.backgroundColor = 'green';
+            square.classList.add('green-path-base');
         }
         if(blueBase.includes(i)){
-            square.style.backgroundColor = 'blue';
+            square.classList.add('blue-path-base');
         }
         if(yellowBase.includes(i)){
-            square.style.backgroundColor = 'yellow';
+            square.classList.add('yellow-path-base');
         }
 
         if(redPath.includes(i)){
-            square.style.backgroundColor = 'red';
+            square.classList.add('red-path-base');
         }
         if(greenPath.includes(i)){
-            square.style.backgroundColor = 'green';
+            square.classList.add('green-path-base');
         }
         if(bluePath.includes(i)){
-            square.style.backgroundColor = 'blue';
+            square.classList.add('blue-path-base');
         }
         if(yellowPath.includes(i)){
-            square.style.backgroundColor = 'yellow';
+            square.classList.add('yellow-path-base');
         }
     }
     /*
