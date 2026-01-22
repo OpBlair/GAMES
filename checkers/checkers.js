@@ -41,6 +41,7 @@ function createBoard(){
         }
         boardState.push(rowArray);
     }
+    playIndication.textContent = "White's Turn";
 }
 createBoard();
 
@@ -140,6 +141,13 @@ function movePiece(fromRow, fromCol, toRow, toCol){
             pieceElement.style.border = "4px solid gold";
         }
         currentPlayer = currentPlayer === 1 ? 2 : 1;
-        playIndication.textContent = `Player ${currentPlayer}'s turn`;
+        switch(currentPlayer){
+            case 1:
+                playIndication.textContent = "Black's Turn";
+                break;
+            case 2:
+                playIndication.textContent = "White's Turn";
+                break;
+        }
     }
 }
