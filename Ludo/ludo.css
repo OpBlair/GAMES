@@ -34,3 +34,15 @@ body{
     justify-content: center;
     align-items: center;
 }
+.red-path-base{
+    background-color: red;
+}
+.green-path-base{
+    background-color: rgb(11, 139, 11);
+}
+.yellow-path-base{
+    background-color: rgb(243, 243, 11);
+}
+.blue-path-base{
+    background-color: rgb(5, 5, 238);
+}
