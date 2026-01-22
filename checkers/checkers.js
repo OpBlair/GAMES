@@ -8,8 +8,9 @@ const playIndication = document.querySelector('.turn-indicator');
 
 let boardState = [];
 let selectedPiece = null;
-let selectedSquare = null;
 let currentPlayer = 2;
+
+//Create Board Function
 function createBoard(){
     for (let row = 0; row < 8; row++) {
         let rowArray = []
@@ -58,7 +59,7 @@ gameBoard.addEventListener('click', (e) =>{
     }
     
     //clicked a piece
-    if(e.target.classList.contains("piece")){
+    if (e.target.classList.contains("piece")) {
         if(parseInt(e.target.dataset.player) !== currentPlayer) return;
         console.log("Clicked piece on cell:", e.target.dataset.cell);
         console.log("Player:",e.target.dataset.player);
@@ -70,11 +71,11 @@ gameBoard.addEventListener('click', (e) =>{
             fromCol: fromCol,
         };
         e.target.classList.add('selected-piece');
-    }else if(e.target.classList.contains("square")){
+
+    } else if (e.target.classList.contains("square")){
         console.log("Clicked cell:", e.target.dataset.cell);
         const toRow = Math.floor((parseInt(e.target.dataset.cell)) / 8);
         const toCol = (parseInt(e.target.dataset.cell)) % 8;
-        selectedSquare = { toRow: toRow, toCol: toCol };
 
         //only move if a piece is selected
         if(selectedPiece){
@@ -84,13 +85,8 @@ gameBoard.addEventListener('click', (e) =>{
                 toRow,
                 toCol
             );
-            let rowDiff = Math.abs(toRow - selectedPiece.fromRow)
-            let pieceData = boardState[toRow][toCol];
-            if(rowDiff !== 2 || !canJumpAgain(toRow, toCol)){
-                selectedPiece = null;
-                selectedSquare = null;
-                document.querySelectorAll('.piece').forEach(p => p.classList.remove('selected-piece'));
-            }
+            selectedPiece = null;
+            document.querySelectorAll('.piece').forEach(p => p.classList.remove('selected-piece')); 
         }
     }
 })
@@ -118,8 +114,8 @@ function canJumpAgain(row, col){
     for(let [dRow, dCol] of directions){
         const newRow = row + dRow;
         const newCol = col + dCol;
-        const newMidRow = Math.floor((row + newRow) / 2);
-        const newMidCol = Math.floor((col + newCol) / 2);
+        const newMidRow = (row + newRow) / 2;
+        const newMidCol = (col + newCol) / 2;
 
         //Check boundaries
         if(newRow < 0 || newRow > 7 || newCol < 0 || newCol > 7) continue;
@@ -187,6 +183,7 @@ function movePiece(fromRow, fromCol, toRow, toCol){
         //Visual feedback for King
         if(pieceData.king){
             pieceElement.style.border = "4px solid gold";
+            pieceElement.innerHTML = '👑';
         }
         
         //MultiJump Logic
