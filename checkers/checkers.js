@@ -174,14 +174,24 @@ function movePiece(fromRow, fromCol, toRow, toCol){
         if(pieceData.king){
             pieceElement.style.border = "4px solid gold";
         }
-        currentPlayer = currentPlayer === 1 ? 2 : 1;
-        switch(currentPlayer){
-            case 1:
-                playIndication.textContent = "Black's Turn";
-                break;
-            case 2:
-                playIndication.textContent = "White's Turn";
-                break;
+        
+        //MultiJump Logic
+        if(rowDiff === 2 && canJumpAgain(toRow, toCol)){
+            //Lock selection to current piece
+            selectedPiece = {fromRow: toRow, fromCol: toCol};
+            pieceElement.classList.add('selected-piece');
+            playIndication.textContent = `Player ${pieceData.player === 1 ? "Black" : "White"} must jump again`;
+        }else{
+            //No more jumps, switch Turn
+            currentPlayer = currentPlayer === 1 ? 2 : 1;
+            switch(currentPlayer){
+                case 1:
+                    playIndication.textContent = "Black's Turn";
+                    break;
+                case 2:
+                    playIndication.textContent = "White's Turn";
+                    break;
+            }
         }
     }
 }
