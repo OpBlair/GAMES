@@ -38,6 +38,9 @@ body{
     height: 40px;
     border-radius: 50%;
     background-color: rgb(249, 248, 248);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .piece:hover{
     transform: scale(1.1);
