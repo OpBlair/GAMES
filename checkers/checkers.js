@@ -46,14 +46,25 @@ function createBoard(){
 createBoard();
 
 gameBoard.addEventListener('click', (e) =>{
+    const fromRow = Math.floor((parseInt(e.target.dataset.cell)) / 8);
+    const fromCol = (parseInt(e.target.dataset.cell)) % 8;
+        
+    // If multi-jump is in progress, force selection of that piece
+    if(selectedPiece && e.target.classList.contains("piece")) {
+        if(selectedPiece.fromRow !== fromRow || selectedPiece.fromCol !== fromCol){
+            console.log("You must continue jumping with same piece");
+            return;
+        } 
+    }
+    
     //clicked a piece
     if(e.target.classList.contains("piece")){
         if(parseInt(e.target.dataset.player) !== currentPlayer) return;
         console.log("Clicked piece on cell:", e.target.dataset.cell);
         console.log("Player:",e.target.dataset.player);
+
+        //hightlight selection
         document.querySelectorAll('.piece').forEach(p => p.classList.remove('selected-piece'));
-        const fromRow = Math.floor((parseInt(e.target.dataset.cell)) / 8);
-        const fromCol = (parseInt(e.target.dataset.cell)) % 8;
         selectedPiece = {
             fromRow: fromRow,
             fromCol: fromCol,
@@ -63,20 +74,23 @@ gameBoard.addEventListener('click', (e) =>{
         console.log("Clicked cell:", e.target.dataset.cell);
         const toRow = Math.floor((parseInt(e.target.dataset.cell)) / 8);
         const toCol = (parseInt(e.target.dataset.cell)) % 8;
-        selectedSquare = {
-            toRow: toRow,
-            toCol: toCol
-        }
-       if(selectedPiece){
+        selectedSquare = { toRow: toRow, toCol: toCol };
+
+        //only move if a piece is selected
+        if(selectedPiece){
             movePiece(
-                selectedPiece.fromRow,
-                selectedPiece.fromCol,
+            selectedPiece.fromRow,
+            selectedPiece.fromCol,
                 toRow,
                 toCol
             );
-            selectedPiece = null;
-            selectedSquare = null;
-            document.querySelectorAll('.piece').forEach(p => p.classList.remove('selected-piece'));
+            let rowDiff = Math.abs(toRow - selectedPiece.fromRow)
+            let pieceData = boardState[toRow][toCol];
+            if(rowDiff !== 2 || !canJumpAgain(toRow, toCol)){
+                selectedPiece = null;
+                selectedSquare = null;
+                document.querySelectorAll('.piece').forEach(p => p.classList.remove('selected-piece'));
+            }
         }
     }
 })
@@ -101,11 +115,11 @@ function canJumpAgain(row, col){
         if(piece.player === 2) directions.push([-2, -2], [-2, 2]);
     }
 
-    for(let[dRow, dCol] of directions){
+    for(let [dRow, dCol] of directions){
         const newRow = row + dRow;
         const newCol = col + dCol;
-        const newMidRow = (row + dRow) / 2;
-        const newMidCol = (col + dCol) / 2;
+        const newMidRow = Math.floor((row + newRow) / 2);
+        const newMidCol = Math.floor((col + newCol) / 2);
 
         //Check boundaries
         if(newRow < 0 || newRow > 7 || newCol < 0 || newCol > 7) continue;
@@ -125,8 +139,8 @@ function movePiece(fromRow, fromCol, toRow, toCol){
     const pieceData = boardState[fromRow][fromCol];
     const rowDiff = Math.abs(toRow - fromRow);
     const colDiff = Math.abs(toCol - fromCol)
-    const midRow = (fromRow + toRow) / 2;
-    const midCol = (fromCol + toCol) / 2;
+    const midRow = Math.floor((fromRow + toRow) / 2);
+    const midCol = Math.floor((fromCol + toCol) / 2);
 
     if(rowDiff !== colDiff) return;
     if((toRow + toCol) % 2 === 0) return;
@@ -181,7 +195,7 @@ function movePiece(fromRow, fromCol, toRow, toCol){
             selectedPiece = {fromRow: toRow, fromCol: toCol};
             pieceElement.classList.add('selected-piece');
             playIndication.textContent = `Player ${pieceData.player === 1 ? "Black" : "White"} must jump again`;
-        }else{
+        } else {
             //No more jumps, switch Turn
             currentPlayer = currentPlayer === 1 ? 2 : 1;
             switch(currentPlayer){
