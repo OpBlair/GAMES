@@ -23,38 +23,30 @@ function createBoard(){
         gameBoard.appendChild(square);
 
         if(redBase.includes(i)){
-            square.classList.add('red-path-base');
+            square.classList.add('red-base');
         }
         if(greenBase.includes(i)){
-            square.classList.add('green-path-base');
+            square.classList.add('green-base');
         }
         if(blueBase.includes(i)){
-            square.classList.add('blue-path-base');
+            square.classList.add('blue-base');
         }
         if(yellowBase.includes(i)){
-            square.classList.add('yellow-path-base');
+            square.classList.add('yellow-base');
         }
 
         if(redPath.includes(i)){
-            square.classList.add('red-path-base');
+            square.classList.add('red-path');
         }
         if(greenPath.includes(i)){
-            square.classList.add('green-path-base');
+            square.classList.add('green-path');
         }
         if(bluePath.includes(i)){
-            square.classList.add('blue-path-base');
+            square.classList.add('blue-path');
         }
         if(yellowPath.includes(i)){
-            square.classList.add('yellow-path-base');
+            square.classList.add('yellow-path');
         }
     }
-    /*
-    for (let a of redBase){
-        const targetSquare = document.querySelector(`[data-index="${a}"]`);
-        if(targetSquare){
-            targetSquare.style.backgroundColor = 'red';
-        }
-    }
-    */
 }
 createBoard()
