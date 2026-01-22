@@ -86,6 +86,40 @@ function getSquare(row, col){
     const index = row * 8 + col;
     return gameBoard.querySelector(`[data-cell="${index}"]`);
 }
+
+//Additional Jumps
+function canJumpAgain(row, col){
+    const piece = boardState[row][col];
+    if(!piece) return false;
+
+    //Jump Directions
+    const directions = [];
+    if(piece.king){
+        directions.push([-2, -2], [-2, 2], [2, -2], [2, 2]);
+    }else{
+        if(piece.player === 1) directions.push([2, -2], [2, 2]);
+        if(piece.player === 2) directions.push([-2, -2], [-2, 2]);
+    }
+
+    for(let[dRow, dCol] of directions){
+        const newRow = row + dRow;
+        const newCol = col + dCol;
+        const newMidRow = (row + dRow) / 2;
+        const newMidCol = (col + dCol) / 2;
+
+        //Check boundaries
+        if(newRow < 0 || newRow > 7 || newCol < 0 || newCol > 7) continue;
+
+        //Landing square must be empty
+        if(boardState[newRow][newCol] !== null) continue;
+
+        const middlePiece = boardState[newMidRow][newMidCol];
+        //middle piece must exist and belong to opponent
+        if(middlePiece && middlePiece.player !== piece.player) return true;
+    }
+    return false;
+}
+
 // MOve piece function
 function movePiece(fromRow, fromCol, toRow, toCol){
     const pieceData = boardState[fromRow][fromCol];
