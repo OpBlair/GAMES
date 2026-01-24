@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 const gameBoard = document.getElementById('game-board');
 
 //home base
@@ -49,4 +49,24 @@ function createBoard(){
         }
     }
 }
-createBoard()
+    // Function to add tokens(pieces)
+    function addTokens(){
+        const playerTokens = 4;
+        const bases = {
+            red: redBase.slice(0, playerTokens),
+            green: greenBase.slice(0, playerTokens),
+            yellow: yellowBase.slice(0, playerTokens),
+            blue: blueBase.slice(0, playerTokens)
+        };
+
+        for(const color in bases){
+            bases[color].forEach(index => {
+                const token = document.createElement('div');
+                token.classList.add('token', `${color}-token`);
+                //append token to the square
+                document.querySelector(`.square[data-index='${index}']`).appendChild(token);
+            });
+        }
+    }
+createBoard();
+addTokens();
