@@ -33,6 +33,7 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
 }
 .red-path,.red-base{
     background-color: red;
@@ -52,7 +53,7 @@ body{
     border-radius: 50%;
     position: absolute;
 }
-.red-token {background-color: red;}
+.red-token {background-color: white;}
 .green-token {background-color: green;}
 .yellow-token {background-color: yellow;}
 .blue-token {background-color: blue;}
