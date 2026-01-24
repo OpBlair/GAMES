@@ -46,3 +46,13 @@ body{
 .blue-path,.blue-base{
     background-color: rgb(5, 5, 238);
 }
+.token{
+    width: 60%;
+    height: 60%;
+    border-radius: 50%;
+    position: absolute;
+}
+.red-token {background-color: red;}
+.green-token {background-color: green;}
+.yellow-token {background-color: yellow;}
+.blue-token {background-color: blue;}
