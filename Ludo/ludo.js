@@ -1,5 +1,6 @@
 'use strict';
 const gameBoard = document.getElementById('game-board');
+const dice = document.getElementById('dice');
 
 //home base
 let redBase = [0,1,2,3,4,5,15,16,17,18,19,20,30,31,32,33,34,35,45,46,47,48,49,50,60,61,62,63,64,65,75,76,77,78,79,80];
@@ -49,24 +50,34 @@ function createBoard(){
         }
     }
 }
-    // Function to add tokens(pieces)
-    function addTokens(){
-        const playerTokens = 4;
-        const bases = {
-            red: redBase.slice(0, playerTokens),
-            green: greenBase.slice(0, playerTokens),
-            yellow: yellowBase.slice(0, playerTokens),
-            blue: blueBase.slice(0, playerTokens)
-        };
+// Function to add tokens(pieces)
+function addTokens(){
+    const playerTokens = 4;
+    const bases = {
+        red: redBase.slice(0, playerTokens),
+        green: greenBase.slice(0, playerTokens),
+        yellow: yellowBase.slice(0, playerTokens),
+        blue: blueBase.slice(0, playerTokens)
+    };
 
-        for(const color in bases){
-            bases[color].forEach(index => {
-                const token = document.createElement('div');
-                token.classList.add('token', `${color}-token`);
-                //append token to the square
-                document.querySelector(`.square[data-index='${index}']`).appendChild(token);
-            });
-        }
+    for(const color in bases){
+        bases[color].forEach(index => {
+        const token = document.createElement('div');
+        token.classList.add('token', `${color}-token`);
+        //append token to the square
+        document.querySelector(`.square[data-index='${index}']`).appendChild(token);
+        });
     }
+}
+// Function to display number on the dice
+function rollDice(){
+    let number = Math.floor((Math.random() * 6) + 1);
+    dice.textContent = number;
+}
+
+dice.addEventListener('click', () => {
+    rollDice();
+});
+
 createBoard();
 addTokens();

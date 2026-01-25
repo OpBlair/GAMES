@@ -61,7 +61,7 @@ main{
 .green-token {background-color: green;}
 .yellow-token {background-color: yellow;}
 .blue-token {background-color: blue;}
-.dice{
+#dice{
     background-color: cyan;
     border-radius: 5px;
     display: flex;
@@ -69,4 +69,7 @@ main{
     align-items: center;
     height: 50px;
     width: 50px;
+}
+#dice:hover{
+    cursor: pointer;
 }
