@@ -1,6 +1,8 @@
 "use strict";
 const gameBoard = document.getElementById('game-board');
 const playIndication = document.querySelector('.turn-indicator');
+const vsHuman = document.getElementById('human');
+const welcomeScreen = document.querySelector('.welcome');
 //let boardState = Array.from({length: 8}, () => Array(8).fill(null));
 //Index=(Row×TotalColumns)+Column
 //Row=floor(Index/8)
@@ -9,6 +11,12 @@ const playIndication = document.querySelector('.turn-indicator');
 let boardState = [];
 let selectedPiece = null;
 let currentPlayer = 2;
+
+vsHuman.addEventListener('click', () => {
+  welcomeScreen.style.display = 'none';  
+  gameBoard.style.display = 'grid';
+  document.querySelector('.turn-indicator').style.display = "flex";
+})
 
 //Create Board Function
 function createBoard(){
