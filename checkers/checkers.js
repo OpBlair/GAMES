@@ -105,6 +105,82 @@ function getSquare(row, col){
     return gameBoard.querySelector(`[data-cell="${index}"]`);
 }
 
+// ---- HELPER.2. PIECE HAS MOVE ---------
+function pieceHasMove(row, col){
+    const piece = boardState[row][col];
+    if(!piece) return false;
+
+    const directions = [];
+
+    if(piece.king){
+        directions.push([-1,-1], [-1, 1], [1,-1], [1, 1], [-2, -2], [-2, 2], [2, -2], [2, 2]);
+    }else{
+        if(piece.player === 1) directions.push([1, -1], [1, 1], [2, -2], [2, 2]);
+        if(piece.player === 2) directions.push([-1, -1], [-1, 1], [-2, -2], [-2, 2]);
+    }
+
+    for(const [dRow, dCol] of directions){
+        const newRow = row + dRow;
+        const newCol = col + dCol;
+
+        if(newRow < 0 || newRow > 7 || newCol < 0 || newCol > 7) continue;
+        if(boardState[newRow][newCol] !== null) continue;
+
+        //simple move
+        if(Math.abs(dRow) === 1) return true;
+
+        //jump move
+        if(Math.abs(dRow) === 2){
+            const midRow = (row + newRow) / 2;
+            const midCol = (col + newCol) / 2;
+            const midPiece = boardState[midRow][midCol];
+            if(midPiece && midPiece.player !== piece.player) return true;
+        }
+    }
+    return false;
+}
+
+// 3. --- Does a player have any legal moves
+function playerHasAnyMove(player){
+    for(let row = 0; row < 8; row++){
+        for(let col = 0; col < 8; col++){
+            const piece = boardState[row][col];
+            if(piece && piece.player === player){
+                if(pieceHasMove(row, col)) return true;
+            }
+        }
+    }
+    return false;
+}
+
+// 4. ----- count pieces
+function countPieces(player){
+    let count = 0;
+    for(let row = 0; row < 8; row++){
+        for(let col = 0; col < 8; col++){
+            const piece = boardState[row][col];
+            if(piece && piece.player === player) count++;
+        }
+    }
+    return count;
+}
+
+// --------- Game Over ----------
+function gameOver(){
+    const playerToMove = currentPlayer;
+
+    const piecesLeft = countPieces(playerToMove);
+    const hasMoves = playerHasAnyMove(playerToMove);
+
+    if(piecesLeft === 0 || !hasMoves){
+        playIndication.textContent = `${playerToMove === 1 ? "Black" : "White"} has no moves. Game Over!`;
+        gameBoard.style.pointerEvents = 'none';
+        console.log("Game Over");
+        return true;
+    }
+    return false;
+}
+
 // ------------- FORCED CAPTURE ----------
 function playerHasJump(player){
     for(let row = 0; row < 8; row++){
@@ -158,7 +234,6 @@ function movePiece(fromRow, fromCol, toRow, toCol){
     const colDiff = Math.abs(toCol - fromCol)
     const midRow = Math.floor((fromRow + toRow) / 2);
     const midCol = Math.floor((fromCol + toCol) / 2);
-    const mustJump = playerHasJump(pieceData.player);
 
     if(rowDiff !== colDiff) return;
     if((toRow + toCol) % 2 === 0) return;
@@ -166,6 +241,7 @@ function movePiece(fromRow, fromCol, toRow, toCol){
 
     // 1.Validation: piece must exist and destination must be empty
     if (!pieceData || boardState[toRow][toCol] !== null) return;
+    const mustJump = playerHasJump(pieceData.player);
 
     // 2.Logic of a Move. black moves down, white moves up
     // if NOt a king enforce above rules.
@@ -180,10 +256,10 @@ function movePiece(fromRow, fromCol, toRow, toCol){
     if(pieceData.player === 2 && toRow === 0){
         pieceData.king = true;
     }
-    if(mustJump && rowDiff !== 2){
-        console.log("jump is mandatory.");
-        return;
-    }
+
+    // Jump is Mandatory.
+    if(mustJump && rowDiff !== 2) return;
+  
     if(rowDiff === 2){
         //if((boardState[fromRow][fromCol].player === 1 && boardState[midRow][midCol].player === 1) || (boardState[fromRow][fromCol].player === 2 && boardState[midRow][midCol].player === 2)) return;
         const jumpedPiece = boardState[midRow][midCol];
@@ -228,6 +304,7 @@ function movePiece(fromRow, fromCol, toRow, toCol){
                     playIndication.textContent = "White's Turn";
                     break;
             }
+            gameOver();
         }
     }
 }
