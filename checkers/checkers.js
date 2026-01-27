@@ -18,7 +18,7 @@ vsHuman.addEventListener('click', () => {
   document.querySelector('.turn-indicator').style.display = "flex";
 })
 
-//Create Board Function
+// -------------- CREATE BOARD -----------
 function createBoard(){
     for (let row = 0; row < 8; row++) {
         let rowArray = []
@@ -99,13 +99,26 @@ gameBoard.addEventListener('click', (e) =>{
     }
 })
 
-//helper function for DOM square
+// -------------- HELPERS ----------------
 function getSquare(row, col){
     const index = row * 8 + col;
     return gameBoard.querySelector(`[data-cell="${index}"]`);
 }
 
-//Additional Jumps
+// ------------- FORCED CAPTURE ----------
+function playerHasJump(player){
+    for(let row = 0; row < 8; row++){
+        for(let col = 0; col < 8; col++){
+            const piece = boardState[row][col];
+            if(piece && piece.player === player){
+                if(canJumpAgain(row, col)) return true;
+            }
+        }
+    }
+    return false;
+}
+
+// ---------------  MULTI-JUMP ----------------
 function canJumpAgain(row, col){
     const piece = boardState[row][col];
     if(!piece) return false;
@@ -138,13 +151,14 @@ function canJumpAgain(row, col){
     return false;
 }
 
-// MOve piece function
+// ------------------ MOVE PIECE ----------------
 function movePiece(fromRow, fromCol, toRow, toCol){
     const pieceData = boardState[fromRow][fromCol];
     const rowDiff = Math.abs(toRow - fromRow);
     const colDiff = Math.abs(toCol - fromCol)
     const midRow = Math.floor((fromRow + toRow) / 2);
     const midCol = Math.floor((fromCol + toCol) / 2);
+    const mustJump = playerHasJump(pieceData.player);
 
     if(rowDiff !== colDiff) return;
     if((toRow + toCol) % 2 === 0) return;
@@ -166,7 +180,10 @@ function movePiece(fromRow, fromCol, toRow, toCol){
     if(pieceData.player === 2 && toRow === 0){
         pieceData.king = true;
     }
-
+    if(mustJump && rowDiff !== 2){
+        console.log("jump is mandatory.");
+        return;
+    }
     if(rowDiff === 2){
         //if((boardState[fromRow][fromCol].player === 1 && boardState[midRow][midCol].player === 1) || (boardState[fromRow][fromCol].player === 2 && boardState[midRow][midCol].player === 2)) return;
         const jumpedPiece = boardState[midRow][midCol];
