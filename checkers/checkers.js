@@ -71,7 +71,7 @@ gameBoard.addEventListener('click', (e) =>{
         if(parseInt(e.target.dataset.player) !== currentPlayer) return;
         console.log("Clicked piece on cell:", e.target.dataset.cell);
         console.log("Player:",e.target.dataset.player);
-
+        clearHightLights();
         //hightlight selection
         document.querySelectorAll('.piece').forEach(p => p.classList.remove('selected-piece'));
         selectedPiece = {
@@ -79,7 +79,7 @@ gameBoard.addEventListener('click', (e) =>{
             fromCol: fromCol,
         };
         e.target.classList.add('selected-piece');
-
+        highlightMoves(fromRow, fromCol);
     } else if (e.target.classList.contains("square")){
         console.log("Clicked cell:", e.target.dataset.cell);
         const toRow = Math.floor((parseInt(e.target.dataset.cell)) / 8);
@@ -163,6 +163,81 @@ function countPieces(player){
         }
     }
     return count;
+}
+
+// 5. ------ HIGHLIGHT SQUARES ----------
+function clearHightLights(){
+    document.querySelectorAll('.highlight-move, .highlight-jump, .attackable').forEach(
+        highlight => highlight.classList.remove('.highlight-move', '.highlight-jump', '.attackable')
+    );
+}
+
+// --------- GET LEGAL MOVES -----------
+function getLegalMoves(row, col){
+    const piece = boardState[row][col];
+    if(!piece) return false;
+
+    const directions = [];
+    const moves = [];
+
+    if(piece.king){
+        directions.push([-1,-1], [-1, 1], [1,-1], [1, 1], [-2, -2], [-2, 2], [2, -2], [2, 2]);
+    }else{
+        if(piece.player === 1) directions.push([1, -1], [1, 1], [2, -2], [2, 2]);
+        if(piece.player === 2) directions.push([-1, -1], [-1, 1], [-2, -2], [-2, 2]);
+    }
+
+    const mustJump = playerHasJump(piece.player);
+
+    for(const [dRow, dCol] of directions){
+        const newRow = row + dRow;
+        const newCol = col + dCol;
+
+        if(newRow < 0 || newRow > 7 || newCol < 0 || newCol > 7) continue;
+        if(boardState[newRow][newCol] !== null) continue;
+
+        //simple move
+        if(Math.abs(dRow) === 1 && !mustJump){
+            moves.push({toRow: newRow, toCol: newCol, jump: false});
+        }
+        //jump move
+        if(Math.abs(dRow) === 2){
+            const midRow = (row + newRow) / 2;
+            const midCol = (col + newCol) / 2;
+            const midPiece = boardState[midRow][midCol];
+            if(midPiece && midPiece.player !== piece.player){
+                moves.push({
+                    toRow: newRow,
+                    toCol: newCol,
+                    jump: true,
+                    attackRow: midRow,
+                    attackCol: midCol
+                });
+            };
+        }
+    }
+    return moves;
+}
+
+// --------- HIGHLIGHT MOVES ----------
+function highlightMoves(row, col){
+    clearHightLights();
+
+    const moves = getLegalMoves(row, col);
+
+    moves.forEach(move => {
+        const square = getSquare(move.toRow, move.toCol);
+
+        if(move.jump){
+            square.classList.add('highlight-jump');
+
+            const enemySquare = getSquare(move.attackRow, move.attackCol);
+            const enemyPiece = enemySquare.querySelector('.piece');
+            if(enemyPiece) enemyPiece.classList.add('attackable');
+        }else{
+            square.classList.add('highlight-move');
+        }
+    });
 }
 
 // --------- Game Over ----------
@@ -280,7 +355,7 @@ function movePiece(fromRow, fromCol, toRow, toCol){
     if(pieceElement){
         newSquare.appendChild(pieceElement);
         pieceElement.dataset.cell = toRow * 8 + toCol;
-
+        clearHightLights();
         //Visual feedback for King
         if(pieceData.king){
             pieceElement.style.border = "4px solid gold";
