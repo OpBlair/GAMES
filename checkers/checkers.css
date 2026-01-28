@@ -79,3 +79,15 @@ button:hover{
     outline-offset: 1px;
     box-shadow: 0 0 15px #3498db;
 }
+.highlight-move{
+    outline: 3px solid lime;
+    box-shadow: inset 0 0 0 3px lime;
+}
+.highlight-jump{
+    outline: 3px solid red;
+    box-shadow: inset 0 0 0 3px red;
+}
+.attackable{
+    outline: 3px solid crimson;
+    transform: scale(1.05);
+}
