@@ -168,14 +168,14 @@ function countPieces(player){
 // 5. ------ HIGHLIGHT SQUARES ----------
 function clearHightLights(){
     document.querySelectorAll('.highlight-move, .highlight-jump, .attackable').forEach(
-        highlight => highlight.classList.remove('.highlight-move', '.highlight-jump', '.attackable')
+        highlight => highlight.classList.remove('highlight-move', 'highlight-jump', 'attackable')
     );
 }
 
 // --------- GET LEGAL MOVES -----------
 function getLegalMoves(row, col){
     const piece = boardState[row][col];
-    if(!piece) return false;
+    if(!piece) return [];
 
     const directions = [];
     const moves = [];
