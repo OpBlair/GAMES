@@ -1,6 +1,14 @@
 'use strict';
 const gameBoard = document.getElementById('game-board');
 const dice = document.getElementById('dice');
+const vsHuman = document.getElementById('human');
+const welcomeScreen = document.querySelector('.welcome');
+
+vsHuman.addEventListener('click', () => {
+  welcomeScreen.style.display = 'none';  
+  gameBoard.style.display = 'grid';
+  dice.style.display = 'flex';
+})
 
 //home base
 let redBase = [0,1,2,3,4,5,15,16,17,18,19,20,30,31,32,33,34,35,45,46,47,48,49,50,60,61,62,63,64,65,75,76,77,78,79,80];
