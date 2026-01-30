@@ -27,11 +27,18 @@ main{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: whitesmoke;
+    background-color: lightskyblue;
     height: 250px;
     width: 300px;
     border-radius: 10px;
     gap: 8px;
+}
+button{
+    padding: 5px;
+    width: 200px;
+}
+button:hover{
+    cursor: pointer;
 }
 #game-board{
     background-color: whitesmoke;
