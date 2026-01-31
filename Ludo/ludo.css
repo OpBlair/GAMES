@@ -15,7 +15,7 @@ main{
 }
 .game-container{
     background-color: whitesmoke;
-    height: 600px;
+    height: 600px;  
     width: 600px;
     display: flex;
     justify-content: center;
