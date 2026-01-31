@@ -82,7 +82,7 @@ function rollDice(){
     let number = Math.floor((Math.random() * 6) + 1);
     dice.textContent = number;
 }
-
+// ---- DICE ROLL EVENT LISTENER -----
 dice.addEventListener('click', () => {
     rollDice();
 });
