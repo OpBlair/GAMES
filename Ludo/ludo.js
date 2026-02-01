@@ -1,10 +1,12 @@
 'use strict';
 
+// -------- VARIABLES --------------
 const gameBoard = document.getElementById('game-board');
 const dice = document.getElementById('dice');
 const vsHuman = document.getElementById('human');
 const welcomeScreen = document.querySelector('.welcome');
 
+// ------ BUTTON FOR PLAYING AGAINST HUMAN --------
 vsHuman.addEventListener('click', () => {
   welcomeScreen.style.display = 'none';  
   gameBoard.style.display = 'grid';
