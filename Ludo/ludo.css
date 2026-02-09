@@ -36,9 +36,14 @@ main{
 button{
     padding: 5px;
     width: 200px;
+    border: none;
+    border-radius: 5px;
+    background-color: rgb(8, 226, 8);
+    color: white;
 }
 button:hover{
     cursor: pointer;
+    transform: translateY(-1px);
 }
 #game-board{
     background-color: whitesmoke;
