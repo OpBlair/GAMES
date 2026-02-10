@@ -76,6 +76,7 @@ No build tools or dependencies required.
 
 ## 🔮 Possible Improvements
 
+* Refactoring the code
 * AI opponent
 * Move animations
 * Undo / replay support
