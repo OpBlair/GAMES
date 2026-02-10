@@ -62,6 +62,7 @@ ludo/
   * Extra turns on rolling 6
 * Win condition (all tokens home)
 * Local multiplayer
+* Refactoring the Logic
 * Optional AI players
 
 ---
