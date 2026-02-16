@@ -386,6 +386,7 @@ function movePiece(fromRow, fromCol, toRow, toCol){
 
 
 // -------- REFACTORING THE GAME LOGIC FLOW ---------
+// 1. THE ENGINE
 class checkersEngine{
     constructor(){
         this.board = Array.from({length: 8}, () => Array(8).fill(null));
