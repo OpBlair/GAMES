@@ -392,4 +392,15 @@ class checkersEngine{
         this.board = Array.from({length: 8}, () => Array(8).fill(null));
         this.currentPlayer = 2 // white
     }
+
+    initialize(){
+        for(let row = 0; row < 8; row++){
+            for(let column = 0; column < 8; column++){
+                if((row + column) % 2 !== 0){
+                    if (row < 3) this.board[row][column] = {player: 1, king: false};
+                    else if(row > 4) this.board[row][column] = {player: 2, king: false};
+                }
+            }
+        }
+    }
 }
