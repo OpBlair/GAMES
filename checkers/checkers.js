@@ -409,7 +409,7 @@ class checkersEngine{
     }
 }
 
-// THE RULES OF CHECKERS GAME
+// ------- THE RULES OF CHECKERS GAME --------
 class moveValidator{
     static getLegalMoves(engine, row, col){
         const piece = engine.board[row][col];
@@ -418,5 +418,13 @@ class moveValidator{
 
     static isKingPromotion(piece, row){
         return (piece.player === 1 && row === 7) || (piece.player === 2 && row === 0);
+    }
+}
+
+// ----------- UI RENDERER ------------
+class checkersUI{
+    constructor(boardElement, onSquareClick){
+        this.boardElement = boardElement;
+        this.onSquareClick = onSquareClick;
     }
 }
