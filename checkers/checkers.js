@@ -408,3 +408,15 @@ class checkersEngine{
         this.currentPlayer = this.currentPlayer === 1 ? 2 : 1;
     }
 }
+
+// THE RULES OF CHECKERS GAME
+class moveValidator{
+    static getLegalMoves(engine, row, col){
+        const piece = engine.board[row][col];
+        if(!piece) return [];
+    }
+
+    static isKingPromotion(piece, row){
+        return (piece.player === 1 && row === 7) || (piece.player === 2 && row === 0);
+    }
+}
