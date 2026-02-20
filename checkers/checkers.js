@@ -438,5 +438,8 @@ class checkersUI{
         });
     }
 
-    
+    createSquare(r, c, piece){
+        const div = document.createElement('div');
+        div.className = `square ${(r + c) % 2 === 0 ? 'light' : 'dark'}`;
+    }
 }
