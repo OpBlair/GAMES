@@ -427,4 +427,16 @@ class checkersUI{
         this.boardElement = boardElement;
         this.onSquareClick = onSquareClick;
     }
+
+    draw(boardState){
+        this.boardElement.innerHTML = '';
+        boardState.forEach((row, r) => {
+            row.forEach((cell, c) => {
+                const square = this.createSquare(r, c, cell);
+                this.boardElement.appendChild(square);
+            });
+        });
+    }
+
+    
 }
