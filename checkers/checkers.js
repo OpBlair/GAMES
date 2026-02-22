@@ -442,5 +442,8 @@ class checkersUI{
         const div = document.createElement('div');
         div.className = `square ${(r + c) % 2 === 0 ? 'light' : 'dark'}`;
         div.onclick = () => this.onSquareClick(r, c);
+        if(piece){
+            const p = document.createElement('div');
+        }
     }
 }
