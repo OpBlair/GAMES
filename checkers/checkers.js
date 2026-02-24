@@ -451,3 +451,9 @@ class checkersUI{
         return div;
     }
 }
+
+// ----- THE CONTROLLER UNIT -----
+const engine = new CheckersEngine();
+const ui = new checkersUI(document.getElementById('game-board'), (r, c) => {
+
+});
