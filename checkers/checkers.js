@@ -444,6 +444,10 @@ class checkersUI{
         div.onclick = () => this.onSquareClick(r, c);
         if(piece){
             const p = document.createElement('div');
+            p.className = `piece p${piece.player} ${piece.king ? 'king' : ''}`;
+            p.textContent = piece.king ? '👑' : '';
+            div.appendChild(p);
         }
+        return div;
     }
 }
