@@ -393,7 +393,7 @@ class checkersEngine{
         this.currentPlayer = 2 // white
     }
 
-    initialize(){
+    createInitialBoard(){
         for(let row = 0; row < 8; row++){
             for(let column = 0; column < 8; column++){
                 if((row + column) % 2 !== 0){
@@ -458,5 +458,5 @@ const ui = new checkersUI(document.getElementById('game-board'), (r, c) => {
 
 });
 
-engine.initialize();
+engine.createInitialBoard();
 ui.draw(engine.board);
