@@ -457,3 +457,6 @@ const engine = new CheckersEngine();
 const ui = new checkersUI(document.getElementById('game-board'), (r, c) => {
 
 });
+
+engine.initialize();
+ui.draw(engine.board);
