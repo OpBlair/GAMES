@@ -18,9 +18,11 @@ vsHuman.addEventListener('click', () => {
   document.querySelector('.turn-indicator').style.display = "flex";
 })
 
+const Board_Size = 8;
+
 // -------------- CREATE BOARD -----------
 function createBoard(){
-    for (let row = 0; row < 8; row++) {
+    for (let row = 0; row < Board_Size; row++) {
         let rowArray = []
         for (let col = 0; col < 8; col++){
             rowArray[col] = null;
