@@ -389,7 +389,7 @@ function movePiece(fromRow, fromCol, toRow, toCol){
 
 // -------- REFACTORING THE GAME LOGIC FLOW ---------
 // 1. THE ENGINE
-class checkersEngine{
+class CheckersEngine{
     constructor(){
         this.board = Array.from({length: 8}, () => Array(8).fill(null));
         this.currentPlayer = 2 // white
@@ -412,7 +412,7 @@ class checkersEngine{
 }
 
 // ------- THE RULES OF CHECKERS GAME --------
-class moveValidator{
+class MoveValidator{
     static getLegalMoves(engine, row, col){
         const piece = engine.board[row][col];
         if(!piece) return [];
@@ -424,7 +424,7 @@ class moveValidator{
 }
 
 // ----------- UI RENDERER ------------
-class checkersUI{
+class CheckersUI{
     constructor(boardElement, onSquareClick){
         this.boardElement = boardElement;
         this.onSquareClick = onSquareClick;
@@ -456,7 +456,7 @@ class checkersUI{
 
 // ----- THE CONTROLLER UNIT -----
 const engine = new CheckersEngine();
-const ui = new checkersUI(document.getElementById('game-board'), (r, c) => {
+const ui = new CheckersUI(document.getElementById('game-board'), (r, c) => {
 
 });
 
