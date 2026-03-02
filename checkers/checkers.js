@@ -399,8 +399,8 @@ class CheckersEngine{
     }
 
     createInitialBoard(){
-        for(let row = 0; row < 8; row++){
-            for(let column = 0; column < 8; column++){
+        for(let row = 0; row < Board_Size; row++){
+            for(let column = 0; column < Board_Size; column++){
                 if((row + column) % 2 !== 0){
                     if (row < 3) this.board[row][column] = {player: 1, king: false};
                     else if(row > 4) this.board[row][column] = {player: 2, king: false};
