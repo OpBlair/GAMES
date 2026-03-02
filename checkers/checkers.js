@@ -391,8 +391,11 @@ function movePiece(fromRow, fromCol, toRow, toCol){
 // 1. THE ENGINE
 class CheckersEngine{
     constructor(){
+        this.Board_Size = 8;
         this.board = Array.from({length: 8}, () => Array(8).fill(null));
-        this.currentPlayer = 2 // white
+        this.currentPlayer = 2 // white starts
+        this.selectedPiece = null;
+        this.mustJumpPieece = null; // multi-jump enforcement
     }
 
     createInitialBoard(){
