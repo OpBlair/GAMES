@@ -411,6 +411,7 @@ class CheckersEngine{
 
     toggleTurn(){
         this.currentPlayer = this.currentPlayer === 1 ? 2 : 1;
+        this.mustJumpPieece = null;
     }
 }
 
