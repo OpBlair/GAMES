@@ -3,6 +3,7 @@ const gameBoard = document.getElementById('game-board');
 const playIndication = document.querySelector('.turn-indicator');
 const vsHuman = document.getElementById('human');
 const welcomeScreen = document.querySelector('.welcome');
+/*
 //let boardState = Array.from({length: 8}, () => Array(8).fill(null));
 //Index=(Row×TotalColumns)+Column
 //Row=floor(Index/8)
@@ -11,12 +12,6 @@ const welcomeScreen = document.querySelector('.welcome');
 let boardState = [];
 let selectedPiece = null;
 let currentPlayer = 2;
-
-vsHuman.addEventListener('click', () => {
-  welcomeScreen.style.display = 'none';  
-  gameBoard.style.display = 'grid';
-  document.querySelector('.turn-indicator').style.display = "flex";
-})
 
 const Board_Size = 8;
 
@@ -385,7 +380,7 @@ function movePiece(fromRow, fromCol, toRow, toCol){
         }
     }
 }
-
+*/
 
 // -------- REFACTORING THE GAME LOGIC FLOW ---------
 // 1. THE ENGINE
@@ -464,5 +459,14 @@ const ui = new CheckersUI(document.getElementById('game-board'), (r, c) => {
 
 });
 
-engine.createInitialBoard();
-ui.draw(engine.board);
+// ------ START GAME BUTTON ------
+vsHuman.addEventListener('click', () => {
+    welcomeScreen.style.display = 'none';  
+    gameBoard.style.display = 'grid';
+    playIndication.style.display = 'flex';
+    playIndication.textContent = "White's Turn";
+
+    // Game Logic start
+    engine.createInitialBoard();
+    ui.draw(engine.board);
+})
