@@ -83,6 +83,7 @@ button:hover{
     z-index: 10;
     position: absolute;
 }
+.token:hover {cursor: pointer;}
 .red-token {background-color: #ffcccc; border-color: white;}
 .green-token {background-color: #2ecc71; border-color: white;}
 .yellow-token {background-color: #f1c40f; border-color: white;}
