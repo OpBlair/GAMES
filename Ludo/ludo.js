@@ -64,13 +64,7 @@ function createBoard(){
 }
 // Function to add tokens(pieces)
 function addTokens(){
-    /*const playerTokens = 4;
-    const bases = {
-        red: redBase.slice(0, playerTokens),
-        green: greenBase.slice(0, playerTokens),
-        yellow: yellowBase.slice(0, playerTokens),
-        blue: blueBase.slice(0, playerTokens)
-    };*/
+
     const basePockets = {
         red: [16, 19, 61, 64],       
         green: [25, 28, 70,73],
