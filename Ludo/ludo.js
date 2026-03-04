@@ -64,21 +64,29 @@ function createBoard(){
 }
 // Function to add tokens(pieces)
 function addTokens(){
-    const playerTokens = 4;
+    /*const playerTokens = 4;
     const bases = {
         red: redBase.slice(0, playerTokens),
         green: greenBase.slice(0, playerTokens),
         yellow: yellowBase.slice(0, playerTokens),
         blue: blueBase.slice(0, playerTokens)
+    };*/
+    const basePockets = {
+        red: [16, 19, 61, 64],       
+        green: [25, 28, 70,73],
+        yellow: [160, 163, 205, 208],
+        blue: [151, 154, 196, 199]
     };
 
-    for(const color in bases){
-        bases[color].forEach(index => {
-        const token = document.createElement('div');
-        token.classList.add('token', `${color}-token`);
-        //append token to the square
-        document.querySelector(`.square[data-index='${index}']`).appendChild(token);
-        });
+    for(const color in basePockets){
+        basePockets[color].forEach(index => {
+            const square = document.querySelector(`.square[data-index='${index}']`);
+            if(square){
+                const token = document.createElement('div');
+                token.classList.add('token', `${color}-token`);
+                square.appendChild(token);
+            }
+        })
     }
 }
 // Function to display number on the dice
