@@ -27,6 +27,7 @@ let bluePath = [127,142,157,172,187,201,202];
 
 // ------- FULL TOKEN PATHS ------
 let gamePath = Array(51).fill(null);
+console.log(gamePath);
 
 // -------- START POSITIONS ------
 let redStart = 2;
