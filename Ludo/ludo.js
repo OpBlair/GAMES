@@ -25,6 +25,9 @@ let greenPath = [22,23,37,52,67,82,97];
 let yellowPath = [113,114,115,116,117,118,133];
 let bluePath = [127,142,157,172,187,201,202];
 
+// ------- FULL TOKEN PATHS ------
+let gamePath = Array(51).fill(null);
+
 // -------- START POSITIONS ------
 let redStart = 2;
 let greenStart = 18;
