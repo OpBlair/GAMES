@@ -103,6 +103,10 @@ function rollDice(){
 dice.addEventListener('click', () => {
     rollDice();
 });
+// ---- MOVE TOKEN FUNCTION ----
+function moveToken(token, numberOfSteps){
+
+}
 
 createBoard();
 addTokens();
