@@ -86,11 +86,21 @@ class CheckersRules{
         return moves.some(move => move.jump);
     }
     
-    static playerHasJump(engine, row, col){}
+    static playerHasJump(engine, row, col){
+        for(let row = 0; row < 8; row++){
+            for(let col = 0; col < 8; col++){
+                const piece = engine.board[row][col];
+                if(piece && piece.player === player){
+                    if(this.canJumpAgain(row, col)) return true;
+                }
+            }
+        }
+        return false;
+    }
     
     static pieceHasMove(engine, row, col){}
     
-    static playerHasanyMove(engine, player){}
+    static playerHasAnyMove(engine, player){}
 
     static isKingPromotion(piece, row){
         return (piece.player === 1 && row === 7) || (piece.player === 2 && row === 0);
