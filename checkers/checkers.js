@@ -98,9 +98,21 @@ class CheckersRules{
         return false;
     }
     
-    static pieceHasMove(engine, row, col){}
+    static pieceHasMove(engine, row, col){
+        return this.getLegalMoves(engine, row, col).length > 0;
+    }
     
-    static playerHasAnyMove(engine, player){}
+    static playerHasAnyMove(engine, player){
+        for(let row = 0; row < 8; row++){
+            for(let col = 0; col < 8; col++){
+                const piece = engine.board[row][col];
+                if(piece && piece.player === player){
+                    if(this.pieceHasMove(row, col)) return true;
+                }
+            }
+        }
+        return false;
+    }
 
     static isKingPromotion(piece, row){
         return (piece.player === 1 && row === 7) || (piece.player === 2 && row === 0);
@@ -140,6 +152,7 @@ class CheckersUI{
 
 // ----- THE CONTROLLER UNIT -----
 const engine = new CheckersEngine();
+const moves = CheckersRules.getLegalMoves(engine, row, col);
 const ui = new CheckersUI(document.getElementById('game-board'), (r, c) => {
 
 });
