@@ -81,7 +81,10 @@ class CheckersRules{
         return moves;
     }
     
-    static canJumpAgain(engine, row, col){}
+    static canJumpAgain(engine, row, col){
+        const moves = this.getLegalMoves(engine, row, col);
+        return moves.some(move => move.jump);
+    }
     
     static playerHasJump(engine, row, col){}
     
