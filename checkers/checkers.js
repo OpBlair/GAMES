@@ -36,8 +36,51 @@ class CheckersRules{
     static getLegalMoves(engine, row, col){
         const piece = engine.board[row][col];
         if(!piece) return [];
-    }
 
+        const moves = [];
+        const directions = [];
+
+        if(piece.king){
+            // King moves in all directions.
+            directions.push([-1,-1], [-1, 1], [1,-1], [1, 1], [-2, -2], [-2, 2], [2, -2], [2, 2]);
+        }else{
+            // Normal piece moves.
+            if(piece.player === 1) directions.push([1, -1], [1, 1], [2, -2], [2, 2]);
+            if(piece.player === 2) directions.push([-1, -1], [-1, 1], [-2, -2], [-2, 2]);
+        }
+
+        const mustJump = this.playerHasJump(engine, piece.player)
+
+        for(const [dRow, dCol] of directions){
+            const newRow = row + dRow;  
+            const newCol = col + dCol;
+                
+            if(newRow < 0 || newRow > 7 || newCol < 0 || newCol > 7) continue;
+            if(engine.board[newRow][newCol] !== null) continue;
+
+            // Normal move
+            if(Math.abs(dRow) === 1 && !mustJump){
+                moves.push({toRow: newRow, toCol: newCol, jump: false});
+            }
+            // Jump move
+            if(Math.abs(dRow) === 2){
+                const midRow = (row + newRow) / 2;
+                const midCol = (col + newCol) / 2;
+                const midPiece = engine.board[midRow][midCol];
+                if(midPiece && midPiece.player !== piece.player){
+                    moves.push({
+                        toRow: newRow,
+                        toCol: newCol,
+                        jump: true,
+                        attackRow: midRow,
+                        attackCol: midCol
+                    });
+                };
+            }
+        }
+        return moves;
+    }
+    
     static canJumpAgain(engine, row, col){}
     
     static playerHasJump(engine, row, col){}
