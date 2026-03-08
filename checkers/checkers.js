@@ -4,7 +4,6 @@ const playIndication = document.querySelector('.turn-indicator');
 const vsHuman = document.getElementById('human');
 const welcomeScreen = document.querySelector('.welcome');
 
-// -------- REFACTORING THE GAME LOGIC FLOW ---------
 // 1. THE ENGINE
 class CheckersEngine{
     constructor(){
@@ -33,11 +32,19 @@ class CheckersEngine{
 }
 
 // ------- THE RULES OF CHECKERS GAME --------
-class MoveValidator{
+class CheckersRules{
     static getLegalMoves(engine, row, col){
         const piece = engine.board[row][col];
         if(!piece) return [];
     }
+
+    static canJumpAgain(engine, row, col){}
+    
+    static playerHasJump(engine, row, col){}
+    
+    static pieceHasMove(engine, row, col){}
+    
+    static playerHasanyMove(engine, player){}
 
     static isKingPromotion(piece, row){
         return (piece.player === 1 && row === 7) || (piece.player === 2 && row === 0);
