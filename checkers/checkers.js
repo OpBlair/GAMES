@@ -11,7 +11,7 @@ class CheckersEngine{
         this.board = Array.from({length: 8}, () => Array(8).fill(null));
         this.currentPlayer = 2 // white starts
         this.selectedPiece = null;
-        this.mustJumpPieece = null; // multi-jump enforcement
+        this.mustJumpPiece = null; // multi-jump enforcement
     }
 
     createInitialBoard(){
@@ -25,9 +25,33 @@ class CheckersEngine{
         }
     }
 
+    executeMOve(fromRow, fromCol, move){
+        const piece = this.board[fromRow][fromCol];
+
+        if(!piece) return false;
+
+        const {toRow, toCol, jump, attackRow, attackCol} = move;
+
+        if(jump){ this.board[attackRow][attackCol] = null; }
+
+        // move piece
+        this.board[fromRow][fromCol] = null;
+        this.board[toRow][tocol] = piece;
+
+        // promotion
+        if(CheckersRules.isKingPromotion(piece, toRow)){ piece.king = true; }
+
+        // multi Jump
+        if(jump && CheckersRules.canJumpAgain(this, toRow, toCol)){
+            this.mustJumpPiece = {row: toRow, col: toCol};
+        }else{
+            this.toggleTurn();
+        }
+        return true;
+    }
     toggleTurn(){
         this.currentPlayer = this.currentPlayer === 1 ? 2 : 1;
-        this.mustJumpPieece = null;
+        this.mustJumpPiece = null;
     }
 }
 
