@@ -57,7 +57,7 @@ class CheckersEngine{
 
 // ------- THE RULES OF CHECKERS GAME --------
 class CheckersRules{
-    static getLegalMoves(engine, row, col){
+    static generateMoves(engine, row, col){
         const piece = engine.board[row][col];
         if(!piece) return [];
 
@@ -73,7 +73,7 @@ class CheckersRules{
             if(piece.player === 2) directions.push([-1, -1], [-1, 1], [-2, -2], [-2, 2]);
         }
 
-        const mustJump = this.playerHasJump(engine, piece.player)
+        //const mustJump = this.playerHasJump(engine, piece.player)
 
         for(const [dRow, dCol] of directions){
             const newRow = row + dRow;  
@@ -83,7 +83,7 @@ class CheckersRules{
             if(engine.board[newRow][newCol] !== null) continue;
 
             // Normal move
-            if(Math.abs(dRow) === 1 && !mustJump){
+            if(Math.abs(dRow) === 1 /*&& !mustJump*/){
                 moves.push({toRow: newRow, toCol: newCol, jump: false});
             }
             // Jump move
@@ -104,9 +104,19 @@ class CheckersRules{
         }
         return moves;
     }
+
+    static getLegalMoves(engine, row, col){
+        const moves = this.generateMoves(engine, row, col);
+
+        if(this.playerHasJump(engine, engine.currentPlayer)){
+            return moves.filter(m => m.jump);
+        }
+
+        return moves;
+    }
     
     static canJumpAgain(engine, row, col){
-        const moves = this.getLegalMoves(engine, row, col);
+        const moves = this.generateMoves(engine, row, col);
         return moves.some(move => move.jump);
     }
     
@@ -131,7 +141,7 @@ class CheckersRules{
             for(let col = 0; col < 8; col++){
                 const piece = engine.board[row][col];
                 if(piece && piece.player === player){
-                    if(this.pieceHasMove(row, col)) return true;
+                    if(this.pieceHasMove(engine, row, col)) return true;
                 }
             }
         }
