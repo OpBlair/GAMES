@@ -31,12 +31,12 @@ class CheckersEngine{
         if(!piece) return false;
 
         const {toRow, toCol, jump, attackRow, attackCol} = move;
-
+        // remove jumped piece
         if(jump){ this.board[attackRow][attackCol] = null; }
 
         // move piece
         this.board[fromRow][fromCol] = null;
-        this.board[toRow][tocol] = piece;
+        this.board[toRow][toCol] = piece;
 
         // promotion
         if(CheckersRules.isKingPromotion(piece, toRow)){ piece.king = true; }
@@ -110,12 +110,12 @@ class CheckersRules{
         return moves.some(move => move.jump);
     }
     
-    static playerHasJump(engine, row, col){
+    static playerHasJump(engine, player){
         for(let row = 0; row < 8; row++){
             for(let col = 0; col < 8; col++){
                 const piece = engine.board[row][col];
                 if(piece && piece.player === player){
-                    if(this.canJumpAgain(row, col)) return true;
+                    if(this.canJumpAgain(engine, row, col)) return true;
                 }
             }
         }
@@ -176,14 +176,16 @@ class CheckersUI{
 
 // ----- THE CONTROLLER UNIT -----
 const engine = new CheckersEngine();
-const moves = CheckersRules.getLegalMoves(engine, row, col);
+
 const ui = new CheckersUI(document.getElementById('game-board'), (row, col) => {
     const piece = engine.board[row][col];
 
     // select a piece
-    if(piece && piece.player === engine.currentPlayer){
+    if(engine.mustJumpPiece){
+        const {row: mRow, col: mCol} = engine.mustJumpPiece;
+        engine.selectedPiece = {row: mRow, col: mCol};
+    }else if(piece && piece.player === engine.currentPlayer){
         engine.selectedPiece = {row, col};
-        return;
     }
 
     if(engine.selectedPiece){
@@ -196,6 +198,8 @@ const ui = new CheckersUI(document.getElementById('game-board'), (row, col) => {
             engine.selectedPiece = null;
 
             ui.draw(engine.board);
+            playIndication.textContent = engine.currentPlayer === 2 ? "White's Turn" : "Black's Turn";
+            if (engine.mustJumpPiece) playIndication.textContent += "(Must Jump Again!)";
         }
     }
 });
@@ -206,7 +210,7 @@ vsHuman.addEventListener('click', () => {
     gameBoard.style.display = 'grid';
     playIndication.style.display = 'flex';
     playIndication.textContent = "White's Turn";
-
+    console.log("clicked me");
     // Game Logic start
     engine.createInitialBoard();
     ui.draw(engine.board);
