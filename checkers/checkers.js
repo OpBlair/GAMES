@@ -25,7 +25,7 @@ class CheckersEngine{
         }
     }
 
-    executeMOve(fromRow, fromCol, move){
+    executeMove(fromRow, fromCol, move){
         const piece = this.board[fromRow][fromCol];
 
         if(!piece) return false;
@@ -177,8 +177,27 @@ class CheckersUI{
 // ----- THE CONTROLLER UNIT -----
 const engine = new CheckersEngine();
 const moves = CheckersRules.getLegalMoves(engine, row, col);
-const ui = new CheckersUI(document.getElementById('game-board'), (r, c) => {
+const ui = new CheckersUI(document.getElementById('game-board'), (row, col) => {
+    const piece = engine.board[row][col];
 
+    // select a piece
+    if(piece && piece.player === engine.currentPlayer){
+        engine.selectedPiece = {row, col};
+        return;
+    }
+
+    if(engine.selectedPiece){
+        const {row: fromRow, col: fromCol} = engine.selectedPiece;
+        const moves = CheckersRules.getLegalMoves(engine, fromRow, fromCol);
+        const move = moves.find(m => m.toRow === row && m.toCol === col);
+
+        if(move){
+            engine.executeMove(fromRow, fromCol, move);
+            engine.selectedPiece = null;
+
+            ui.draw(engine.board);
+        }
+    }
 });
 
 // ------ START GAME BUTTON ------
