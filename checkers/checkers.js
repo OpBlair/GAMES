@@ -57,6 +57,19 @@ class CheckersEngine{
 
 // ------- THE RULES OF CHECKERS GAME --------
 class CheckersRules{
+
+    static move_directions = {
+        p1: [[1,-1], [1,1]],
+        p2: [[-1,-1], [-1,1]],
+        king: [[-1,-1], [-1,1], [1,-1], [1,1]]
+    }
+
+    static jump_directions = {
+        p1: [[2,-2], [2,2]],
+        p2: [[-2,-2], [-2,2]],
+        king: [[-2,-2], [-2,2], [2,-2], [2,2]]
+    }
+    
     static generateMoves(engine, row, col){
         const piece = engine.board[row][col];
         if(!piece) return [];
@@ -73,8 +86,6 @@ class CheckersRules{
             if(piece.player === 2) directions.push([-1, -1], [-1, 1], [-2, -2], [-2, 2]);
         }
 
-        //const mustJump = this.playerHasJump(engine, piece.player)
-
         for(const [dRow, dCol] of directions){
             const newRow = row + dRow;  
             const newCol = col + dCol;
@@ -83,7 +94,7 @@ class CheckersRules{
             if(engine.board[newRow][newCol] !== null) continue;
 
             // Normal move
-            if(Math.abs(dRow) === 1 /*&& !mustJump*/){
+            if(Math.abs(dRow) === 1){
                 moves.push({toRow: newRow, toCol: newCol, jump: false});
             }
             // Jump move
