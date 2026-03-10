@@ -107,8 +107,12 @@ const gameState = {
     currentPlayer: '',
     diceValue: null,
     isGameOver: false,
-    positions: {}
+    positions: {
+        red: [16, 19, 61, 64],       
+        green: [25, 28, 70,73],
+        yellow: [160, 163, 205, 208],
+        blue: [151, 154, 196, 199]
+    }
 }
-
 createBoard();
 addTokens();
