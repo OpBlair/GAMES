@@ -96,6 +96,7 @@ function rollDice(){
 // ---- DICE ROLL EVENT LISTENER -----
 dice.addEventListener('click', () => {
     rollDice();
+    console.log(gameState.diceValue);
 });
 // ---- MOVE TOKEN FUNCTION ----
 function moveToken(token, numberOfSteps){
@@ -108,6 +109,6 @@ const gameState = {
     isGameOver: false,
     positions: {}
 }
-console.log(gameState.diceValue);
+
 createBoard();
 addTokens();
