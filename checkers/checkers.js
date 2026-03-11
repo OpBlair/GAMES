@@ -9,7 +9,7 @@ class CheckersEngine{
     constructor(){
         this.Board_Size = 8;
         this.board = Array.from({length: 8}, () => Array(8).fill(null));
-        this.currentPlayer = 2 // white starts
+        this.currentPlayer = 1 // white starts
         this.selectedPiece = null;
         this.mustJumpPiece = null; // multi-jump enforcement
     }
@@ -102,8 +102,8 @@ class CheckersRules{
             if(newRow < 0 || newRow > 7 || newCol < 0 || newCol > 7) continue;
             if(engine.board[newRow][newCol] !== null) continue;
 
-            const midRow = (row + dRow) / 2;
-            const midCol = (col + dCol) / 2;
+            const midRow = row + dRow / 2;
+            const midCol = col + dCol / 2;
             const midPiece = engine.board[midRow][midCol];
             if(midPiece && midPiece.player !== piece.player){
                 moves.push({
@@ -239,14 +239,15 @@ const engine = new CheckersEngine();
 const ui = new CheckersUI(gameBoard, (row, col) => {
     const piece = engine.board[row][col];
 
-    // select a piece
+    // Multi-jump
     if(engine.mustJumpPiece){
         const {row: mRow, col: mCol} = engine.mustJumpPiece;
         
         if(row !== mRow || col !== mCol) return;
 
         engine.selectedPiece = {row: mRow, col: mCol};
-    }else if(!engine.mustJumpPiece && piece && piece.player === engine.currentPlayer){
+    }
+    else if(!engine.mustJumpPiece && piece && piece.player === engine.currentPlayer){
         engine.selectedPiece = {row, col};
 
         const moves = CheckersRules.getLegalMoves(engine, row, col);
