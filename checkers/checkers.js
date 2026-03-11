@@ -140,8 +140,8 @@ class CheckersRules{
     }
     
     static canJumpAgain(engine, row, col){
-        const moves = this.generateMoves(engine, row, col);
-        return moves.some(move => move.jump);
+        const jumps = this.generateJumpMoves(engine, row, col);
+        return jumps.length > 0;
     }
     
     static playerHasJump(engine, player){
@@ -245,11 +245,7 @@ const ui = new CheckersUI(gameBoard, (row, col) => {
 
     // Multi-jump
     if(engine.mustJumpPiece){
-        const {row: mRow, col: mCol} = engine.mustJumpPiece;
-        
-        if(row !== mRow || col !== mCol) return;
-
-        engine.selectedPiece = {row: mRow, col: mCol};
+        engine.selectedPiece = {...engine.mustJumpPiece};
     }
     else if(!engine.mustJumpPiece && piece && piece.player === engine.currentPlayer){
         engine.selectedPiece = {row, col};
