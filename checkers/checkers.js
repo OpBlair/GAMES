@@ -9,7 +9,7 @@ class CheckersEngine{
     constructor(){
         this.Board_Size = 8;
         this.board = Array.from({length: 8}, () => Array(8).fill(null));
-        this.currentPlayer = 1 // white starts
+        this.currentPlayer = 1 // Black starts
         this.selectedPiece = null;
         this.mustJumpPiece = null; // multi-jump enforcement
     }
@@ -93,7 +93,7 @@ class CheckersRules{
         if(!piece) return [];
 
         const moves = [];
-        const directions = piece.king ? this.move_directions.king : (piece.player === 1 ? this.move_directions.p1 : this.move_directions.p2);
+        const directions = piece.king ? this.jump_directions.king : (piece.player === 1 ? this.jump_directions.p1 : this.jump_directions.p2);
 
         for(const[dRow, dCol] of directions){
             const newRow = row + dRow;
@@ -126,13 +126,17 @@ class CheckersRules{
     }
 
     static getLegalMoves(engine, row, col){
-        const moves = this.generateJumpMoves(engine, row, col);
+        const jumpMoves = this.generateJumpMoves(engine, row, col);
 
+        // if player must jump, only allow jumps
         if(this.playerHasJump(engine, engine.currentPlayer)){
-            return moves.filter(m => m.jump);
+            return jumpMoves;
         }
 
-        return moves;
+        // Allow normal moves
+        if(jumpMoves.length > 0) return jumpMoves;
+
+        return this.generateNormalMoves(engine, row, col);
     }
     
     static canJumpAgain(engine, row, col){
@@ -299,7 +303,7 @@ vsHuman.addEventListener('click', () => {
     welcomeScreen.style.display = 'none';  
     gameBoard.style.display = 'grid';
     playIndication.style.display = 'flex';
-    playIndication.textContent = "White's Turn";
+    playIndication.textContent = "Black's Turn";
     console.log("clicked me");
     // Game Logic start
     engine.createInitialBoard();
