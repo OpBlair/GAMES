@@ -196,38 +196,8 @@ class CheckersUI{
         }
         return div;
     }
-}
 
-// ----- THE CONTROLLER UNIT -----
-const engine = new CheckersEngine();
-
-const ui = new CheckersUI(document.getElementById('game-board'), (row, col) => {
-    const piece = engine.board[row][col];
-
-    // select a piece
-    if(engine.mustJumpPiece){
-        const {row: mRow, col: mCol} = engine.mustJumpPiece;
-        engine.selectedPiece = {row: mRow, col: mCol};
-    }else if(piece && piece.player === engine.currentPlayer){
-        engine.selectedPiece = {row, col};
-    }
-
-    if(engine.selectedPiece){
-        const {row: fromRow, col: fromCol} = engine.selectedPiece;
-        const moves = CheckersRules.getLegalMoves(engine, fromRow, fromCol);
-        const move = moves.find(m => m.toRow === row && m.toCol === col);
-
-        if(move){
-            engine.executeMove(fromRow, fromCol, move);
-            engine.selectedPiece = null;
-
-            ui.draw(engine.board);
-            playIndication.textContent = engine.currentPlayer === 2 ? "White's Turn" : "Black's Turn";
-            if (engine.mustJumpPiece) playIndication.textContent += "(Must Jump Again!)";
-        }
-    }
-
-    function highlightMoves(moves){
+    highlightMoves(moves){
         moves.forEach(move => {
             const square = this.getSquare(move.toRow, move.toCol);
 
@@ -243,14 +213,72 @@ const ui = new CheckersUI(document.getElementById('game-board'), (row, col) => {
         });
     }
 
-    function clearHightLights(){
+    clearHightlights(){
         document.querySelectorAll('.highlight-move, .highlight-jump, .attackable').forEach(
             highlight => {highlight.classList.remove('highlight-move', 'highlight-jump', 'attackable');}
         );
     }
 
-    function getSquare(row, col){
+    getSquare(row, col){
         return this.boardElement.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+    }
+}
+
+// ----- THE CONTROLLER UNIT -----
+const engine = new CheckersEngine();
+
+const ui = new CheckersUI(gameBoard, (row, col) => {
+    const piece = engine.board[row][col];
+
+    // select a piece
+    if(engine.mustJumpPiece){
+        const {row: mRow, col: mCol} = engine.mustJumpPiece;
+        
+        if(row !== mRow || col !== mCol) return;
+
+        engine.selectedPiece = {row: mRow, col: mCol};
+    }else if(piece && piece.player === engine.currentPlayer){
+        engine.selectedPiece = {row, col};
+
+        const moves = CheckersRules.getLegalMoves(engine, row, col);
+
+        ui.clearHightlights();
+        ui.highlightMoves(moves);
+    }
+
+    if(engine.selectedPiece){
+        const {row: fromRow, col: fromCol} = engine.selectedPiece;
+        const moves = CheckersRules.getLegalMoves(engine, fromRow, fromCol);
+        const move = moves.find(m => m.toRow === row && m.toCol === col);
+
+        if(move){
+            engine.executeMove(fromRow, fromCol, move);
+            
+            if(engine.mustJumpPiece){
+                engine.selectedPiece = {...engine.mustJumpPiece};
+            }else{
+                engine.selectedPiece = null;
+            }
+
+            ui.clearHightlights();
+            ui.draw(engine.board);
+            playIndication.textContent = engine.currentPlayer === 2 ? "White's Turn" : "Black's Turn";
+            if (engine.mustJumpPiece) playIndication.textContent += "(Must Jump Again!)";
+            checkGameOver();
+        }
+    }
+
+    function checkGameOver(){
+        const player = engine.currentPlayer;
+        const hasMoves = CheckersRules.playerHasAnyMove(engine, player);
+
+        if(!hasMoves){
+            playIndication.textContent = `${player === 1 ? "Black" : 'White'} has no moves. Game Over!`;
+
+            gameBoard.style.pointerEvents = "none";
+            return true;
+        }
+        return false;
     }
 });
 
