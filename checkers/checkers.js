@@ -184,6 +184,9 @@ class CheckersUI{
     createSquare(r, c, piece){
         const div = document.createElement('div');
         div.className = `square ${(r + c) % 2 === 0 ? 'light' : 'dark'}`;
+        div.dataset.row = r;
+        div.dataset.col = c;
+
         div.onclick = () => this.onSquareClick(r, c);
         if(piece){
             const p = document.createElement('div');
@@ -222,6 +225,22 @@ const ui = new CheckersUI(document.getElementById('game-board'), (row, col) => {
             playIndication.textContent = engine.currentPlayer === 2 ? "White's Turn" : "Black's Turn";
             if (engine.mustJumpPiece) playIndication.textContent += "(Must Jump Again!)";
         }
+    }
+
+    function highlightMoves(moves){
+        moves.forEach(move => {
+            const square = this.getSquare(move.toRow, move.toCol);
+
+            if(move.jump){
+                square.classList.add("highlight-jump");
+
+                const enemy = this.getSquare(move.attackRow, move.attackCol).querySelector(".piece");
+
+                if(enemy) enemy.classList.add("attackable");
+            }else{
+                square.classList.add("highlight-move");
+            }
+        });
     }
 });
 
