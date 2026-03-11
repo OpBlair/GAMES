@@ -242,6 +242,12 @@ const ui = new CheckersUI(document.getElementById('game-board'), (row, col) => {
             }
         });
     }
+
+    function clearHightLights(){
+        document.querySelectorAll('.highlight-move, .highlight-jump, .attackable').forEach(
+            highlight => highlight.classList.remove('highlight-move', 'highlight-jump', 'attackable')
+        );
+    }
 });
 
 // ------ START GAME BUTTON ------
