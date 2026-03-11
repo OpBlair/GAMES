@@ -70,54 +70,63 @@ class CheckersRules{
         king: [[-2,-2], [-2,2], [2,-2], [2,2]]
     }
     
-    static generateMoves(engine, row, col){
+    static generateNormalMoves(engine, row, col){
         const piece = engine.board[row][col];
         if(!piece) return [];
 
         const moves = [];
-        const directions = [];
+        const directions = piece.king ? this.move_directions.king : (piece.player === 1 ? this.move_directions.p1 : this.move_directions.p2);
 
-        if(piece.king){
-            // King moves in all directions.
-            directions.push([-1,-1], [-1, 1], [1,-1], [1, 1], [-2, -2], [-2, 2], [2, -2], [2, 2]);
-        }else{
-            // Normal piece moves.
-            if(piece.player === 1) directions.push([1, -1], [1, 1], [2, -2], [2, 2]);
-            if(piece.player === 2) directions.push([-1, -1], [-1, 1], [-2, -2], [-2, 2]);
-        }
-
-        for(const [dRow, dCol] of directions){
-            const newRow = row + dRow;  
+        for(const[dRow, dCol] of directions){
+            const newRow = row + dRow;
             const newCol = col + dCol;
-                
+
             if(newRow < 0 || newRow > 7 || newCol < 0 || newCol > 7) continue;
             if(engine.board[newRow][newCol] !== null) continue;
-
-            // Normal move
-            if(Math.abs(dRow) === 1){
-                moves.push({toRow: newRow, toCol: newCol, jump: false});
-            }
-            // Jump move
-            if(Math.abs(dRow) === 2){
-                const midRow = (row + newRow) / 2;
-                const midCol = (col + newCol) / 2;
-                const midPiece = engine.board[midRow][midCol];
-                if(midPiece && midPiece.player !== piece.player){
-                    moves.push({
-                        toRow: newRow,
-                        toCol: newCol,
-                        jump: true,
-                        attackRow: midRow,
-                        attackCol: midCol
-                    });
-                };
-            }
+            moves.push({toRow: newRow, toCol: newCol, jump: false});
         }
         return moves;
     }
 
+    static generateJumpMoves(engine, row, col){
+        const piece = engine.board[row][col];
+        if(!piece) return [];
+
+        const moves = [];
+        const directions = piece.king ? this.move_directions.king : (piece.player === 1 ? this.move_directions.p1 : this.move_directions.p2);
+
+        for(const[dRow, dCol] of directions){
+            const newRow = row + dRow;
+            const newCol = col + dCol;
+
+            if(newRow < 0 || newRow > 7 || newCol < 0 || newCol > 7) continue;
+            if(engine.board[newRow][newCol] !== null) continue;
+
+            const midRow = (row + dRow) / 2;
+            const midCol = (col + dCol) / 2;
+            const midPiece = engine.board[midRow][midCol];
+            if(midPiece && midPiece.player !== piece.player){
+                moves.push({
+                    toRow: newRow,
+                    toCol: newCol,
+                    jump: true,
+                    attackRow: midRow,
+                    attackCol: midCol
+                });
+            };
+        }
+        return moves;
+    }
+
+    static generateMoves(engine, row, col){
+        const jumpMoves = this.generateJumpMoves(engine, row, col);
+        if(jumpMoves.length > 0) return jumpMoves;
+
+        return this.generateNormalMoves(engine, row, col);
+    }
+
     static getLegalMoves(engine, row, col){
-        const moves = this.generateMoves(engine, row, col);
+        const moves = this.generateJumpMoves(engine, row, col);
 
         if(this.playerHasJump(engine, engine.currentPlayer)){
             return moves.filter(m => m.jump);
@@ -237,7 +246,7 @@ const ui = new CheckersUI(gameBoard, (row, col) => {
         if(row !== mRow || col !== mCol) return;
 
         engine.selectedPiece = {row: mRow, col: mCol};
-    }else if(piece && piece.player === engine.currentPlayer){
+    }else if(!engine.mustJumpPiece && piece && piece.player === engine.currentPlayer){
         engine.selectedPiece = {row, col};
 
         const moves = CheckersRules.getLegalMoves(engine, row, col);
@@ -253,15 +262,17 @@ const ui = new CheckersUI(gameBoard, (row, col) => {
 
         if(move){
             engine.executeMove(fromRow, fromCol, move);
+            ui.clearHightlights();
+            ui.draw(engine.board);
             
             if(engine.mustJumpPiece){
                 engine.selectedPiece = {...engine.mustJumpPiece};
+                const moves = CheckersRules.getLegalMoves(engine, engine.mustJumpPiece.row, engine.mustJumpPiece.col);
+                ui.highlightMoves(moves);
             }else{
                 engine.selectedPiece = null;
             }
 
-            ui.clearHightlights();
-            ui.draw(engine.board);
             playIndication.textContent = engine.currentPlayer === 2 ? "White's Turn" : "Black's Turn";
             if (engine.mustJumpPiece) playIndication.textContent += "(Must Jump Again!)";
             checkGameOver();
