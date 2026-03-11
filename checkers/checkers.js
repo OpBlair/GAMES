@@ -245,8 +245,12 @@ const ui = new CheckersUI(document.getElementById('game-board'), (row, col) => {
 
     function clearHightLights(){
         document.querySelectorAll('.highlight-move, .highlight-jump, .attackable').forEach(
-            highlight => highlight.classList.remove('highlight-move', 'highlight-jump', 'attackable')
+            highlight => {highlight.classList.remove('highlight-move', 'highlight-jump', 'attackable');}
         );
+    }
+
+    function getSquare(row, col){
+        return this.boardElement.querySelector(`[data-row="${row}"][data-col="${col}"]`);
     }
 });
 
