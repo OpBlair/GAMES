@@ -60,6 +60,8 @@ button:hover{
     align-items: center;
     justify-content: center;
 }
+.p1{ background-color: #000000 !important;}
+.p2{ background-color: #f9f8f8 !important;}
 .piece:hover{
     transform: scale(1.1);
     box-shadow: 0 0 10px white;
