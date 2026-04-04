@@ -156,3 +156,10 @@ class CheckersRules{
         return false;
     }
 }
+
+let engine;
+
+vsHuman.addEventListener('click', () => {
+    gameBoard.style.display = 'grid';
+    welcomeScreen.style.display = 'none';
+})
