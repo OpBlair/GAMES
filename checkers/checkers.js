@@ -4,6 +4,9 @@ const playIndication = document.querySelector('.turn-indicator');
 const vsHuman = document.getElementById('human');
 const welcomeScreen = document.querySelector('.welcome');
 
+let engine;
+
+
 // 1. THE ENGINE
 class CheckersEngine{
     constructor(){
@@ -157,9 +160,18 @@ class CheckersRules{
     }
 }
 
-let engine;
 
 vsHuman.addEventListener('click', () => {
     gameBoard.style.display = 'grid';
     welcomeScreen.style.display = 'none';
+
+    startGame();
 })
+
+// Function to Start the Game.
+function startGame(){
+    engine = new CheckersEngine();
+    engine.createInitialBoard();
+
+    renderBoard();
+}
