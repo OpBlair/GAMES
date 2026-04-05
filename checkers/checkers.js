@@ -295,11 +295,18 @@ const ui = new CheckersUI(gameBoard, (row, col) => {
     }
 });
 
+function startGame(){
+    // Game Logic start
+    engine.createInitialBoard();
+    ui.draw(engine.board);
+}
+
 // ------ START GAME BUTTON ------
 vsHuman.addEventListener('click', () => {
     welcomeScreen.style.display = 'none';  
     gameBoard.style.display = 'grid';
     playIndication.style.display = 'flex';
     playIndication.textContent = "Black's Turn";
-    
+    startGame();
 })
+
