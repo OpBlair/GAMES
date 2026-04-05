@@ -301,8 +301,5 @@ vsHuman.addEventListener('click', () => {
     gameBoard.style.display = 'grid';
     playIndication.style.display = 'flex';
     playIndication.textContent = "Black's Turn";
-    console.log("clicked me");
-    // Game Logic start
-    engine.createInitialBoard();
-    ui.draw(engine.board);
+    
 })
