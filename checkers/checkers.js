@@ -310,3 +310,11 @@ vsHuman.addEventListener('click', () => {
     startGame();
 })
 
+// Creating a connection to the backend
+const connection = new signalR.HubConnectionBuilder().withUrl("http://localhost:5000/gameHub").build();
+
+connection.on("RecieveBoard", (board) => {
+    console.log("Board updated:", board);
+});
+
+connection.start();
