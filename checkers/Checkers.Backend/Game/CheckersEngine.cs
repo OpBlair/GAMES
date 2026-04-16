@@ -1,37 +1,113 @@
-namespace Checkers.Backend.Game;
-public class CheckersEngine
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Checkers.Backend.Game
 {
-    public int[,] Board = new int[8,8];
-    public int CurrentPlayer = 1;
+    public class CheckersPiece { public int Player { get; set; } public bool IsKing { get; set; } }
 
-    public CheckersEngine()
+    public class Move
     {
-        InitializeBoard();
+        public int FromRow { get; set; }
+        public int FromCol { get; set; }
+        public int ToRow { get; set; }
+        public int ToCol { get; set; }
+        public bool IsJump { get; set; }
+        public int? AttackRow { get; set; }
+        public int? AttackCol { get; set; }
     }
 
-    public void InitializeBoard()
+    public class Position { public int Row { get; set; } public int Col { get; set; } }
+
+    public class CheckersEngine
     {
-        for(int row = 0; row < 8; row++)
+        public const int BoardSize = 8;
+        public CheckersPiece[,] Board { get; private set; } = new CheckersPiece[BoardSize, BoardSize];
+        public int CurrentPlayer { get; private set; } = 1;
+        public Position MustJumpPiece { get; private set; }
+
+        public void CreateInitialBoard()
         {
-            for(int col = 0; col < 8; col++)
-            {
-                if((row + col) % 2 != 0)
-                {
-                    if(row < 3) Board[row,col] = 1;
-                    else if(row > 4) Board[row,col] = 2;
-                }
-            }
+            Board = new CheckersPiece[BoardSize, BoardSize];
+            for (int r = 0; r < BoardSize; r++)
+                for (int c = 0; c < BoardSize; c++)
+                    if ((r + c) % 2 != 0)
+                    {
+                        if (r < 3) Board[r, c] = new CheckersPiece { Player = 1 };
+                        else if (r > 4) Board[r, c] = new CheckersPiece { Player = 2 };
+                    }
+            CurrentPlayer = 1; MustJumpPiece = null;
         }
+
+        public bool ExecuteMove(int fR, int fC, Move m)
+        {
+            var p = Board[fR, fC];
+            if (p == null || p.Player != CurrentPlayer) return false;
+            if (MustJumpPiece != null && (fR != MustJumpPiece.Row || fC != MustJumpPiece.Col)) return false;
+
+            var legal = CheckersRules.GetLegalMoves(this, fR, fC);
+            if (!legal.Any(l => l.ToRow == m.ToRow && l.ToCol == m.ToCol && l.IsJump == m.IsJump)) return false;
+
+            if (m.IsJump) Board[m.AttackRow.Value, m.AttackCol.Value] = null;
+            Board[fR, fC] = null; Board[m.ToRow, m.ToCol] = p;
+
+            if (CheckersRules.IsKingPromotion(p, m.ToRow)) p.IsKing = true;
+
+            if (m.IsJump && CheckersRules.CanJumpAgain(this, m.ToRow, m.ToCol))
+                MustJumpPiece = new Position { Row = m.ToRow, Col = m.ToCol };
+            else ToggleTurn();
+
+            return true;
+        }
+
+        private void ToggleTurn() { CurrentPlayer = CurrentPlayer == 1 ? 2 : 1; MustJumpPiece = null; }
     }
 
-    public bool ApplyMove(int fromRow, int fromCol, int toRow, int toCol)
+    public static class CheckersRules
     {
-        if(Board[fromRow, fromCol] != CurrentPlayer) return false;
+        private static readonly int[][] P1 = { new[] { 1, -1 }, new[] { 1, 1 } };
+        private static readonly int[][] P2 = { new[] { -1, -1 }, new[] { -1, 1 } };
+        private static readonly int[][] K = { new[] { -1, -1 }, new[] { -1, 1 }, new[] { 1, -1 }, new[] { 1, 1 } };
+        private static readonly int[][] P1J = { new[] { 2, -2 }, new[] { 2, 2 } };
+        private static readonly int[][] P2J = { new[] { -2, -2 }, new[] { -2, 2 } };
+        private static readonly int[][] KJ = { new[] { -2, -2 }, new[] { -2, 2 }, new[] { 2, -2 }, new[] { 2, 2 } };
 
-        Board[toRow, toCol] = Board[fromRow, fromCol];
-        Board[fromRow, fromCol] = 0;
+        public static List<Move> GetLegalMoves(CheckersEngine e, int r, int c) => 
+            PlayerHasJump(e, e.Board[r, c].Player) ? GenerateJumpMoves(e, r, c) : GenerateNormalMoves(e, r, c);
 
-        CurrentPlayer = CurrentPlayer == 1 ? 2 : 1;
-        return true;
+        public static List<Move> GenerateNormalMoves(CheckersEngine e, int r, int c)
+        {
+            var p = e.Board[r, c];
+            var moves = new List<Move>();
+            var dirs = p.IsKing ? K : (p.Player == 1 ? P1 : P2);
+            foreach (var d in dirs) {
+                int nR = r + d[0], nC = c + d[1];
+                if (IsInside(nR, nC) && e.Board[nR, nC] == null)
+                    moves.Add(new Move { FromRow = r, FromCol = c, ToRow = nR, ToCol = nC, IsJump = false });
+            }
+            return moves;
+        }
+
+        public static List<Move> GenerateJumpMoves(CheckersEngine e, int r, int c)
+        {
+            var p = e.Board[r, c];
+            var moves = new List<Move>();
+            var dirs = p.IsKing ? KJ : (p.Player == 1 ? P1J : P2J);
+            foreach (var d in dirs) {
+                int nR = r + d[0], nC = c + d[1], mR = r + d[0] / 2, mC = c + d[1] / 2;
+                if (IsInside(nR, nC) && e.Board[nR, nC] == null && e.Board[mR, mC]?.Player != null && e.Board[mR, mC].Player != p.Player)
+                    moves.Add(new Move { FromRow = r, FromCol = c, ToRow = nR, ToCol = nC, IsJump = true, AttackRow = mR, AttackCol = mC });
+            }
+            return moves;
+        }
+
+        public static bool CanJumpAgain(CheckersEngine e, int r, int c) => GenerateJumpMoves(e, r, c).Any();
+        public static bool PlayerHasJump(CheckersEngine e, int p) {
+            for (int r = 0; r < 8; r++) for (int c = 0; c < 8; c++)
+                if (e.Board[r, c]?.Player == p && CanJumpAgain(e, r, c)) return true;
+            return false;
+        }
+        public static bool IsKingPromotion(CheckersPiece p, int r) => (p.Player == 1 && r == 7) || (p.Player == 2 && r == 0);
+        private static bool IsInside(int r, int c) => r >= 0 && r < 8 && c >= 0 && c < 8;
     }
 }
