@@ -10,6 +10,7 @@ let currentBoard = [];
 let currentPlayer = 1;
 let selectedPiece = null;
 let mustJumpPiece = null;
+let myPlayerNumber = 0;
 
 // --- CONNECTION ---
 const connection = new signalR.HubConnectionBuilder()
@@ -27,6 +28,11 @@ connection.on("MoveMade", (board, player, mJump) => {
 });
 
 connection.on("InvalidMove", () => alert("That move is not allowed!"));
+
+connection.on("AssignRole", (role) => {
+    myPlayerNumber = role;
+    console.log("You are player " + role);
+});
 
 connection.start().catch(err => console.error(err));
 
@@ -84,6 +90,11 @@ const ui = new CheckersUI(gameBoard, (row, col) => {
 
     // 1. Select a piece
     if (cell && cell.player === currentPlayer) {
+        // Turn checking
+        if(cell.player !== myPlayerNumber){
+            console.log("That's not your piece");
+            return;
+        }
         // Multi-jump enforcement: if mustJumpPiece exists, only that piece can be selected
         if (mustJumpPiece && (row !== mustJumpPiece.row || col !== mustJumpPiece.col)) return;
 
