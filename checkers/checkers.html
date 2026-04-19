@@ -1,21 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Checkers</title>
-  <link rel="stylesheet" href="checkers.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
-  <script defer src="checkers.js"></script>
-</head>
-<body>
-  <main id="game-container">
-    <div class="welcome">
-      <h1>checkers game</h1>
-      <button>new game vs computer</button>
-      <button id="human">new game vs human</button>
-    </div>
-    <div class="turn-indicator" style="display: none;"></div>
-    <div id="game-board" style="display: none;"></div>
-  </main>
-</body>
+  <head>
+    <meta charset="UTF-8">
+    <title>Checkers</title>
+    <link rel="stylesheet" href="checkers.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+    <script defer src="checkers.js"></script>
+  </head>
+    <body>
+      <main id="game-container">
+        <div class="welcome">
+          <h1>checkers game</h1>
+
+          <div class="room-control">
+            <input type="number" id="roomInput" placeholder="Enter room Number">
+          </div>
+          <button>new game vs computer</button>
+          <button id="human">new game vs human</button>
+        </div>
+        <div class="turn-indicator" style="display: none;"></div>
+        <div id="game-board" style="display: none;"></div>
+      </main>
+    </body>
 </html>
