@@ -4,56 +4,50 @@ using Checkers.Backend.Game;
 namespace Checkers.Backend.Hubs
 {
     public class GameHub : Hub
+{
+    private readonly GameManager _manager;
+    public GameHub(GameManager manager) => _manager = manager;
+
+    public async Task JoinRoom(string? roomName)
     {
-        private readonly CheckersEngine _engine;
-        // Track players by their unique Connection ID
-        private static readonly Dictionary<string, int> Players = new();
+        // If no roomName provided, generate a random one (or use a default)
+        string actualRoom = string.IsNullOrWhiteSpace(roomName) 
+                            ? "Public-Room-1" 
+                            : roomName;
 
-        public GameHub(CheckersEngine engine) => _engine = engine;
+        await Groups.AddToGroupAsync(Context.ConnectionId, actualRoom);
+        var engine = _manager.GetOrCreateRoom(actualRoom);
 
-        public async Task StartGame()
+        // Initial board setup only if the board is empty
+        if (engine.Board[0] == null) engine.CreateInitialBoard();
+
+        // Assign role and notify the room
+        await Clients.Caller.SendAsync("AssignRole", _manager.GetPlayerNumber(actualRoom, Context.ConnectionId));
+        await Clients.Group(actualRoom).SendAsync("GameStarted", engine.Board, engine.CurrentPlayer);
+    }
+
+    public async Task MakeMove(string roomName, int fR, int fC, int tR, int tC)
+    {
+        var engine = _manager.GetOrCreateRoom(roomName);
+        int playerNum = _manager.GetPlayerNumber(roomName, Context.ConnectionId);
+
+        if (playerNum != engine.CurrentPlayer)
         {
-            // Assign player numbers based on connection order
-            if (!Players.ContainsKey(Context.ConnectionId))
-            {
-                if (Players.Count == 0) Players[Context.ConnectionId] = 1; // Black
-                else if (Players.Count == 1) Players[Context.ConnectionId] = 2; // White
-            }
-
-            int assignedPiece = Players.GetValueOrDefault(Context.ConnectionId, 0);
-            _engine.CreateInitialBoard();
-            
-            // Tell the caller what color they are, and everyone that the game started
-            await Clients.Caller.SendAsync("AssignRole", assignedPiece);
-            await Clients.All.SendAsync("GameStarted", _engine.Board, _engine.CurrentPlayer);
+            await Clients.Caller.SendAsync("InvalidMove", "It is not your turn!");
+            return;
         }
 
-        public async Task MakeMove(int fR, int fC, int tR, int tC)
+        var moves = CheckersRules.GetLegalMoves(engine, fR, fC);
+        var move = moves.FirstOrDefault(m => m.ToRow == tR && m.ToCol == tC);
+
+        if (move != null && engine.ExecuteMove(fR, fC, move))
         {
-            // SECURITY: Check if the person moving is actually the current player
-            if (!Players.TryGetValue(Context.ConnectionId, out int playerNum) || playerNum != _engine.CurrentPlayer)
-            {
-                await Clients.Caller.SendAsync("InvalidMove", "It is not your turn!");
-                return;
-            }
-
-            var moves = CheckersRules.GetLegalMoves(_engine, fR, fC);
-            var move = moves.FirstOrDefault(m => m.ToRow == tR && m.ToCol == tC);
-
-            if (move != null && _engine.ExecuteMove(fR, fC, move))
-            {
-                await Clients.All.SendAsync("MoveMade", _engine.Board, _engine.CurrentPlayer, _engine.MustJumpPiece);
-            }
-            else
-            {
-                await Clients.Caller.SendAsync("InvalidMove", "Illegal Move!");
-            }
+            await Clients.Group(roomName).SendAsync("MoveMade", engine.Board, engine.CurrentPlayer, engine.MustJumpPiece);
         }
-
-        public override async Task OnDisconnectedAsync(Exception? ex)
+        else
         {
-            Players.Remove(Context.ConnectionId);
-            await base.OnDisconnectedAsync(ex);
+            await Clients.Caller.SendAsync("InvalidMove", "Illegal Move!");
         }
     }
+}
 }
