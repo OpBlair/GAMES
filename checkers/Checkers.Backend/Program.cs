@@ -1,4 +1,3 @@
-using Checkers.Backend.Game; // Points to CheckersEngine
 using Checkers.Backend.Hubs; // Points to GameHub
 
 var builder = WebApplication.CreateBuilder(args);

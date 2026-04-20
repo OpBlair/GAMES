@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace Checkers.Backend.Game
 {
     public class CheckersPiece { public int Player { get; set; } public bool IsKing { get; set; } }
