@@ -11,6 +11,7 @@ let currentPlayer = 1;
 let selectedPiece = null;
 let mustJumpPiece = null;
 let myPlayerNumber = 0;
+let roomId = "";
 
 // --- CONNECTION ---
 const connection = new signalR.HubConnectionBuilder()
@@ -47,6 +48,14 @@ function updateLocalState(board, player, mJump) {
     if (mustJumpPiece) playIndication.textContent += " (Must Jump!)";
 }
 
+function joinRoom(){
+    roomId = document.getElementById('roomInput').value;
+    connection.invoke("JoinRoom", roomId).catch(err => console.error(err));
+}
+
+function handleMove(fR, fC, tR, tC){
+    connection.invoke("MakeMove", roomId, fR, fC, tR, tC);
+}
 // --- UI RENDERER ---
 class CheckersUI {
     constructor(boardElement, onSquareClick) {
@@ -106,7 +115,7 @@ const ui = new CheckersUI(gameBoard, (row, col) => {
 
     // 2. Try to move to a square
     if (selectedPiece) {
-        connection.invoke("MakeMove", selectedPiece.row, selectedPiece.col, row, col)
+        connection.invoke("MakeMove", roomId, selectedPiece.row, selectedPiece.col, row, col)
             .catch(err => console.error(err));
         ui.clear();
     }
@@ -114,9 +123,17 @@ const ui = new CheckersUI(gameBoard, (row, col) => {
 
 // --- START GAME ---
 vsHuman.addEventListener('click', () => {
+    // Basic validation
+    const input = document.getElementById('roomInput').value;
+    if (!input) {
+        alert("Please enter a room number!");
+        return;
+    }
+    roomId = input;
     welcomeScreen.style.display = 'none';
     gameBoard.style.display = 'grid';
     playIndication.style.display = 'flex';
     
-    connection.invoke("StartGame").catch(err => console.error(err));
+    // Only join the room; the Hub will handle the engine setup
+    joinRoom();
 });
