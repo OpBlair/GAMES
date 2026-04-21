@@ -24,21 +24,16 @@ let greenPath = [22,23,37,52,67,82,97];
 let yellowPath = [113,114,115,116,117,118,133];
 let bluePath = [127,142,157,172,187,201,202];
 
-// ------- FULL TOKEN PATHS ------
+// ------- FULL GAME PATH ------
 const gamePath = [91, 92, 93, 94, 95, 96, 81, 66, 51, 36, 21, 6, 7, 8, 23, 38, 53, 68, 83, 98, 99, 100, 101, 102, 103, 104, 119, 134, 133, 132, 131, 130, 129, 128, 143, 158, 173, 188, 203, 218, 217, 216, 201, 186, 171, 156, 141, 126, 125, 124, 123, 122, 121, 120, 105, 90];
 
+// -------- TOKEN PATHS ------
 const playerPath = {
     red: gamePath,
     green: [...gamePath.slice(14), ...gamePath.slice(0, 14)],   // starts at 28 
     yellow: [...gamePath.slice(28), ...gamePath.slice(0, 28)], // starts at 133
     blue: [...gamePath.slice(42), ...gamePath.slice(0, 42)]   // starts at 201
 }
-
-// -------- START POSITIONS ------
-let redStart = 2;
-let greenStart = 18;
-let yellowStart = 30;
-let blueStart = 48;
 
 // -------- CREATE BOARD ----------
 function createBoard(){
@@ -89,14 +84,49 @@ function addTokens(){
     };
 
     for(const color in basePockets){
-        basePockets[color].forEach(index => {
+        basePockets[color].forEach((index, i) => {
             const square = document.querySelector(`.square[data-index='${index}']`);
             if(square){
                 const token = document.createElement('div');
                 token.classList.add('token', `${color}-token`);
+                token.dataset.color = color;
+                token.dataset.pieceIndex = i + 1;
+                token.dataset.location = 'base';
+                token.addEventListener('click', handleTokenClick);
                 square.appendChild(token);
             }
         })
+    }
+}
+
+// ---- Function to add click event to the tokens
+function handleTokenClick(event){
+    const clickedToken = event.target;
+    const tokenColor = clickedToken.dataset.color;
+    const pieceIndex = clickedToken.dataset.pieceIndex;
+    const currentPlayer = gameState.players[gameState.currentPlayerIndex];
+
+    // check if its current player's turn.
+    if(tokenColor !== currentPlayer){
+        console.log("It's not your turn.");
+        return;
+    }
+
+    // Check if dice has been rolled.
+    if(gameState.diceValue === null){
+        console.log("Roll dice first.");
+        return;
+    }
+
+    //Move piece
+    if(token.dataset.location === 'base'){
+        if(gameState.diceValue === 6){
+            moveFromBaseToStart();
+            gameState.diceValue = null;
+            gameState.canRoll = true;
+        }else{
+            moveAlongPath();
+        }
     }
 }
 
