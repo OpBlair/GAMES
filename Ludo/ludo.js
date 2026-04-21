@@ -8,7 +8,7 @@ const welcomeScreen = document.querySelector('.welcome');
 vsHuman.addEventListener('click', () => {
   welcomeScreen.style.display = 'none';  
   gameBoard.style.display = 'grid';
-  dice.style.display = 'flex';
+  dice.style.display = 'grid';
 })
 // --------- HOME BASE ----------
 let redBase = [0,1,2,3,4,5,15,16,17,18,19,20,30,31,32,33,34,35,45,46,47,48,49,50,60,61,62,63,64,65,75,76,77,78,79,80];
@@ -86,18 +86,54 @@ function addTokens(){
         })
     }
 }
+// Dice Pattern
+const dicePatterns = {
+    1: [4],
+    2: [0, 8],
+    3: [0, 4, 8],
+    4: [0, 2, 6, 8],
+    5: [0, 2, 4, 6, 8],
+    6: [0, 2, 3, 5, 6, 8]
+};
 // Function to display number on the dice
 function rollDice(){
-    let number = Math.floor((Math.random() * 6) + 1);
-    dice.textContent = number;
-    gameState.diceValue = number;
-    return number;
+    // animation
+    dice.classList.add('rolling');
+    dice.innerHTML = '';
+
+    setTimeout(() => {
+        dice.classList.remove('rolling');
+
+        let number = Math.floor((Math.random() * 6) + 1);
+        //dice.textContent = number;
+        gameState.diceValue = number;
+        //return number;
+        renderDiceDots(number);
+        console.log("Rolled:", number);
+    }, 500);
+}
+
+function renderDiceDots(number){
+    dice.innerHTML = '';
+
+    for(let i = 0; i < 9; i++){
+        const dotSlot = document.createElement('div');
+        
+        if(dicePatterns[number].includes(i)){
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            dotSlot.appendChild(dot);
+        }
+        dice.appendChild(dotSlot);
+    }
 }
 // ---- DICE ROLL EVENT LISTENER -----
 dice.addEventListener('click', () => {
-    rollDice();
-    console.log(gameState.diceValue);
+    if(!dice.classList.contains('rolling')){
+        rollDice();
+    }
 });
+renderDiceDots(1);
 // ---- MOVE TOKEN FUNCTION ----
 function moveToken(token, numberOfSteps){
 
