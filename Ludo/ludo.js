@@ -30,7 +30,7 @@ const gamePath = [91, 92, 93, 94, 95, 96, 81, 66, 51, 36, 21, 6, 7, 8, 23, 38, 5
 // -------- TOKEN PATHS ------
 const playerPath = {
     red: gamePath,
-    green: [...gamePath.slice(14), ...gamePath.slice(0, 14)],   // starts at 28 
+    green: [...gamePath.slice(14), ...gamePath.slice(0, 14)],   // starts at 23
     yellow: [...gamePath.slice(28), ...gamePath.slice(0, 28)], // starts at 133
     blue: [...gamePath.slice(42), ...gamePath.slice(0, 42)]   // starts at 201
 }
@@ -90,7 +90,7 @@ function addTokens(){
                 const token = document.createElement('div');
                 token.classList.add('token', `${color}-token`);
                 token.dataset.color = color;
-                token.dataset.pieceIndex = i + 1;
+                token.dataset.pieceIndex = i;
                 token.dataset.location = 'base';
                 token.addEventListener('click', handleTokenClick);
                 square.appendChild(token);
@@ -103,7 +103,6 @@ function addTokens(){
 function handleTokenClick(event){
     const clickedToken = event.target;
     const tokenColor = clickedToken.dataset.color;
-    const pieceIndex = clickedToken.dataset.pieceIndex;
     const currentPlayer = gameState.players[gameState.currentPlayerIndex];
 
     // check if its current player's turn.
@@ -119,15 +118,25 @@ function handleTokenClick(event){
     }
 
     //Move piece
-    if(token.dataset.location === 'base'){
+    if(clickedToken.dataset.location === 'base'){
         if(gameState.diceValue === 6){
-            moveFromBaseToStart();
+            moveFromBaseToStart(clickedToken);
             gameState.diceValue = null;
             gameState.canRoll = true;
         }else{
             moveAlongPath();
         }
     }
+}
+
+// Function to make the first move
+function moveFromBaseToStart(clickedToken){
+    const color = clickedToken.dataset.color;
+    const startIndices = {red : 91, green : 23, yellow: 133, blue: 201};
+    const startSquare = document.querySelector(`.square[data-index='${startIndices[color]}']`);
+    startSquare.appendChild(clickedToken);
+    clickedToken.dataset.location = 'path';
+    clickedToken.dataset.pathIndex = 0;
 }
 
 // Dice Pattern
