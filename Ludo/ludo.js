@@ -123,9 +123,9 @@ function handleTokenClick(event){
             moveFromBaseToStart(clickedToken);
             gameState.diceValue = null;
             gameState.canRoll = true;
-        }else{
-            moveAlongPath();
         }
+    }else{
+        moveAlongPath(clickedToken, gameState.diceValue);
     }
 }
 
@@ -137,6 +137,37 @@ function moveFromBaseToStart(clickedToken){
     startSquare.appendChild(clickedToken);
     clickedToken.dataset.location = 'path';
     clickedToken.dataset.pathIndex = 0;
+}
+
+// // ---- MOVE TOKEN ALONG THE BOARD ----.
+async function moveAlongPath(clickedToken, steps){
+    const color = clickedToken.dataset.color;
+    let currentPathIndex = parseInt(clickedToken.dataset.pathIndex);
+    const path = playerPath[color];
+
+    gameState.canRoll = false;
+    for(let j = 0; j < steps; j++){
+        currentPathIndex++;
+
+        if(currentPathIndex >= path.length){
+            console.log("Reached end of the gamePath.");
+            break;
+        }
+
+        const nextSquareIndex = path[currentPathIndex];
+        const nextSquare = document.querySelector(`.square[data-index='${nextSquareIndex}']`);
+
+        clickedToken.classList.add('hopping');
+        nextSquare.appendChild(clickedToken);
+
+        await new Promise(resolve => setTimeout(resolve, 300));
+        clickedToken.classList.remove('hopping');
+    }
+
+    clickedToken.dataset.pathIndex = currentPathIndex;
+
+    gameState.diceValue = null;
+    switchTurn();
 }
 
 // Dice Pattern
@@ -166,10 +197,16 @@ function rollDice(){
         renderDiceDots(number);
 
         setTimeout(() => {
-            if(number !== 6){
+            const currentPlayer = gameState.players[gameState.currentPlayerIndex];
+            const tokensOnBoard = document.querySelectorAll(`.token.${currentPlayer}-token[data-location="path"]`);
+            const hasTokensOnBoard = tokensOnBoard.length > 0;
+
+            if(number !== 6 && !hasTokensOnBoard){
+                console.log("No possible moves. Switching turn...");
+                gameState.diceValue = null;
                 switchTurn();
             }else{
-                console.log("Rollled a 6! Roll again.");
+                console.log("Rolled a 6! Roll again.");
                 gameState.canRoll = true;
             }
         }, 1000);
@@ -198,11 +235,6 @@ dice.addEventListener('click', () => {
     }
 });
 renderDiceDots(1);
-
-// ---- MOVE TOKEN FUNCTION ----
-function moveToken(token, numberOfSteps){
-
-}
 
 // ---- GAME STATE -----
 const gameState = {
