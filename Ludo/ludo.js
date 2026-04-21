@@ -165,9 +165,13 @@ async function moveAlongPath(clickedToken, steps){
     }
 
     clickedToken.dataset.pathIndex = currentPathIndex;
-
+    
+    if(gameState.diceValue === 6){
+        gameState.canRoll = true;
+    }else{
+        switchTurn();
+    }
     gameState.diceValue = null;
-    switchTurn();
 }
 
 // Dice Pattern
@@ -206,8 +210,13 @@ function rollDice(){
                 gameState.diceValue = null;
                 switchTurn();
             }else{
-                console.log("Rolled a 6! Roll again.");
-                gameState.canRoll = true;
+                if(number === 6){
+                    console.log("Rolled a 6! Roll again.");
+                    gameState.canRoll = false;
+                }else{
+                    console.log("Select a piece to move.");
+                    gameState.canRoll = false;
+                }
             }
         }, 1000);
     }, 500);
@@ -255,7 +264,7 @@ const gameState = {
 function switchTurn(){
     gameState.currentPlayerIndex = (gameState.currentPlayerIndex + 1) % 4;
     gameState.canRoll = true;
-
+    gameState.diceValue = null;
     const nextPlayer = gameState.players[gameState.currentPlayerIndex];
     dice.style.borderColor = nextPlayer;
     console.log(`It is now ${nextPlayer}'s turn`);
