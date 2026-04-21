@@ -25,7 +25,14 @@ let yellowPath = [113,114,115,116,117,118,133];
 let bluePath = [127,142,157,172,187,201,202];
 
 // ------- FULL TOKEN PATHS ------
-let gamePath = Array(51).fill(null);
+const gamePath = [91, 92, 93, 94, 95, 96, 81, 66, 51, 36, 21, 6, 7, 8, 23, 38, 53, 68, 83, 98, 99, 100, 101, 102, 103, 104, 119, 134, 133, 132, 131, 130, 129, 128, 143, 158, 173, 188, 203, 218, 217, 216, 201, 186, 171, 156, 141, 126, 125, 124, 123, 122, 121, 120, 105, 90];
+
+const playerPath = {
+    red: gamePath,
+    green: [...gamePath.slice(14), ...gamePath.slice(0, 14)],   // starts at 28 
+    yellow: [...gamePath.slice(28), ...gamePath.slice(0, 28)], // starts at 133
+    blue: [...gamePath.slice(42), ...gamePath.slice(0, 42)]   // starts at 201
+}
 
 // -------- START POSITIONS ------
 let redStart = 2;
@@ -35,7 +42,7 @@ let blueStart = 48;
 
 // -------- CREATE BOARD ----------
 function createBoard(){
-    
+
     // ludo board = 15x15(225 squares)
     for(let i = 0; i < 225; i++){
         let square = document.createElement('div');
