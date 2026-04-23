@@ -43,6 +43,13 @@ const playerPath = {
     blue: [...gamePath.slice(42), ...gamePath.slice(0, 42)]   // starts at 201
 }
 
+const tokenHomePath = {
+    red: [105,106,107,108,109,110,111],
+    green: [7,22,37,52,67,82,97],
+    yellow: [119,118,117,116,115,114,113],
+    blue: [217,202,187,172,157,142,127]
+};
+
 // -------- CREATE BOARD ----------
 function createBoard(){
 
@@ -140,22 +147,43 @@ function moveFromBaseToStart(clickedToken){
     clickedToken.dataset.pathIndex = 0;
 }
 
-// // ---- MOVE TOKEN ALONG THE BOARD ----.
+// ---- MOVE TOKEN ALONG THE BOARD ----.
 async function moveAlongPath(clickedToken, steps){
     const color = clickedToken.dataset.color;
     let currentPathIndex = parseInt(clickedToken.dataset.pathIndex);
-    const path = playerPath[color];
+    let currentLocation = clickedToken.dataset.location;
+
+    if (currentLocation === 'homePath'){
+        const isMoveValid = homePath(clickedToken, gameState.diceValue);
+        if(!isMoveValid){
+            gameState.diceValue = null;
+            switchTurn();
+            return;
+        }
+    }
 
     gameState.canRoll = false;
     for(let j = 0; j < steps; j++){
+
+        // switch from gamePath to Home path.
+        if (currentLocation === 'path' && currentPathIndex === 54){
+            currentLocation = 'homePath';
+            currentPathIndex = 0;
+        }
         currentPathIndex++;
 
-        if(currentPathIndex >= path.length){
+        if(currentPathIndex >= playerPath[color].length){
             console.log("Reached end of the gamePath.");
             break;
         }
 
-        const nextSquareIndex = path[currentPathIndex];
+        let nextSquareIndex;
+        if (currentLocation === 'homePath'){
+            nextSquareIndex = tokenHomePath[color][currentPathIndex];
+        }else{
+            nextSquareIndex = playerPath[color][currentPathIndex]
+        }
+
         const nextSquare = document.querySelector(`.square[data-index='${nextSquareIndex}']`);
 
         clickedToken.classList.add('hopping');
@@ -166,6 +194,7 @@ async function moveAlongPath(clickedToken, steps){
     }
 
     clickedToken.dataset.pathIndex = currentPathIndex;
+    clickedToken.dataset.location = currentLocation;
     
     if(gameState.diceValue === 6){
         gameState.canRoll = true;
@@ -180,6 +209,8 @@ async function moveAlongPath(clickedToken, steps){
 function captureToken(token){
     const color = token.dataset.color;
     const currentSquare = token.parentElement;
+    
+    if (currentSquare.classList.contains('start-indices')) return false;
     const tokenInside = currentSquare.querySelectorAll('.token');
 
     for(const resident of tokenInside){
@@ -196,6 +227,19 @@ function captureToken(token){
             resident.dataset.pathIndex = 0;
         }
     }
+}
+
+// ----- HOME PATH MOVEMENT ------
+function homePath(token, steps){
+    const color = token.dataset.color;
+    const currentHomeIndex = parseInt(token.dataset.pathIndex);
+    const maxIndex = tokenHomePath[color].length - 1;
+
+    if (currentHomeIndex + steps > maxIndex){
+        console.log("Roll is too high! You need an exact match to finish.");
+        return false;
+    }
+    return true;
 }
 
 // Dice Pattern
