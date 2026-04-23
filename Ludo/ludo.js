@@ -44,10 +44,10 @@ const playerPath = {
 }
 
 const tokenHomePath = {
-    red: [105,106,107,108,109,110,111],
-    green: [7,22,37,52,67,82,97],
-    yellow: [119,118,117,116,115,114,113],
-    blue: [217,202,187,172,157,142,127]
+    red: [106,107,108,109,110,111],
+    green: [22,37,52,67,82,97],
+    yellow: [118,117,116,115,114,113],
+    blue: [202,187,172,157,142,127]
 };
 
 // -------- CREATE BOARD ----------
@@ -166,9 +166,9 @@ async function moveAlongPath(clickedToken, steps){
     for(let j = 0; j < steps; j++){
 
         // switch from gamePath to Home path.
-        if (currentLocation === 'path' && currentPathIndex === 54){
+        if (currentLocation === 'path' && currentPathIndex === playerPath[color].length - 2){
             currentLocation = 'homePath';
-            currentPathIndex = 0;
+            currentPathIndex = -1;
         }
         currentPathIndex++;
 
@@ -339,3 +339,64 @@ function switchTurn(){
 }
 createBoard();
 addTokens();
+
+// ---- MY CHEAT CODE TO MAKE TESTING EASIER -----
+const debug_Mode = false;
+if(debug_Mode){
+    window.devTools = {
+        dice(value){
+            gameState.diceValue = value;
+            gameState.canRoll = false;
+            renderDiceDots(value);
+            console.log(`🎲 Forced dice: ${value}`);
+        },
+
+        move(color, pieceIndex, steps){
+            const token = document.querySelector(
+                `.token.${color}-token[data-piece-index='${pieceIndex}']`
+            );
+
+            if(!token){
+                console.log("Token not found");
+                return;
+            }
+
+            moveAlongPath(token, steps);
+            console.log(`🚀 Moved ${color} token ${pieceIndex} by ${steps}`);
+        },
+
+        release(color, pieceIndex){
+            const token = document.querySelector(
+                `.token.${color}-token[data-piece-index='${pieceIndex}']`
+            );
+
+            if(!token){
+                console.log("Token not found");
+                return;
+            }
+
+            moveFromBaseToStart(token);
+            console.log(`🏁 Released ${color} token ${pieceIndex}`);
+        },
+
+        teleport(color, pieceIndex, boardIndex){
+            const token = document.querySelector(
+                `.token.${color}-token[data-piece-index='${pieceIndex}']`
+            );
+
+            const square = document.querySelector(`.square[data-index='${boardIndex}']`);
+
+            if(!token || !square){
+                console.log("Invalid teleport target");
+                return;
+            }
+
+            square.appendChild(token);
+
+            token.dataset.location = 'path';
+            token.dataset.pathIndex = boardIndex;
+
+            console.log(`🌀 Teleported ${color} ${pieceIndex} → ${boardIndex}`);
+        }
+    };
+}

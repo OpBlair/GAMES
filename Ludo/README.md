@@ -20,6 +20,18 @@ A browser-based implementation of the **Ludo** board game using **HTML, CSS, and
 
 ---
 
+## 🛠️ Developer & Testing Tools
+
+To streamline the development process and bypass the randomness of dice rolls, a custom Debug API has been implemented. This can be accessed directly via the browser console:
+
+* ```devTools.dice(n)``` – Forces the dice to a specific value.
+
+* ```devTools.release(color, index)``` – Instantly moves a token from base to start.
+
+* ```devTools.move(color, index, steps)``` – Moves a specific token to test pathing logic.
+
+* ```devTools.teleport(color, index, boardIndex)``` – Relocates a token to any square for edge-case testing.
+
 ## 🧠 Game Design Approach
 
 * Board is represented using indexed squares (0–224)
@@ -49,9 +61,8 @@ ludo/
 
 ---
 
-## 🚧 Work in Progress / Planned Features
+## 🚧 Work in Progress / Implemented Features
 
-* Centralized game state (single source of truth)
 * Turn-based gameplay
 * Token movement rules:
 
@@ -62,17 +73,20 @@ ludo/
   * Extra turns on rolling 6
 * Win condition (all tokens home)
 * Local multiplayer
-* Refactoring the Logic
-* Optional AI players
+
 
 ---
 
 ## 🧪 Future Technical Improvements
 
+* Centralized game state (single source of truth)
 * Separate game logic from DOM rendering
 * Introduce pure rule functions for movement and captures
 * Add unit tests for dice and movement rules
 * Prepare architecture for online multiplayer
+* Refactoring the Logic
+* Optional AI players
+* Implement build-time environment checks to strip debug tools from production.
 
 ---
 
