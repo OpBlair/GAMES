@@ -18,6 +18,14 @@ let greenBase = [9,10,11,12,13,14,24,25,26,27,28,29,39,40,41,42,43,44,54,55,56,5
 let yellowBase = [144,145,146,147,148,149,159,160,161,162,163,164,174,175,176,177,178,179,189,190,191,192,193,194,204,205,206,207,208,209,219,220,221,222,223,224];
 let blueBase = [135,136,137,138,139,140,150,151,152,153,154,155,165,166,167,168,169,170,180,181,182,183,184,185,195,196,197,198,199,200,210,211,212,213,214,215];
 
+// ------ TOKEN BASE --------
+const basePockets = {
+    red: [16, 19, 61, 64],       
+    green: [25, 28, 70,73],
+    yellow: [160, 163, 205, 208],
+    blue: [151, 154, 196, 199]
+};
+
 // --------- HOME PATHS ----------
 let redPath = [91,106,107,108,109,110,111];
 let greenPath = [22,23,37,52,67,82,97];
@@ -75,13 +83,6 @@ function createBoard(){
 
 // Function to add tokens(pieces)
 function addTokens(){
-
-    const basePockets = {
-        red: [16, 19, 61, 64],       
-        green: [25, 28, 70,73],
-        yellow: [160, 163, 205, 208],
-        blue: [151, 154, 196, 199]
-    };
 
     for(const color in basePockets){
         basePockets[color].forEach((index, i) => {
@@ -172,6 +173,29 @@ async function moveAlongPath(clickedToken, steps){
         switchTurn();
     }
     gameState.diceValue = null;
+    captureToken(clickedToken);
+}
+
+// ----- CAPTURE TOKEN -----
+function captureToken(token){
+    const color = token.dataset.color;
+    const currentSquare = token.parentElement;
+    const tokenInside = currentSquare.querySelectorAll('.token');
+
+    for(const resident of tokenInside){
+        if (resident === token) continue;
+        if (resident.dataset.color !== color){
+            const victimColor = resident.dataset.color;
+            const victimIndex = resident.dataset.pieceIndex; 
+            const baseSquareIndex = basePockets[victimColor][victimIndex];
+            const baseSquare = document.querySelector(`.square[data-index='${baseSquareIndex}']`);
+            
+            baseSquare.appendChild(resident);
+            console.log(`${color} just captured ${victimColor}'s token number ${victimIndex}`);
+            resident.dataset.location = 'base';
+            resident.dataset.pathIndex = 0;
+        }
+    }
 }
 
 // Dice Pattern
@@ -212,7 +236,7 @@ function rollDice(){
             }else{
                 if(number === 6){
                     console.log("Rolled a 6! Roll again.");
-                    gameState.canRoll = false;
+                    gameState.canRoll = true;
                 }else{
                     console.log("Select a piece to move.");
                     gameState.canRoll = false;
