@@ -138,3 +138,13 @@ button:hover{
     0%, 100% {transform: translateY(0) scale(1);}
     50% {transform: translateY(-20px) scale(1.2);}
 }
+.token.finished{
+    cursor: default;
+    border: 2px solid gold;
+    box-shadow: 0 0 10px gold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    pointer-events: none;
+}
