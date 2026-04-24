@@ -235,6 +235,17 @@ function reachedEndOfHomePath(token){
     
     baseSquare.appendChild(token);
 
+    checkVictory(token.dataset.color);
+}
+
+// ----- CHECK IF ALL TOKENS HAVE REACHED END OF HOME PATH -----
+function checkVictory(color){
+    const finishedTokens = document.querySelectorAll(`.token.${color}-token.finished`);
+    if (finishedTokens.length === 4){
+        alert(`Hooray, ${color.toUpperCase()} HAS WON THE GAME!`);
+        gameState.isGameOver = true;
+        gameState.canRoll = false;
+    }
 }
 
 // ----- CHECK IF PATH IS BLOCKED ------
