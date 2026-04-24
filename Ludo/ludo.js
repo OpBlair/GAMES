@@ -138,9 +138,10 @@ function handleTokenClick(event){
 }
 
 // Function to make the first move
+
+const startIndices = {red : 91, green : 23, yellow: 133, blue: 201};
 function moveFromBaseToStart(clickedToken){
     const color = clickedToken.dataset.color;
-    const startIndices = {red : 91, green : 23, yellow: 133, blue: 201};
     const startSquare = document.querySelector(`.square[data-index='${startIndices[color]}']`);
     startSquare.appendChild(clickedToken);
     clickedToken.dataset.location = 'path';
@@ -170,7 +171,7 @@ async function moveAlongPath(clickedToken, steps){
             currentLocation = 'homePath';
             currentPathIndex = -1;
         }
-        currentPathIndex++;
+        let nextIndex = currentPathIndex + 1;
 
         if(currentPathIndex >= playerPath[color].length){
             console.log("Reached end of the gamePath.");
@@ -179,9 +180,9 @@ async function moveAlongPath(clickedToken, steps){
 
         let nextSquareIndex;
         if (currentLocation === 'homePath'){
-            nextSquareIndex = tokenHomePath[color][currentPathIndex];
+            nextSquareIndex = tokenHomePath[color][nextIndex];
         }else{
-            nextSquareIndex = playerPath[color][currentPathIndex]
+            nextSquareIndex = playerPath[color][nextIndex];
         }
 
         // check if the the path is blocked.
@@ -189,7 +190,7 @@ async function moveAlongPath(clickedToken, steps){
             console.log("Path is Blocked.");
             break;
         }
-        
+        currentPathIndex = nextIndex;
 
         const nextSquare = document.querySelector(`.square[data-index='${nextSquareIndex}']`);
 
@@ -203,7 +204,7 @@ async function moveAlongPath(clickedToken, steps){
     clickedToken.dataset.pathIndex = currentPathIndex;
     clickedToken.dataset.location = currentLocation;
     
-    if(gameState.diceValue === 6){
+    if(captureToken(clickedToken) || gameState.diceValue === 6){
         gameState.canRoll = true;
     }else{
         switchTurn();
@@ -231,7 +232,12 @@ function isSquareBlocked(squareIndex, movingTokenColor){
 function captureToken(token){
     const color = token.dataset.color;
     const currentSquare = token.parentElement;
-    
+    const index = parseInt(currentSquare.dataset.index);
+    const safeSquares = new Set(Object.values(startIndices));
+    let didCapture = false;
+
+    if(safeSquares.has(index)) return; // check values in startIndices object since they are safe squares.
+
     if (currentSquare.classList.contains('start-indices')) return false;
     const tokenInside = currentSquare.querySelectorAll('.token');
 
@@ -247,6 +253,7 @@ function captureToken(token){
             console.log(`${color} just captured ${victimColor}'s token number ${victimIndex}`);
             resident.dataset.location = 'base';
             resident.dataset.pathIndex = 0;
+            didCapture = true;
         }
     }
 }
