@@ -140,6 +140,8 @@ function handleTokenClick(event){
 // Function to make the first move
 
 const startIndices = {red : 91, green : 23, yellow: 133, blue: 201};
+const safeSquares = new Set(Object.values(startIndices));
+
 function moveFromBaseToStart(clickedToken){
     const color = clickedToken.dataset.color;
     const startSquare = document.querySelector(`.square[data-index='${startIndices[color]}']`);
@@ -204,13 +206,35 @@ async function moveAlongPath(clickedToken, steps){
     clickedToken.dataset.pathIndex = currentPathIndex;
     clickedToken.dataset.location = currentLocation;
     
-    if(captureToken(clickedToken) || gameState.diceValue === 6){
+    // Check if a token has reached the end of home path
+    const isFinished = currentLocation === 'homePath' && currentPathIndex === tokenHomePath[color].length - 1;
+    if(isFinished) {
+        reachedEndOfHomePath(clickedToken);
+    }
+
+    let didCapture = captureToken(clickedToken);
+
+    if(didCapture || isFinished || gameState.diceValue === 6){
         gameState.canRoll = true;
     }else{
         switchTurn();
     }
     gameState.diceValue = null;
-    captureToken(clickedToken);
+}
+
+// ----- CHECK IF TOKEN IS AT END OF HOME PATH ----
+function reachedEndOfHomePath(token){
+    console.log(`${token.dataset.color} piece ${token.dataset.pieceIndex} finished.`);
+
+    token.classList.add('finished');
+    token.removeEventListener('click', handleTokenClick);
+
+    token.innerHTML = '👑';
+    const pocketIndex = basePockets[token.dataset.color][token.dataset.pieceIndex];
+    const baseSquare = document.querySelector(`.square[data-index='${pocketIndex}']`);
+    
+    baseSquare.appendChild(token);
+
 }
 
 // ----- CHECK IF PATH IS BLOCKED ------
@@ -233,7 +257,6 @@ function captureToken(token){
     const color = token.dataset.color;
     const currentSquare = token.parentElement;
     const index = parseInt(currentSquare.dataset.index);
-    const safeSquares = new Set(Object.values(startIndices));
     let didCapture = false;
 
     if(safeSquares.has(index)) return; // check values in startIndices object since they are safe squares.
@@ -256,6 +279,7 @@ function captureToken(token){
             didCapture = true;
         }
     }
+    return didCapture;
 }
 
 // ----- HOME PATH MOVEMENT ------
