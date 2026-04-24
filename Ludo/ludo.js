@@ -184,6 +184,13 @@ async function moveAlongPath(clickedToken, steps){
             nextSquareIndex = playerPath[color][currentPathIndex]
         }
 
+        // check if the the path is blocked.
+        if (currentLocation === 'path' && isSquareBlocked(nextSquareIndex, color)){
+            console.log("Path is Blocked.");
+            break;
+        }
+        
+
         const nextSquare = document.querySelector(`.square[data-index='${nextSquareIndex}']`);
 
         clickedToken.classList.add('hopping');
@@ -203,6 +210,21 @@ async function moveAlongPath(clickedToken, steps){
     }
     gameState.diceValue = null;
     captureToken(clickedToken);
+}
+
+// ----- CHECK IF PATH IS BLOCKED ------
+function isSquareBlocked(squareIndex, movingTokenColor){
+    const square = document.querySelector(`.square[data-index='${squareIndex}']`);
+    const tokensInSquare = square.querySelectorAll('.token');
+
+    if (tokensInSquare.length >= 2){
+        const firstTokenColor = tokensInSquare[0].dataset.color;
+
+        if (firstTokenColor !== movingTokenColor){
+            return true;
+        }
+    }
+    return false;
 }
 
 // ----- CAPTURE TOKEN -----
@@ -341,7 +363,7 @@ createBoard();
 addTokens();
 
 // ---- MY CHEAT CODE TO MAKE TESTING EASIER -----
-const debug_Mode = false;
+const debug_Mode = true;
 if(debug_Mode){
     window.devTools = {
         dice(value){
