@@ -192,7 +192,7 @@ function switchTurn(){
 
 // Function to display number on the dice
 function rollDice(){
-    if(!gameState.canRoll) return;
+    if(!gameState.canRoll || gameState.isMoving) return;
 
     // animation
     gameState.canRoll = false;
@@ -209,19 +209,21 @@ function rollDice(){
         setTimeout(() => {
             const currentPlayer = gameState.players[gameState.currentPlayerIndex];
             const tokensOnBoard = document.querySelectorAll(`.token.${currentPlayer}-token:not(.finished)`);
-            const hasTokensOnBoard = tokensOnBoard.length > 0;
+            const hasTokensOnBoard = Array.from(tokensOnBoard).some(t => t.dataset.location !== 'base');
 
             if(number !== 6 && !hasTokensOnBoard){
                 console.log("No possible moves. Switching turn...");
                 gameState.diceValue = null;
+                gameState.canRoll = true;
                 switchTurn();
             }else{
                 if(number === 6){
                     console.log("Rolled a 6! Roll again.");
-                    gameState.canRoll = true;
+                    //gameState.canRoll = true;
                 }else{
                     console.log("Select a piece to move.");
-                    gameState.canRoll = false;
+                    //gameState.canRoll = false;
+                    //switchTurn();
                 }
             }
         }, 800);
@@ -231,6 +233,8 @@ function rollDice(){
 // ====== MOVEMENT LOGIC ======
 // ---- Function to add click event to the tokens
 function handleTokenClick(event){
+    if (gameState.isMoving) return;
+
     const clickedToken = event.target;
     const tokenColor = clickedToken.dataset.color;
     const currentPlayer = gameState.players[gameState.currentPlayerIndex];
@@ -285,12 +289,15 @@ async function moveAlongPath(clickedToken, steps){
         const isMoveValid = homePath(clickedToken, gameState.diceValue);
         if(!isMoveValid){
             gameState.diceValue = null;
+            gameState.canRoll = true;
             switchTurn();
             return;
         }
     }
 
+    gameState.isMoving = true;
     gameState.canRoll = false;
+
     for(let j = 0; j < steps; j++){
 
         // switch from gamePath to Home path.
@@ -320,7 +327,10 @@ async function moveAlongPath(clickedToken, steps){
         currentPathIndex = nextIndex;
 
         const nextSquare = document.querySelector(`.square[data-index='${nextSquareIndex}']`);
-
+        if (!nextSquare) {
+            console.error(`Square not found for index: ${nextSquareIndex}. Stopping movement.`);
+            return;
+        }
         clickedToken.classList.add('hopping');
         nextSquare.appendChild(clickedToken);
 
@@ -338,8 +348,9 @@ async function moveAlongPath(clickedToken, steps){
     }
 
     let didCapture = captureToken(clickedToken);
+    gameState.isMoving = false;
 
-    if(didCapture || isFinished || gameState.diceValue === 6){
+    if(didCapture || isFinished || steps === 6){
         gameState.canRoll = true;
     }else{
         switchTurn();
