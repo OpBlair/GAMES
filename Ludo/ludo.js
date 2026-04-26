@@ -71,6 +71,27 @@ function createBoard(){
 
     // ludo board = 15x15(225 squares)
     for(let i = 0; i < 225; i++){
+
+        // Define the 9 indices that make up the 3x3 center
+        const centerIndices = [111, 112, 113, 96, 97, 98, 126, 127, 128];
+
+        // Only create the triangle container ONCE (at the first center index)
+        if (i === 96) {
+            let home = document.createElement('div');
+            home.id = 'ludo-home-center';
+            // We add the triangles inside
+            home.innerHTML = `
+                <div class="home-sector red-home"></div>
+                <div class="home-sector green-home"></div>
+                <div class="home-sector yellow-home"></div>
+                <div class="home-sector blue-home"></div>
+            `;
+            gameBoard.appendChild(home);
+        }
+
+        // Skip the loop logic for all 9 center indices so they don't draw extra squares
+        if (centerIndices.includes(i)) continue;
+
         let square = document.createElement('div');
         square.classList.add('square');
         square.dataset.index = i;
@@ -255,8 +276,6 @@ function handleTokenClick(event){
     if(clickedToken.dataset.location === 'base'){
         if(gameState.diceValue === 6){
             moveFromBaseToStart(clickedToken);
-            //gameState.diceValue = null;
-            //gameState.canRoll = true;
         }
     }else{
         moveAlongPath(clickedToken, gameState.diceValue);
@@ -334,7 +353,7 @@ async function moveAlongPath(clickedToken, steps){
         clickedToken.classList.add('hopping');
         nextSquare.appendChild(clickedToken);
 
-        await new Promise(resolve => setTimeout(resolve, 300));
+        await new Promise(resolve => setTimeout(resolve, 250));
         clickedToken.classList.remove('hopping');
     }
 
