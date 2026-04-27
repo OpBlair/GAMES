@@ -20,7 +20,7 @@ const basePockets = {
 };
 
 // --------- HOME PATHS ----------
-const redPath = [91,106,107,108,109,110,111];
+const redPath = [91,106,107,108,109,110];
 const greenPath = [22,23,37,52,67,82,97];
 const yellowPath = [113,114,115,116,117,118,133];
 const bluePath = [127,142,157,172,187,201,202];
@@ -81,10 +81,10 @@ function createBoard(){
             home.id = 'ludo-home-center';
             // We add the triangles inside
             home.innerHTML = `
-                <div class="home-sector red-home data-index = "111""></div>
-                <div class="home-sector green-home"></div>
-                <div class="home-sector yellow-home"></div>
-                <div class="home-sector blue-home"></div>
+                <div class="home-sector red-home square" data-index="111"></div>
+                <div class="home-sector green-home square" data-index="97"></div>
+                <div class="home-sector yellow-home square" data-index="113"></div>
+                <div class="home-sector blue-home square" data-index="127"></div>
             `;
             gameBoard.appendChild(home);
         }
@@ -413,10 +413,15 @@ function reachedEndOfHomePath(token){
     token.removeEventListener('click', handleTokenClick);
 
     token.innerHTML = '👑';
-    const pocketIndex = basePockets[token.dataset.color][token.dataset.pieceIndex];
-    const baseSquare = document.querySelector(`.square[data-index='${pocketIndex}']`);
+    //const pocketIndex = basePockets[token.dataset.color][token.dataset.pieceIndex];
+    //const baseSquare = document.querySelector(`.square[data-index='${pocketIndex}']`);
     
-    baseSquare.appendChild(token);
+    //baseSquare.appendChild(token);
+
+    const centerHome = document.querySelector(`.${token.dataset.color}-home`);
+    if(centerHome){
+        centerHome.appendChild(token);
+    }
 
     checkVictory(token.dataset.color);
 }
