@@ -436,8 +436,7 @@ dice.addEventListener('click', () => {
 // ------ BUTTON FOR PLAYING AGAINST HUMAN --------
 vsHuman.addEventListener('click', () => {
   welcomeScreen.style.display = 'none';  
-  gameBoard.style.display = 'grid';
-  dice.style.display = 'grid';
+  document.getElementById('game-ui').style.display = 'flex';
 })
 
 // Initialization
