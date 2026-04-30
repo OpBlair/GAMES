@@ -11,12 +11,27 @@
     <main class="game-container">
         <div class="welcome">
             <h1>Ludo</h1>
-            welcome to the ultimate ludo game.
+            <p class="subtitle">Strategy. Luck. Chaos.</p>
+            <p class="description">welcome to the ultimate ludo game.</p>
             <button>new game vs computer</button>
             <button id="human">new game vs human</button>
         </div>
-        <div id="game-board" style="display: none;"></div>
-        <div id="dice" style="display: none;"></div>
+
+        <!-- Game UI -->
+        <div class="game-ui" id="game-ui">
+            <header class="top-bar">
+                <h1>Ludo</h1>
+                <div id="turn-indicator">Current: Red</div>
+            </header>
+
+            <section class="board-area">
+                <div id="game-board"></div>
+            </section>
+            
+            <footer class="controls">
+                <div id="dice"></div>
+            </footer>
+        </div>
     </main>
 </body>
 </html>
