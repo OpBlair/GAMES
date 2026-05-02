@@ -131,7 +131,6 @@ vsHuman.addEventListener('click', () => {
     }
     roomId = input;
     welcomeScreen.style.display = 'none';
-    gameBoard.style.display = 'grid';
     playIndication.style.display = 'flex';
     document.getElementById('game-ui').style.display = 'grid';
     
