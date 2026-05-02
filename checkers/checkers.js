@@ -133,6 +133,7 @@ vsHuman.addEventListener('click', () => {
     welcomeScreen.style.display = 'none';
     gameBoard.style.display = 'grid';
     playIndication.style.display = 'flex';
+    document.getElementById('game-ui').style.display = 'grid';
     
     // Only join the room; the Hub will handle the engine setup
     joinRoom();
