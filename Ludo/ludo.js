@@ -408,18 +408,25 @@ function captureToken(token){
 // ----- CHECK IF TOKEN IS AT END OF HOME PATH ----
 function reachedEndOfHomePath(token){
     console.log(`${token.dataset.color} piece ${token.dataset.pieceIndex} finished.`);
-
+    const color = token.dataset.color;
     token.classList.add('finished');
     token.removeEventListener('click', handleTokenClick);
-
     token.innerHTML = '👑';
-    //const pocketIndex = basePockets[token.dataset.color][token.dataset.pieceIndex];
-    //const baseSquare = document.querySelector(`.square[data-index='${pocketIndex}']`);
-    
-    //baseSquare.appendChild(token);
 
-    const centerHome = document.querySelector(`.${token.dataset.color}-home`);
+    const centerHome = document.querySelector(`.${color}-home`);
     if(centerHome){
+        if (color === 'red') {
+            token.style.left = '5px';
+        } 
+        else if (color === 'green') {
+            token.style.top = '5px';
+        } 
+        else if (color === 'yellow') {
+            token.style.right = '5px';
+        } 
+        else if (color === 'blue') {
+            token.style.bottom = '5px';
+        }
         centerHome.appendChild(token);
     }
 
