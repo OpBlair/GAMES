@@ -187,48 +187,48 @@ button:hover{
     grid-row: 7 / 10;    /* Row 7 to 9 */
     position: relative;
     background: #fff;
+    overflow: hidden;
 }
-
 .home-sector {
     position: absolute;
     width: 100%;
     height: 100%;
-    top: 0;
-    left: 0;
+    display: flex;
+    pointer-events: none;
+    z-index: 1;
 }
-
 /* Ludo Color Mapping to Triangles */
 .red-home {
     background-color: red;
     clip-path: polygon(0 0, 50% 50%, 0 100%); /* Faces Red Path */
+    justify-content: flex-start; align-items: center;
 }
 .green-home {
     background-color: rgb(11, 139, 11);
     clip-path: polygon(0 0, 100% 0, 50% 50%); /* Faces Green Path */
+    justify-content: center; align-items: flex-start;
 }
 .yellow-home {
     background-color: rgb(243, 243, 11);
     clip-path: polygon(100% 0, 100% 100%, 50% 50%); /* Faces Yellow Path */
+    justify-content: flex-end; align-items: center;
 }
 .blue-home {
     background-color: rgb(5, 5, 238);
     clip-path: polygon(0 100%, 100% 100%, 50% 50%); /* Faces Blue Path */
+    justify-content: center; align-items: flex-end;
+}
+.token.finished {
+    width: 22px;
+    height: 22px;
+    margin: 4px; /* Keeps them from touching the absolute edge */
+    z-index: 50;  /* Make sure they stay on top */
+    position: relative;
 }
 @media (max-width: 768px) {
+    .game-ui { padding: 10px; gap: 8px; }
 
-    .game-ui {
-        padding: 10px;
-        gap: 8px;
-    }
+    .top-bar { font-size: 14px; padding: 8px 10px; }
 
-    .top-bar {
-        font-size: 14px;
-        padding: 8px 10px;
-    }
-
-    button {
-        width: 160px;
-        font-size: 12px;
-        padding: 8px;
-    }
+    button { width: 160px; font-size: 12px; padding: 8px; }
 }
