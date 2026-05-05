@@ -67,6 +67,12 @@ const gameState = {
     isMoving: false
 }
 
+// ----- GET SELECTED COLORS -------
+function getSelectedColors(){
+    const checkBoxes = document.querySelectorAll('input[name="player-color"]:checked');
+    return Array.from(checkBoxes).map(cb => cb.value);
+}
+
 // -------- CREATE BOARD ----------
 function createBoard(){
 
@@ -203,11 +209,11 @@ function checkVictory(color){
 // ===== TURN & DICE CONTROL =====
 // ----- FUNCTION TO SWITCH PLAYER TURNS -----
 function switchTurn(){
-    gameState.currentPlayerIndex = (gameState.currentPlayerIndex + 1) % 4;
+    gameState.currentPlayerIndex = (gameState.currentPlayerIndex + 1) % gameState.activePlayers.length;
     gameState.canRoll = true;
     gameState.diceValue = null;
 
-    const nextPlayer = gameState.players[gameState.currentPlayerIndex];
+    const nextPlayer = gameState.activePlayers[gameState.currentPlayerIndex];
     dice.style.borderColor = nextPlayer;
     console.log(`It is now ${nextPlayer}'s turn`);
 }
@@ -229,7 +235,7 @@ function rollDice(){
         renderDiceDots(number);
 
         setTimeout(() => {
-            const currentPlayer = gameState.players[gameState.currentPlayerIndex];
+            const currentPlayer = gameState.activePlayers[gameState.currentPlayerIndex];
             const tokensOnBoard = document.querySelectorAll(`.token.${currentPlayer}-token:not(.finished)`);
             const hasTokensOnBoard = Array.from(tokensOnBoard).some(t => t.dataset.location !== 'base');
 
@@ -443,13 +449,24 @@ dice.addEventListener('click', () => {
 
 // ------ BUTTON FOR PLAYING AGAINST HUMAN --------
 vsHuman.addEventListener('click', () => {
-  welcomeScreen.style.display = 'none';  
-  document.getElementById('game-ui').style.display = 'flex';
+    const selectedColors = getSelectedColors();
+    
+    if (selectedColors.length < 2){
+        alert("Select at least 2 colors to play.");
+        return;
+    }
+
+    gameState.activePlayers = selectedColors;
+    gameState.currentPlayerIndex = 0;
+    console.log("Active players:", gameState.activePlayers.join(', '));
+
+    welcomeScreen.style.display = 'none';  
+    document.getElementById('game-ui').style.display = 'flex';
+    addTokens();
 })
 
 // Initialization
 createBoard();
-addTokens();
 renderDiceDots(1);
 
 // ---- MY CHEAT CODE TO MAKE TESTING EASIER -----
