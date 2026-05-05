@@ -60,6 +60,7 @@ const dicePatterns = {
 const gameState = {
     currentPlayerIndex: 0,
     players: ['red', 'green', 'yellow', 'blue'],
+    activePlayers: [],
     diceValue: null,
     isGameOver: false,
     canRoll: true,
