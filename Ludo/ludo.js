@@ -459,14 +459,14 @@ vsHuman.addEventListener('click', () => {
     gameState.activePlayers = selectedColors;
     gameState.currentPlayerIndex = 0;
     console.log("Active players:", gameState.activePlayers.join(', '));
-
+    
     welcomeScreen.style.display = 'none';  
     document.getElementById('game-ui').style.display = 'flex';
-    addTokens();
 })
 
 // Initialization
 createBoard();
+addTokens();
 renderDiceDots(1);
 
 // ---- MY CHEAT CODE TO MAKE TESTING EASIER -----
