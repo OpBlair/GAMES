@@ -1,9 +1,13 @@
 'use strict';
 const gameBoard = document.getElementById('game-board');
 
-const JUMPS = {
-    ladders: [ [4, 14], [9, 31], [20, 38], [28, 84], [40, 59], [51, 67], [63, 81], [71, 91] ],
-    snakes: [ [17, 7], [54, 34], [62, 19], [64, 60], [87, 24], [93, 16], [95, 5], [98, 2] ]
+class GAMERULES{
+    constructor(){
+        this.jumps = {
+            ladders: [ [4, 14], [9, 31], [20, 38], [28, 84], [40, 59], [51, 67], [63, 81], [71, 91] ],
+            snakes: [ [17, 7], [54, 34], [62, 19], [64, 60], [87, 24], [93, 16], [95, 5], [98, 2] ]
+        };
+    }
 }
 
 for(let row = 9; row >= 0; row--){
