@@ -13,6 +13,7 @@ class GameRules{
 class Board{
     constructor(boardElement){
         this.board = boardElement;
+        this.svg = document.getElementById('svg-overlay');
     }
 
     createBoard(){
@@ -49,7 +50,65 @@ class Board{
             y: rect.top - boardRect.top + rect.height / 2
         };
     }
+
+    drawLadder(start, end){
+        const startPosition = this.getSquareCenter(start);
+        const endPosition = this.getSquareCenter(end);
+
+        // direction vector
+        const dx = endPosition.x - startPosition.x;
+        const dy = endPosition.y - startPosition.y;
+
+        //perpendicular vector
+        const length = Math.sqrt(dx * dx + dy * dy);
+        const offsetX = -(dy / length) * 10;
+        const offsetY = (dx / length) * 10;
+
+        // Left rail
+        this.createLine(
+            startPosition.x - offsetX, startPosition.y - offsetY, endPosition.x - offsetX, endPosition.y - offsetY
+        )
+        // Right rail
+        this.createLine(
+            startPosition.x + offsetX, startPosition.y + offsetY, endPosition.x + offsetX, endPosition.y + offsetY
+        )
+
+        // Ladder Steps
+        const steps = 6;
+        for(let i = 1; i < steps; i++){
+            const t = i / steps;
+
+            const x1 = startPosition.x - offsetX + dx * t;
+            const y1 = startPosition.y - offsetY + dy * t;
+
+            const x2 = startPosition.x + offsetX + dx * t;
+            const y2 = startPosition.y + offsetY + dy * t;
+
+            this.createLine(x1, y1, x2, y2);
+        }
+    }
+
+    createLine(x1, y1, x2, y2){
+        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+
+        line.setAttribute('x1', x1);
+        line.setAttribute('y1', y1);
+        line.setAttribute('x2', x2);
+        line.setAttribute('y2', y2);
+        line.setAttribute('stroke', 'brown');
+        line.setAttribute('stroke-width', '4');
+
+        this.svg.appendChild(line);
+    }
 }
 
 const board = new Board(gameBoard);
 board.createBoard();
+
+const rules = new GameRules();
+
+rules.jumps.ladders.forEach(([start, end]) => {
+    board.drawLadder(start, end);
+});
+
+this.svg.setAttribute('viewBox', `0 0 ${this.board.clientWidth} ${this.board.clientHeight}`);
