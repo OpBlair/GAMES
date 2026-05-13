@@ -5,21 +5,24 @@
 }
 body{
     min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    place-items: center;
+    background: #f4f4f4;
+    padding: 20px;
+    font-family: sans-serif;
 }
 main{
     gap: 10px;
     padding: 10px;
 }
 .game-container {
-    width: min(95vw, 600px);
-    height: min(95vw, 600px);
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
+}
+.game-ui{
+    width: min(95vw, 35rem);
 }
 #game-board{
     background-color: whitesmoke;
@@ -27,7 +30,7 @@ main{
     grid-template-columns: repeat(10, 1fr);
     grid-template-rows: repeat(10, 1fr);
     width: 100%;
-    aspect-ratio: 1/1;
+    height: 100%;
     border: 2px solid #333;
 }
 .square{
@@ -37,6 +40,11 @@ main{
     text-align: left;
     font-size: 70%;
     position: relative;
+}
+.board-wrapper{
+    position: relative;
+    aspect-ratio: 1/1;
+    width: 100%;
 }
 #svg-overlay{
     position: absolute;
