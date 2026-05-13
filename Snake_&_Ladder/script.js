@@ -135,8 +135,43 @@ class Board{
         this.svg.appendChild(path);
 
         const angle = (Math.atan2(dx, dy) * 180 / Math.PI) - 90;
-        this.createSnakehead(startPosition.x, endPosition.y, angle);
+        this.createSnakehead(startPosition.x, startPosition.y, angle);
     }
+
+    // Creating the head of the snake.
+    createSnakehead(x, y, angle){
+        const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        group.setAttribute('transform', `rotate(${angle} ${x} ${y})`);
+
+        // Head Shape
+        const head = this.createSVGElement('ellipse', {
+            cx: x, cy: y, rx: 16, ry: 12, fill: '#145a32'
+        });
+        group.appendChild(head);
+
+        // Snake's Tongue
+        const tongue = this.createSVGElement('path', {
+            d: `M ${x} ${y + 8} L ${x} ${y + 18} M ${x} ${y + 18} L ${x-4} ${y + 22} M ${x} ${y + 18} L ${x+4} ${y + 22}`,
+            stroke: '#e74c3c', 'stroke-width': 2, 'stroke-linecap': 'round', fill: 'none'
+        });
+        group.appendChild(tongue);
+
+        // --- Eyes (White part) ---
+        group.appendChild(this.createSVGElement('circle', { cx: x - 6, cy: y - 2, r: 4, fill: 'white' }));
+        group.appendChild(this.createSVGElement('circle', { cx: x + 6, cy: y - 2, r: 4, fill: 'white' }));
+
+        // --- Pupils (Black part) ---
+        group.appendChild(this.createSVGElement('circle', { cx: x - 6, cy: y - 3, r: 1.5, fill: 'black' }));
+        group.appendChild(this.createSVGElement('circle', { cx: x + 6, cy: y - 3, r: 1.5, fill: 'black' }));
+
+        this.svg.appendChild(group);
+    }
+
+    createSVGElement(type, attrs) {
+    const el = document.createElementNS("http://www.w3.org/2000/svg", type);
+    for (let key in attrs) el.setAttribute(key, attrs[key]);
+    return el;
+}
 }
 
 const board = new Board(gameBoard);
