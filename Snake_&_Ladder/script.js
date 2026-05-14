@@ -174,6 +174,12 @@ class Board{
 }
 }
 
+class Utilities{
+    static rollDice(){
+        return (Math.random() * 6 ) + 1;
+    }
+}
+
 const board = new Board(gameBoard);
 board.createBoard();
 
