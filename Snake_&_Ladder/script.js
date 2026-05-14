@@ -1,5 +1,6 @@
 'use strict';
 const gameBoard = document.getElementById('game-board');
+const diceElement = document.getElementById('dice');
 
 class GameRules{
     constructor(){
@@ -174,11 +175,42 @@ class Board{
 }
 }
 
-class Utilities{
-    static rollDice(){
-        return (Math.random() * 6 ) + 1;
+class Dice{
+    constructor(diceElement){
+        this.dice = diceElement;
+        this.dicePatterns = {
+            1: [4],
+            2: [0, 8],
+            3: [0, 4, 8],
+            4: [0, 2, 6, 8],
+            5: [0, 2, 4, 6, 8],
+            6: [0, 2, 3, 5, 6, 8]
+        };
+    }
+
+    renderDiceDots(number){
+        this.dice.innerHTML = '';
+        this.dice.classList.remove('rolling');
+
+        for(let i = 0; i < 9; i++){
+            const dotSlot = document.createElement('div');
+            
+            if(this.dicePatterns[number].includes(i)){
+                const dot = document.createElement('div');
+                dot.classList.add('dot');
+                dotSlot.appendChild(dot);
+            }
+            this.dice.appendChild(dotSlot);
+        }
     }
 }
+
+class Utilities{
+    static rollDice(){
+        return Math.floor(Math.random() * 6 ) + 1;
+    }
+}
+
 
 const board = new Board(gameBoard);
 board.createBoard();
@@ -192,4 +224,18 @@ rules.jumps.snakes.forEach(([start, end]) => {
     board.drawSnake(start, end);
 });
 
-//https://www.joshwcomeau.com/svg/friendly-introduction-to-svg/
+const myDice = new Dice(diceElement);
+myDice.renderDiceDots(1);
+
+diceElement.addEventListener('click', () => {
+    // Prevent clicking while already rolling
+    if (diceElement.classList.contains('rolling')) return;
+
+    diceElement.classList.add('rolling');
+    
+    setTimeout(() => {
+        const result = Utilities.rollDice();
+        myDice.renderDiceDots(result);
+        console.log(`Rolled a ${result}`);
+    }, 600);
+});
