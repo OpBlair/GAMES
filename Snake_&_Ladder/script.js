@@ -178,6 +178,7 @@ class Board{
 class Dice{
     constructor(diceElement){
         this.dice = diceElement;
+        this.isRolling = false;
         this.dicePatterns = {
             1: [4],
             2: [0, 8],
@@ -186,6 +187,10 @@ class Dice{
             5: [0, 2, 4, 6, 8],
             6: [0, 2, 3, 5, 6, 8]
         };
+    }
+
+    generateRandomNumber(){
+        return Math.floor(Math.random() * 6 ) + 1;
     }
 
     renderDiceDots(number){
@@ -203,14 +208,25 @@ class Dice{
             this.dice.appendChild(dotSlot);
         }
     }
-}
 
-class Utilities{
-    static rollDice(){
-        return Math.floor(Math.random() * 6 ) + 1;
+    async rollDice(){
+        if(this.isRolling) return;
+
+        this.isRolling = true;
+        this.dice.classList.add('rolling');
+
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                const result = this.generateRandomNumber();
+                this.renderDiceDots(result);
+                this.dice.classList.remove('rolling');
+                this.isRolling = false;
+                resolve(result);
+                console.log(`Rolled a ${result}`);
+            }, 600);
+        });
     }
 }
-
 
 const board = new Board(gameBoard);
 board.createBoard();
@@ -227,15 +243,44 @@ rules.jumps.snakes.forEach(([start, end]) => {
 const myDice = new Dice(diceElement);
 myDice.renderDiceDots(1);
 
-diceElement.addEventListener('click', () => {
-    // Prevent clicking while already rolling
-    if (diceElement.classList.contains('rolling')) return;
-
-    diceElement.classList.add('rolling');
-    
-    setTimeout(() => {
-        const result = Utilities.rollDice();
-        myDice.renderDiceDots(result);
-        console.log(`Rolled a ${result}`);
-    }, 600);
+diceElement.addEventListener('click', async () => {
+    const rolledValue = await myDice.rollDice();
 });
+
+
+//https://www.joshwcomeau.com/svg/friendly-introduction-to-svg/
+/*
+class Player{
+    constructor(board){
+        this.board = board;
+        this.createSquare = 1;
+        this.element = this.createPawn();
+        this.updatePosition();
+    }
+
+    createPawn() {
+        const pawn = document.createElement('div');
+        pawn.classList.add('pawn');
+        // We append it to the gameBoard parent
+        document.getElementById('game-board').appendChild(pawn);
+        return pawn;
+    }
+
+    async move(steps) {
+        // Logic to prevent going past 100
+        if (this.currentSquare + steps <= 100) {
+            this.currentSquare += steps;
+            this.updatePosition();
+        }
+        
+        // Return a promise that resolves when the CSS transition ends
+        return new Promise(resolve => setTimeout(resolve, 600));
+    }
+
+    updatePosition() {
+        const coords = this.board.getSquareCenter(this.currentSquare);
+        this.element.style.left = `${coords.x}px`;
+        this.element.style.top = `${coords.y}px`;
+    }
+}
+*/
