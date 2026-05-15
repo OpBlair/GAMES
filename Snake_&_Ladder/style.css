@@ -96,3 +96,16 @@ main{
     75% { transform: rotateX(310deg) rotateY(270deg) rotateX(160deg) scale(1.1); }
     100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
 }
+/* Player Pawn Style*/
+.pawn {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid white;
+    z-index: 20;
+    transition: all 0.4s ease-in-out; 
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
