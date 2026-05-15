@@ -228,6 +228,23 @@ class Dice{
     }
 }
 
+class Player{
+    constructor(board, color = 'e74c3c'){
+        this.board = board;
+        this.currentSquare = 1;
+        this.element = this.createPawn(color);
+        this.updatePosition();
+    }
+    
+    createPawn(color) {
+        const pawn = document.createElement('div');
+        pawn.classList.add('pawn');
+        pawn.style.backgroundColor = color;
+        document.querySelector('.active-players').appendChild(pawn);
+        return pawn;
+    }
+}
+
 const board = new Board(gameBoard);
 board.createBoard();
 
@@ -247,40 +264,7 @@ diceElement.addEventListener('click', async () => {
     const rolledValue = await myDice.rollDice();
 });
 
+const player1 = new Player();
+player1.createPawn();
 
 //https://www.joshwcomeau.com/svg/friendly-introduction-to-svg/
-/*
-class Player{
-    constructor(board){
-        this.board = board;
-        this.createSquare = 1;
-        this.element = this.createPawn();
-        this.updatePosition();
-    }
-
-    createPawn() {
-        const pawn = document.createElement('div');
-        pawn.classList.add('pawn');
-        // We append it to the gameBoard parent
-        document.getElementById('game-board').appendChild(pawn);
-        return pawn;
-    }
-
-    async move(steps) {
-        // Logic to prevent going past 100
-        if (this.currentSquare + steps <= 100) {
-            this.currentSquare += steps;
-            this.updatePosition();
-        }
-        
-        // Return a promise that resolves when the CSS transition ends
-        return new Promise(resolve => setTimeout(resolve, 600));
-    }
-
-    updatePosition() {
-        const coords = this.board.getSquareCenter(this.currentSquare);
-        this.element.style.left = `${coords.x}px`;
-        this.element.style.top = `${coords.y}px`;
-    }
-}
-*/
