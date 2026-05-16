@@ -231,7 +231,7 @@ class Dice{
 class Player{
     constructor(board, color = 'e74c3c'){
         this.board = board;
-        this.currentSquare = 1;
+        this.currentSquare = 0;
         this.element = this.createPawn(color);
     }
     
@@ -241,6 +241,20 @@ class Player{
         pawn.style.backgroundColor = color;
         document.querySelector('.player-lobby').appendChild(pawn);
         return pawn;
+    }
+}
+
+class GameState{
+    constructor(board, dice, rules, activePlayers){
+        this.board = board;
+        this.dice = dice;
+        this.rules = rules;
+        this.currentPlayerIndex = 0;
+        this.players = activePlayers;
+        this.canRoll = true;
+        this.gameOver = false;
+        this.isMoving = false;
+        this.diceValue = null;
     }
 }
 
@@ -265,5 +279,6 @@ diceElement.addEventListener('click', async () => {
 
 const player1 = new Player(board,);
 const player2 = new Player(board, 'red');
-
+const currentPlayers = [player1, player2];
+const game = new GameState(board, myDice, rules, currentPlayers);
 //https://www.joshwcomeau.com/svg/friendly-introduction-to-svg/
