@@ -240,7 +240,14 @@ class Player{
         pawn.classList.add('pawn');
         pawn.style.backgroundColor = color;
         document.querySelector('.player-lobby').appendChild(pawn);
+        pawn.addEventListener('click', () => {
+            console.log(`${color} has been clicked.`);
+        });
         return pawn;
+    }
+
+    moveToBoard(){
+        
     }
 }
 
@@ -255,6 +262,29 @@ class GameState{
         this.gameOver = false;
         this.isMoving = false;
         this.diceValue = null;
+
+        this.dice.dice.addEventListener('click', () => {
+            this.handleDiceRoll();
+        })
+    }
+
+    async handleDiceRoll(){
+        if(!this.canRoll) return;
+        this.canRoll = false;
+
+        const diceValue = await this.dice.rollDice();
+        this.diceValue = diceValue;
+
+        const player = this.players[this.currentPlayerIndex];
+
+        console.log(`Player ${this.currentPlayerIndex + 1} rolled: ${diceValue}`);
+
+        this.switchTurn();
+    }
+
+    switchTurn(){
+        this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
+        this.canRoll = true;
     }
 }
 
@@ -273,12 +303,10 @@ rules.jumps.snakes.forEach(([start, end]) => {
 const myDice = new Dice(diceElement);
 myDice.renderDiceDots(1);
 
-diceElement.addEventListener('click', async () => {
-    const rolledValue = await myDice.rollDice();
-});
-
 const player1 = new Player(board,);
 const player2 = new Player(board, 'red');
-const currentPlayers = [player1, player2];
+const player3 = new Player(board, 'yellow');
+
+const currentPlayers = [player1, player2, player3];
 const game = new GameState(board, myDice, rules, currentPlayers);
 //https://www.joshwcomeau.com/svg/friendly-introduction-to-svg/
