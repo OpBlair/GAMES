@@ -233,14 +233,13 @@ class Player{
         this.board = board;
         this.currentSquare = 1;
         this.element = this.createPawn(color);
-        this.updatePosition();
     }
     
     createPawn(color) {
         const pawn = document.createElement('div');
         pawn.classList.add('pawn');
         pawn.style.backgroundColor = color;
-        document.querySelector('.active-players').appendChild(pawn);
+        document.querySelector('.player-lobby').appendChild(pawn);
         return pawn;
     }
 }
@@ -264,7 +263,7 @@ diceElement.addEventListener('click', async () => {
     const rolledValue = await myDice.rollDice();
 });
 
-const player1 = new Player();
-player1.createPawn();
+const player1 = new Player(board,);
+const player2 = new Player(board, 'red');
 
 //https://www.joshwcomeau.com/svg/friendly-introduction-to-svg/
