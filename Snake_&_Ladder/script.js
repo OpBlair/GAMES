@@ -247,7 +247,28 @@ class Player{
     }
 
     moveToBoard(){
-        
+        const startSquare = this.currentSquare = 1;
+        // move pawn from lobby into board
+        this.board.board.appendChild(this.element);
+
+        // find target square
+        const square = this.board.board.querySelector(
+            `[data-index='${startSquare}']`
+        );
+
+        if(!square) return;
+
+        // position pawn inside the square
+        this.element.style.position = 'absolute';
+
+        const boardRect = this.board.board.getBoundingClientRect();
+        const squareRect = square.getBoundingClientRect();
+
+        const x = squareRect.left - boardRect.left + 8;
+        const y = squareRect.top - boardRect.top + 8;
+
+        this.element.style.left = `${x}px`;
+        this.element.style.top = `${y}px`;
     }
 }
 
