@@ -249,7 +249,7 @@ class Player{
 
     moveToBoard(){
         const startSquare = this.currentSquare = 1;
-        this.isOnBoard = !false;
+        this.isOnBoard = true;
         // move pawn from lobby into board
         this.board.board.appendChild(this.element);
 
@@ -305,16 +305,21 @@ class GameState{
         if(!player.isOnBoard){
 
             if(diceValue === 6){
+
                 player.moveToBoard();
+
                 console.log('Player entered the board!');
-            }else{
-                console.log('Need a 6 to enter the board.');
+                console.log('Roll again!');
+
+                this.canRoll = true;
+                return;
             }
+
+            console.log('Need a 6 to enter the board.');
 
             this.switchTurn();
             return;
         }
-        this.switchTurn();
     }
 
     switchTurn(){
