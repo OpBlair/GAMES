@@ -232,6 +232,7 @@ class Player{
     constructor(board, color = 'e74c3c'){
         this.board = board;
         this.currentSquare = 0;
+        this.isOnBoard = false;
         this.element = this.createPawn(color);
     }
     
@@ -248,6 +249,7 @@ class Player{
 
     moveToBoard(){
         const startSquare = this.currentSquare = 1;
+        this.isOnBoard = !false;
         // move pawn from lobby into board
         this.board.board.appendChild(this.element);
 
@@ -299,7 +301,19 @@ class GameState{
         const player = this.players[this.currentPlayerIndex];
 
         console.log(`Player ${this.currentPlayerIndex + 1} rolled: ${diceValue}`);
+        
+        if(!player.isOnBoard){
 
+            if(diceValue === 6){
+                player.moveToBoard();
+                console.log('Player entered the board!');
+            }else{
+                console.log('Need a 6 to enter the board.');
+            }
+
+            this.switchTurn();
+            return;
+        }
         this.switchTurn();
     }
 
