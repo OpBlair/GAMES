@@ -272,6 +272,48 @@ class Player{
         this.element.style.left = `${x}px`;
         this.element.style.top = `${y}px`;
     }
+
+    move(steps) {
+        let targetSquare = this.currentSquare + steps;
+
+        // Prevent overshooting 100
+        if (targetSquare > 100) {
+            console.log("Rolled too high to finish!");
+            return;
+        }
+
+        this.currentSquare = targetSquare;
+
+        const square = this.board.board.querySelector(
+            `[data-index='${this.currentSquare}']`
+        );
+
+        if (!square) return;
+
+        // Keep pawn inside the board
+        this.board.board.appendChild(this.element);
+
+        this.element.style.position = 'absolute';
+
+        const boardRect = this.board.board.getBoundingClientRect();
+        const squareRect = square.getBoundingClientRect();
+
+        // Center pawn in square
+        const x =
+            squareRect.left -
+            boardRect.left +
+            (squareRect.width / 2) -
+            (this.element.offsetWidth / 2);
+
+        const y =
+            squareRect.top -
+            boardRect.top +
+            (squareRect.height / 2) -
+            (this.element.offsetHeight / 2);
+
+        this.element.style.left = `${x}px`;
+        this.element.style.top = `${y}px`;
+    }
 }
 
 class GameState{
@@ -320,6 +362,8 @@ class GameState{
             this.switchTurn();
             return;
         }
+        player.move(diceValue);
+        this.switchTurn();
     }
 
     switchTurn(){
