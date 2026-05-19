@@ -276,46 +276,35 @@ class Player{
         this.element.style.top = `${y}px`;
     }
 
-    move(steps) {
+    async move(steps) {
         let targetSquare = this.currentSquare + steps;
 
-        // Prevent overshooting 100
         if (targetSquare > 100) {
             console.log("Rolled too high to finish!");
             return;
         }
 
+        // Move one square at a time
+        for (let next = this.currentSquare + 1; next <= targetSquare; next++) {
+            const square = this.board.board.querySelector(`[data-index='${next}']`);
+            if (!square) continue;
+
+            const boardRect = this.board.board.getBoundingClientRect();
+            const squareRect = square.getBoundingClientRect();
+
+            const x = squareRect.left - boardRect.left + (squareRect.width / 2) - (this.element.offsetWidth / 2);
+            const y = squareRect.top - boardRect.top + (squareRect.height / 2) - (this.element.offsetHeight / 2);
+
+            this.element.style.left = `${x}px`;
+            this.element.style.top = `${y}px`;
+            this.element.classList.add('hopping');
+
+            await new Promise(resolve => setTimeout(resolve, 300)); // pause 300ms per square
+            
+            this.element.classList.remove('hopping');
+        }
+
         this.currentSquare = targetSquare;
-
-        const square = this.board.board.querySelector(
-            `[data-index='${this.currentSquare}']`
-        );
-
-        if (!square) return;
-
-        // Keep pawn inside the board
-        this.board.board.appendChild(this.element);
-
-        this.element.style.position = 'absolute';
-
-        const boardRect = this.board.board.getBoundingClientRect();
-        const squareRect = square.getBoundingClientRect();
-
-        // Center pawn in square
-        const x =
-            squareRect.left -
-            boardRect.left +
-            (squareRect.width / 2) -
-            (this.element.offsetWidth / 2);
-
-        const y =
-            squareRect.top -
-            boardRect.top +
-            (squareRect.height / 2) -
-            (this.element.offsetHeight / 2);
-
-        this.element.style.left = `${x}px`;
-        this.element.style.top = `${y}px`;
     }
 }
 
