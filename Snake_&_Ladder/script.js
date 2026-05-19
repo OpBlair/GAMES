@@ -179,6 +179,7 @@ class Dice{
     constructor(diceElement){
         this.dice = diceElement;
         this.isRolling = false;
+        this.rollSound = new Audio('./sound/roll.mp3');
         this.dicePatterns = {
             1: [4],
             2: [0, 8],
@@ -214,6 +215,8 @@ class Dice{
 
         this.isRolling = true;
         this.dice.classList.add('rolling');
+        this.rollSound.currentTime = 0;
+        this.rollSound.play();
 
         return new Promise((resolve) => {
             setTimeout(() => {
@@ -223,7 +226,7 @@ class Dice{
                 this.isRolling = false;
                 resolve(result);
                 console.log(`Rolled a ${result}`);
-            }, 600);
+            }, 900);
         });
     }
 }
