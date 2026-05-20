@@ -227,8 +227,14 @@ function rollDice(){
     dice.classList.add('rolling');
     dice.innerHTML = '';
 
+    const rollSound = new Audio('./sound/roll.mp3');
+    rollSound.currentTime = 0;
+    rollSound.play();
+
     setTimeout(() => {
         dice.classList.remove('rolling');
+        rollSound.currentTime = 0;
+        rollSound.pause();
 
         let number = Math.floor((Math.random() * 6) + 1);
         gameState.diceValue = number;
@@ -252,7 +258,7 @@ function rollDice(){
                 }
             }
         }, 800);
-    }, 500);
+    }, 900);
 }
 
 // ====== MOVEMENT LOGIC ======
