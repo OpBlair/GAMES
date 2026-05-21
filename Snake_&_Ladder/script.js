@@ -248,7 +248,7 @@ class Dice{
 }
 
 class Player{
-    constructor(board, color = 'e74c3c'){
+    constructor(board, color = '#e74c3c'){
         this.board = board;
         this.currentSquare = 0;
         this.isOnBoard = false;
