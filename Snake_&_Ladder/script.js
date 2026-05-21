@@ -14,7 +14,7 @@ class GameRules{
         const allJumps = [ ...this.jumps.ladders, ...this.jumps.snakes ];
         
         for(const [startSquare, endSquare] of allJumps){
-            if(start === startSquare){
+            if(square === startSquare){
                 const type = startSquare > endSquare ? 'ladder' : 'snake';
                 return{
                     startSquare: startSquare,
@@ -370,7 +370,30 @@ class GameState{
             this.switchTurn();
             return;
         }
-        player.move(diceValue);
+        await player.move(diceValue);
+
+        const jump = this.rules.checkForJump(player.currentSquare);
+        if(jump){
+            console.log(`Oops/ yay! Hit a ${jump.type}. Moving to ${jump.endSquare}`);
+            player.currentSquare = jump.endSquare;
+
+            const targetSquareEl = this.board.board.querySelector(`[data-index='${player.currentSquare}']`);
+            if (targetSquareEl) {
+                const boardRect = this.board.board.getBoundingClientRect();
+                const squareRect = targetSquareEl.getBoundingClientRect();
+
+                const x = squareRect.left - boardRect.left + (squareRect.width / 2) - (player.element.offsetWidth / 2);
+                const y = squareRect.top - boardRect.top + (squareRect.height / 2) - (player.element.offsetHeight / 2);
+
+                player.element.style.transition = 'left 0.6s ease, top 0.6s ease';
+                player.element.style.left = `${x}px`;
+                player.element.style.top = `${y}px`;
+                
+                await new Promise(resolve => setTimeout(resolve, 600));
+                player.element.style.transition = '';
+            }
+        }
+
         this.switchTurn();
     }
 
