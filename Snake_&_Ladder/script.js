@@ -9,6 +9,22 @@ class GameRules{
             snakes: [ [17, 7], [54, 34], [62, 19], [64, 60], [87, 24], [93, 16], [95, 5], [98, 2] ]
         };
     }
+
+    checkForJump(square){
+        const allJumps = [ ...this.jumps.ladders, ...this.jumps.snakes ];
+        
+        for(const [startSquare, endSquare] of allJumps){
+            if(start === startSquare){
+                const type = startSquare > endSquare ? 'ladder' : 'snake';
+                return{
+                    startSquare: startSquare,
+                    endSquare: endSquare,
+                    type: type
+                };
+            }
+        }
+        return null;
+    }
 }
 
 class Board{
