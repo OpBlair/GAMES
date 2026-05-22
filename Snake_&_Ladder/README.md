@@ -129,10 +129,8 @@ Responsible for:
 
 ## ⚠️ Game Rules Engine (missing logic layer)
 
-* [ ] Snakes actually move players
-* [ ] Ladders actually move players
 * [ ] Win condition (reach 100)
-* [ ] Exact-roll-to-finish rule (optional)
+* [ ] Exact-roll-to-finish rule
 
 ---
 
