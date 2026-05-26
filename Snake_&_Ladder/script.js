@@ -434,6 +434,9 @@ if(debug_Mode){
             gameState.canRoll = false;
             renderDiceDots(value);
             console.log(`🎲 Forced dice: ${value}`);
+        }, 
+        move(color, steps){
+            
         }
     }
 }
