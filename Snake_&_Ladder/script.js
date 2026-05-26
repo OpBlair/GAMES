@@ -436,7 +436,10 @@ if(debug_Mode){
             console.log(`🎲 Forced dice: ${value}`);
         }, 
         move(color, steps){
-            
+
+        },
+        async teleport(color, targetSquare){
+
         }
     }
 }
