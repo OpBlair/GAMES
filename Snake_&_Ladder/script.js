@@ -425,3 +425,15 @@ const player3 = new Player(board, 'yellow');
 const currentPlayers = [player1, player2, player3];
 const game = new GameState(board, myDice, rules, currentPlayers);
 //https://www.joshwcomeau.com/svg/friendly-introduction-to-svg/
+
+const debug_Mode = true;
+if(debug_Mode){
+    window.devTools = {
+        dice(value){
+            gameState.diceValue = value;
+            gameState.canRoll = false;
+            renderDiceDots(value);
+            console.log(`🎲 Forced dice: ${value}`);
+        }
+    }
+}
