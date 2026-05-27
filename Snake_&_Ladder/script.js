@@ -15,7 +15,7 @@ class GameRules{
         
         for(const [startSquare, endSquare] of allJumps){
             if(square === startSquare){
-                const type = startSquare > endSquare ? 'ladder' : 'snake';
+                const type = startSquare > endSquare ? 'snake' : 'ladder';
                 return{
                     startSquare: startSquare,
                     endSquare: endSquare,
