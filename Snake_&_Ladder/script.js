@@ -429,6 +429,31 @@ const game = new GameState(board, myDice, rules, currentPlayers);
 const debug_Mode = true;
 
 if (debug_Mode) {
+    // Helper function to handle jumps manually
+    const handleDebugJumpCheck = async (player) => {
+        const jump = game.rules.checkForJump(player.currentSquare);
+        if (jump) {
+            console.log(`[DEBUG TRIGGER] Hit a ${jump.type}! Moving from ${jump.startSquare} to ${jump.endSquare}`);
+            player.currentSquare = jump.endSquare;
+
+            const targetSquareEl = game.board.board.querySelector(`[data-index='${player.currentSquare}']`);
+            if (targetSquareEl) {
+                const boardRect = game.board.board.getBoundingClientRect();
+                const squareRect = targetSquareEl.getBoundingClientRect();
+
+                const x = squareRect.left - boardRect.left + (squareRect.width / 2) - (player.element.offsetWidth / 2);
+                const y = squareRect.top - boardRect.top + (squareRect.height / 2) - (player.element.offsetHeight / 2);
+
+                player.element.style.transition = 'left 0.6s ease, top 0.6s ease';
+                player.element.style.left = `${x}px`;
+                player.element.style.top = `${y}px`;
+                
+                await new Promise(resolve => setTimeout(resolve, 600));
+                player.element.style.transition = '';
+            }
+        }
+    };
+
     window.devTools = {
         dice(value) {
             if (value < 1 || value > 6) {
@@ -451,7 +476,10 @@ if (debug_Mode) {
                 player.moveToBoard();
             }
             console.log(`[DEBUG] Moving ${color} forward by ${steps} steps...`);
+            
             await player.move(steps);
+            
+            await handleDebugJumpCheck(player);
         },
 
         async teleport(color, targetSquare) {
@@ -486,6 +514,8 @@ if (debug_Mode) {
                 await new Promise(resolve => setTimeout(resolve, 400));
                 player.element.style.transition = '';
                 console.log(`[DEBUG] Teleported ${color} to square ${targetSquare}`);
+                
+                await handleDebugJumpCheck(player);
             }
         }
     };
