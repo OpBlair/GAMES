@@ -454,6 +454,40 @@ if (debug_Mode) {
             await player.move(steps);
         },
 
+        async teleport(color, targetSquare) {
+            if (targetSquare < 1 || targetSquare > 100) {
+                console.error("Target square must be between 1 and 100");
+                return;
+            }
+            
+            const player = currentPlayers.find(p => p.element.style.backgroundColor === color);
+            if (!player) {
+                console.error(`Player with color '${color}' not found.`);
+                return;
+            }
+
+            if (!player.isOnBoard) {
+                player.moveToBoard();
+            }
+
+            player.currentSquare = targetSquare;
+            const targetSquareEl = board.board.querySelector(`[data-index='${targetSquare}']`);
+            
+            if (targetSquareEl) {
+                const boardRect = board.board.getBoundingClientRect();
+                const squareRect = targetSquareEl.getBoundingClientRect();
+                const x = squareRect.left - boardRect.left + (squareRect.width / 2) - (player.element.offsetWidth / 2);
+                const y = squareRect.top - boardRect.top + (squareRect.height / 2) - (player.element.offsetHeight / 2);
+                
+                player.element.style.transition = 'left 0.4s ease, top 0.4s ease';
+                player.element.style.left = `${x}px`;
+                player.element.style.top = `${y}px`;
+                
+                await new Promise(resolve => setTimeout(resolve, 400));
+                player.element.style.transition = '';
+                console.log(`[DEBUG] Teleported ${color} to square ${targetSquare}`);
+            }
+        }
     };
     console.log("DevTools Active! Use devTools.dice(), devTools.move(), or devTools.teleport() in the console.");
 }
