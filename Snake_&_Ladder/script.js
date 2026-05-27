@@ -427,19 +427,33 @@ const game = new GameState(board, myDice, rules, currentPlayers);
 //https://www.joshwcomeau.com/svg/friendly-introduction-to-svg/
 
 const debug_Mode = true;
-if(debug_Mode){
+
+if (debug_Mode) {
     window.devTools = {
-        dice(value){
-            gameState.diceValue = value;
-            gameState.canRoll = false;
-            renderDiceDots(value);
-            console.log(`🎲 Forced dice: ${value}`);
+        dice(value) {
+            if (value < 1 || value > 6) {
+                console.error("Dice value must be between 1 and 6");
+                return;
+            }
+            game.diceValue = value;
+            myDice.renderDiceDots(value);
+            console.log(`Forced dice value to: ${value}. Click the dice to trigger the move logic!`);
         }, 
-        move(color, steps){
 
+        async move(color, steps) {
+            const player = currentPlayers.find(p => p.element.style.backgroundColor === color);
+            if (!player) {
+                console.error(`Player with color '${color}' not found.`);
+                return;
+            }
+            if (!player.isOnBoard) {
+                console.log(`[DEBUG] Player ${color} is not on the board yet. Teleporting to square 1 first.`);
+                player.moveToBoard();
+            }
+            console.log(`[DEBUG] Moving ${color} forward by ${steps} steps...`);
+            await player.move(steps);
         },
-        async teleport(color, targetSquare){
 
-        }
-    }
+    };
+    console.log("DevTools Active! Use devTools.dice(), devTools.move(), or devTools.teleport() in the console.");
 }
