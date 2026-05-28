@@ -394,7 +394,14 @@ class GameState{
             }
         }
 
-        this.switchTurn();
+        //this.switchTurn();
+        // At the very end of handleDiceRoll():
+        if (diceValue === 6 && !this.gameOver) {
+            console.log(`Player ${this.currentPlayerIndex + 1} rolled a 6! Roll again.`);
+            this.canRoll = true; // Allow them to click again without switching indices
+        } else {
+            this.switchTurn();
+        }
     }
 
     switchTurn(){
@@ -455,15 +462,20 @@ if (debug_Mode) {
     };
 
     window.devTools = {
-        dice(value) {
-            if (value < 1 || value > 6) {
-                console.error("Dice value must be between 1 and 6");
+        
+        release(color){
+            const player = currentPlayers.find(p => p.element.style.backgroundColor === color);
+            if(!player){
+                console.error(`Player with color "${color}" not found`);
                 return;
             }
-            game.diceValue = value;
-            myDice.renderDiceDots(value);
-            console.log(`Forced dice value to: ${value}. Click the dice to trigger the move logic!`);
-        }, 
+            if(player.isOnBoard){
+                console.log(`Player "${color}" is already on the board, can't release, move player instead.`);
+                return;
+            }
+            player.moveToBoard();
+            console.log(`Player "${color}" has been released successfully from the waiting lobby.`);
+        },
 
         async move(color, steps) {
             const player = currentPlayers.find(p => p.element.style.backgroundColor === color);
@@ -472,10 +484,10 @@ if (debug_Mode) {
                 return;
             }
             if (!player.isOnBoard) {
-                console.log(`[DEBUG] Player ${color} is not on the board yet. Teleporting to square 1 first.`);
+                console.log(`Player ${color} is not on the board yet. Teleporting to square 1 first.`);
                 player.moveToBoard();
             }
-            console.log(`[DEBUG] Moving ${color} forward by ${steps} steps...`);
+            console.log(`Moving ${color} forward by ${steps} steps...`);
             
             await player.move(steps);
             
@@ -513,7 +525,7 @@ if (debug_Mode) {
                 
                 await new Promise(resolve => setTimeout(resolve, 400));
                 player.element.style.transition = '';
-                console.log(`[DEBUG] Teleported ${color} to square ${targetSquare}`);
+                console.log(`Teleported ${color} to square ${targetSquare}`);
                 
                 await handleDebugJumpCheck(player);
             }
