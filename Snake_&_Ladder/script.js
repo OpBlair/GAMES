@@ -293,15 +293,28 @@ class Player{
     }
 
     async move(steps) {
-        let targetSquare = this.currentSquare + steps;
 
-        if (targetSquare > 100) {
-            console.log("Rolled too high to finish!");
-            return;
+        let path = []; 
+
+        if(this.currentSquare + steps <= 100){
+            for(let a = this.currentSquare + 1; a <= this.currentSquare + steps; a++){
+                path.push(a);
+            }
+        }else{
+            for(let a = this.currentSquare + 1; a <= 100; a++){
+                path.push(a);
+            }
+
+            let stepsTo100 = 100 - this.currentSquare;
+            let separationSteps = steps - stepsTo100;
+
+            for(let a = 1; a <= separationSteps; a++){
+                path.push(100 - a);
+            }
         }
 
         // Move one square at a time
-        for (let next = this.currentSquare + 1; next <= targetSquare; next++) {
+        for (const next of path) {
             const square = this.board.board.querySelector(`[data-index='${next}']`);
             if (!square) continue;
 
@@ -320,7 +333,7 @@ class Player{
             this.element.classList.remove('hopping');
         }
 
-        this.currentSquare = targetSquare;
+        this.currentSquare = path[path.length - 1];
     }
 }
 
@@ -394,11 +407,9 @@ class GameState{
             }
         }
 
-        //this.switchTurn();
-        // At the very end of handleDiceRoll():
         if (diceValue === 6 && !this.gameOver) {
             console.log(`Player ${this.currentPlayerIndex + 1} rolled a 6! Roll again.`);
-            this.canRoll = true; // Allow them to click again without switching indices
+            this.canRoll = true;
         } else {
             this.switchTurn();
         }
@@ -425,7 +436,7 @@ rules.jumps.snakes.forEach(([start, end]) => {
 const myDice = new Dice(diceElement);
 myDice.renderDiceDots(1);
 
-const player1 = new Player(board,);
+const player1 = new Player(board, 'blue');
 const player2 = new Player(board, 'red');
 const player3 = new Player(board, 'yellow');
 
