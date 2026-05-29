@@ -354,7 +354,18 @@ class GameState{
         })
     }
 
+    checkWin(player){
+         if(player.currentSquare === 100){
+            this.gameOver = true;
+            console.log("we have a winner");
+            alert(`Hooray... Player ${player.element.style.backgroundColor} has won the game.`);
+            return true;
+        }
+        return false;
+    }
+
     async handleDiceRoll(){
+        if(this.gameOver) return;
         if(!this.canRoll) return;
         this.canRoll = false;
 
@@ -406,6 +417,8 @@ class GameState{
                 player.element.style.transition = '';
             }
         }
+
+        this.checkWin(player);
 
         if (diceValue === 6 && !this.gameOver) {
             console.log(`Player ${this.currentPlayerIndex + 1} rolled a 6! Roll again.`);
@@ -503,6 +516,8 @@ if (debug_Mode) {
             await player.move(steps);
             
             await handleDebugJumpCheck(player);
+
+            game.checkWin(player);
         },
 
         async teleport(color, targetSquare) {
@@ -539,6 +554,8 @@ if (debug_Mode) {
                 console.log(`Teleported ${color} to square ${targetSquare}`);
                 
                 await handleDebugJumpCheck(player);
+                
+                game.checkWin(player);
             }
         }
     };
