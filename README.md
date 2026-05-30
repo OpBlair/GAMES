@@ -17,12 +17,12 @@ This project also serves as a practical space to experiment with:
 
 ## 📂 Project Gallery
 
-| Game                               | Tech Stack            | Status         |
-| :--------------------------------- | :-------------------- | :------------- |
+| Game                               | Tech Stack            | Status          |
+| :--------------------------------- | :-------------------- | :-------------- |
 | [Tic-Tac-Toe](./TIC_TAC_TOE)       | HTML, CSS, JavaScript | ✅ Completed    |
-| [Checkers](./checkers)             | HTML, CSS, JavaScript | 🚧 In Progress |
-| [Ludo](./Ludo)                     | HTML, CSS, JavaScript | 🚧 In Progress |
-| [Snake & Ladder](./Snake_&_Ladder) | HTML, CSS, JavaScript | 🚧 In Progress |
+| [Checkers](./checkers)             | HTML, CSS, JavaScript | ✅ Completed    |
+| [Ludo](./Ludo)                     | HTML, CSS, JavaScript | ✅ Completed    |
+| [Snake & Ladder](./Snake_&_Ladder) | HTML, CSS, JavaScript | 🚧 Polishing UI |
 
 ---
 
