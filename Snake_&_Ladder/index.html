@@ -21,9 +21,23 @@
                 <h1>Snake & Ladder</h1>
             </header>
 
+            <aside class="game-sidebar">
+                <div class="turn-indicator">
+                    <h3>Turn</h2>
+                    <div id="active-player" class="pawn-preview"></div>
+                </div>
+                <div class="player-leaderboard">
+                    <h3>Player Stats</h2>
+                    <div id="player-list"></div>
+                </div>
+                <div class="player-lobby-section">
+                    <h3>Waiting</h3>
+                    <div class="player-lobby"></div>
+                </div>
+            </aside>
+
             <section class="board-area">
                 <div class="board-wrapper">
-                    <div class="player-lobby"></div>
                     <div id="game-board"></div>
                     <svg id="svg-overlay" xmlns="http://www.w3.org/2000/svg">
                     </svg>
@@ -31,7 +45,9 @@
             </section>
             
             <footer class="controls">
-                <div id="dice"></div>
+                <div class="dice-container">
+                    <div id="dice"></div>
+                </div>
             </footer>
         </div>
     </main>
