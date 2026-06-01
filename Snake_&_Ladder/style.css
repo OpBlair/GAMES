@@ -4,7 +4,7 @@ body {
     display: grid;
     place-items: center;
     background: #f4f4f4;
-    padding: 20px;
+    padding: 20px 20px;
     font-family: sans-serif;
 }
 main { gap: 10px; padding: 10px; }
@@ -14,7 +14,16 @@ main { gap: 10px; padding: 10px; }
     align-items: center;
     position: relative;
 }
-.game-ui { width: min(95vw, 35rem); }
+.game-ui { 
+    width: min(95vw, 35rem); 
+    display: grid; 
+    gap: 0.5rem; 
+    grid-template-areas: "header" "sidebar" "board" "footer";
+}
+.top-bar{ grid-area: header; }
+.game-sidebar{ grid-area: sidebar; }
+.board-area{ grid-area: board; }
+.controls { grid-area: footer; }
 /* BOARD */
 .board-wrapper {
     position: relative;
@@ -41,8 +50,11 @@ main { gap: 10px; padding: 10px; }
     position: relative;
 }
 /*  PLAYER LOBBY */
+.player-lobby-section{
+    display: flex;
+    justify-content: space-between;
+}
 .player-lobby {
-    position: absolute;
     bottom: clamp(-60px, -6vw, -35px);
     left: 50%;
     transform: translateX(-50%);
@@ -76,6 +88,11 @@ main { gap: 10px; padding: 10px; }
     height: 100%;
     pointer-events: none;
     z-index: 5;
+}
+/* Footer */
+footer{
+    display: flex;
+    justify-content: center;
 }
 /*   DICE  */
 #dice {
@@ -119,4 +136,11 @@ main { gap: 10px; padding: 10px; }
 @keyframes hop{
     0%, 100% {transform: translateY(0) scale(1);}
     50% {transform: translateY(-20px) scale(1.2);}
+}
+
+/* LAPTOP UI LAYOUT */
+@media (min-width: 780px){
+    .game-ui{
+        display: flex;
+    }
 }
