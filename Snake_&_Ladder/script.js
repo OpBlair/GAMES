@@ -1,6 +1,7 @@
 'use strict';
 const gameBoard = document.getElementById('game-board');
 const diceElement = document.getElementById('dice');
+const currentPlayer = document.getElementById('active-player');
 
 class GameRules{
     constructor(){
@@ -431,6 +432,7 @@ class GameState{
     switchTurn(){
         this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
         this.canRoll = true;
+        currentPlayer.innerHTML = `${this.players[this.currentPlayerIndex].element.style.backgroundColor}`;
     }
 }
 
