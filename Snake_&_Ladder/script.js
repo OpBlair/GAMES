@@ -429,10 +429,15 @@ class GameState{
         }
     }
 
+    updateTurnIndicator(){
+        const player = this.players[this.currentPlayerIndex];
+        currentPlayer.style.backgroundColor = player.element.style.backgroundColor;
+    }
+
     switchTurn(){
         this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
         this.canRoll = true;
-        currentPlayer.innerHTML = `${this.players[this.currentPlayerIndex].element.style.backgroundColor}`;
+        this.updateTurnIndicator();
     }
 }
 
@@ -457,6 +462,7 @@ const player3 = new Player(board, 'yellow');
 
 const currentPlayers = [player1, player2, player3];
 const game = new GameState(board, myDice, rules, currentPlayers);
+game.updateTurnIndicator();
 //https://www.joshwcomeau.com/svg/friendly-introduction-to-svg/
 
 const debug_Mode = true;

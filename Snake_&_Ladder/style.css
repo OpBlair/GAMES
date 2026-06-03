@@ -80,6 +80,13 @@ main { gap: 10px; padding: 10px; }
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
+.pawn-preview{
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0,0,0,.3);
+}
 /* SVG OVERLAY */
 #svg-overlay {
     position: absolute;
