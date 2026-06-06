@@ -71,4 +71,4 @@ This project also serves as a practical space to experiment with:
 
 Most projects are intentionally built with minimal dependencies to strengthen understanding of the underlying mechanics and browser APIs.
 
-As development continues, more games and advanced systems will be added progressively.
+As development continues, more games and advanced systems will be added progressively such that I develop the skills for software development.
