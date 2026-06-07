@@ -434,6 +434,9 @@ class GameState{
         currentPlayer.style.backgroundColor = player.element.style.backgroundColor;
     }
 
+    updatePlayerStat(){
+        
+    }
     switchTurn(){
         this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
         this.canRoll = true;
