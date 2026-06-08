@@ -435,7 +435,20 @@ class GameState{
     }
 
     updatePlayerStat(){
-        
+        const list = document.getElementById('player-list');
+
+        list.innerHTML = '';
+
+        this.players.forEach((player,index)=>{
+            const div = document.createElement('div');
+
+            div.innerHTML = `
+                Player ${index+1}
+                : ${player.currentSquare}
+            `;
+
+            list.appendChild(div);
+        });
     }
     switchTurn(){
         this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
