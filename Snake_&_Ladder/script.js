@@ -382,6 +382,7 @@ class GameState{
             if(diceValue === 6){
 
                 player.moveToBoard();
+                this.updatePlayerStat();
 
                 console.log('Player entered the board!');
                 console.log('Roll again!');
@@ -396,11 +397,13 @@ class GameState{
             return;
         }
         await player.move(diceValue);
+        this.updatePlayerStat();
 
         const jump = this.rules.checkForJump(player.currentSquare);
         if(jump){
             console.log(`Oops/ yay! Hit a ${jump.type}. Moving to ${jump.endSquare}`);
             player.currentSquare = jump.endSquare;
+            this.updatePlayerStat();
 
             const targetSquareEl = this.board.board.querySelector(`[data-index='${player.currentSquare}']`);
             if (targetSquareEl) {
@@ -442,10 +445,7 @@ class GameState{
         this.players.forEach((player,index)=>{
             const div = document.createElement('div');
 
-            div.innerHTML = `
-                Player ${index+1}
-                : ${player.currentSquare}
-            `;
+            div.innerHTML = `Player ${index+1} : ${player.currentSquare}`;
 
             list.appendChild(div);
         });
@@ -479,6 +479,7 @@ const player3 = new Player(board, 'yellow');
 const currentPlayers = [player1, player2, player3];
 const game = new GameState(board, myDice, rules, currentPlayers);
 game.updateTurnIndicator();
+game.updatePlayerStat();
 //https://www.joshwcomeau.com/svg/friendly-introduction-to-svg/
 
 const debug_Mode = true;
