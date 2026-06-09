@@ -267,6 +267,16 @@ class Player{
         return pawn;
     }
 
+    getPawnOffset(playersOnSquare, playerIndex){
+        const offsets = [
+            {x: -10, y: -10},
+            {x: 10, y: -10},
+            {x: 0, y: 10}
+        ];
+
+        return offsets[playerIndex] || {x:0, y:0};
+    }
+
     moveToBoard(){
         const startSquare = this.currentSquare = 1;
         this.isOnBoard = true;
