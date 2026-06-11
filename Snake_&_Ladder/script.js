@@ -233,7 +233,7 @@ class Dice{
         this.isRolling = true;
         this.dice.classList.add('rolling');
         this.rollSound.currentTime = 0;
-        this.rollSound.play();
+        this.rollSound.play().catch(() => {});
 
         return new Promise((resolve) => {
             setTimeout(() => {
@@ -595,4 +595,32 @@ if (debug_Mode) {
         }
     };
     console.log("DevTools Active! Use devTools.dice(), devTools.move(), or devTools.teleport() in the console.");
+}
+
+// redrawing the board
+window.addEventListener('resize', () => {
+    board.svg.innerHTML = '';
+
+    rules.jumps.ladders.forEach(([s,e]) =>
+        board.drawLadder(s,e)
+    );
+
+    rules.jumps.snakes.forEach(([s,e]) =>
+        board.drawSnake(s,e)
+    );
+});
+
+// updating pawn position
+updatePawnPosition(player){
+    const square = this.board.board.querySelector(`[data-index='${player.currentSquare}']`);
+
+    if(!square) return;
+
+    const boardRect = this.board.board.getBoundingClientRect();
+
+    const squareRect = square.getBoundingClientRect();
+
+    player.element.style.left = `${squareRect.left - boardRect.left}px`;
+
+    player.element.style.top = `${squareRect.top - boardRect.top}px`;
 }
