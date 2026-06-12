@@ -277,6 +277,7 @@ class Player{
         return offsets[playerIndex] || {x:0, y:0};
     }
 
+    // Method to Move a Pawn to the board from Waiting Lobby
     moveToBoard(){
         const startSquare = this.currentSquare = 1;
         this.isOnBoard = true;
