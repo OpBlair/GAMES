@@ -249,10 +249,12 @@ class Dice{
 }
 
 class Player{
-    constructor(board, color = '#e74c3c'){
+    constructor(board, color = '#e74c3c', name="Player"){
         this.board = board;
         this.currentSquare = 0;
         this.isOnBoard = false;
+        this.isComputer = isComputer;
+        this.name = name;
         this.element = this.createPawn(color);
     }
     
@@ -362,6 +364,7 @@ class GameState{
         this.diceValue = null;
 
         this.dice.dice.addEventListener('click', () => {
+            if(this.players[this.currentPlayerIndex].isComputer) return;
             this.handleDiceRoll();
         })
     }
@@ -612,6 +615,7 @@ window.addEventListener('resize', () => {
 });
 
 // updating pawn position
+/*
 updatePawnPosition(player){
     const square = this.board.board.querySelector(`[data-index='${player.currentSquare}']`);
 
@@ -624,4 +628,4 @@ updatePawnPosition(player){
     player.element.style.left = `${squareRect.left - boardRect.left}px`;
 
     player.element.style.top = `${squareRect.top - boardRect.top}px`;
-}
+}*/
