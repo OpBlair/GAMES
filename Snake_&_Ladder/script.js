@@ -464,10 +464,22 @@ class GameState{
             list.appendChild(div);
         });
     }
-    switchTurn(){
+    // Method For Turn Switching.
+    switchTurn() {
         this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
         this.canRoll = true;
         this.updateTurnIndicator();
+        this.updatePlayerStat();
+
+        // Checking if the next player is a bot
+        const nextPlayer = this.players[this.currentPlayerIndex];
+        if (nextPlayer.isComputer && !this.gameOver) {
+            console.log(`It's ${nextPlayer.name}'s turn (AI)...`);
+
+            setTimeout(() => {
+                this.handleDiceRoll();
+            }, 1200); 
+        }
     }
 }
 
