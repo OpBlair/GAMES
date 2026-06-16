@@ -186,10 +186,18 @@ class Board{
     }
 
     createSVGElement(type, attrs) {
-    const el = document.createElementNS("http://www.w3.org/2000/svg", type);
-    for (let key in attrs) el.setAttribute(key, attrs[key]);
-    return el;
-}
+        const el = document.createElementNS("http://www.w3.org/2000/svg", type);
+        for (let key in attrs) el.setAttribute(key, attrs[key]);
+        return el;
+    }
+
+    // Method to Draw all SVGs
+    drawAllJumps() {
+        this.svg.innerHTML = '';
+        this.svg.setAttribute('viewBox', `0 0 ${this.board.clientWidth} ${this.board.clientHeight}`);
+        rules.jumps.ladders.forEach(([start, end]) => this.drawLadder(start, end));
+        rules.jumps.snakes.forEach(([start, end]) => this.drawSnake(start, end));
+    }
 }
 
 class Dice{
@@ -249,7 +257,7 @@ class Dice{
 }
 
 class Player{
-    constructor(board, color = '#e74c3c', name="Player"){
+    constructor(board, color = '#e74c3c', isComputer=false, name="Player"){
         this.board = board;
         this.currentSquare = 0;
         this.isOnBoard = false;
@@ -269,14 +277,43 @@ class Player{
         return pawn;
     }
 
-    getPawnOffset(playersOnSquare, playerIndex){
+    getPawnOffset(playersOnSquare, playerIndex) {
+        if (playersOnSquare <= 1) return { x: 0, y: 0 };
+
+        // Layout configuration for grid placements inside a single square
         const offsets = [
-            {x: -10, y: -10},
-            {x: 10, y: -10},
-            {x: 0, y: 10}
+            { x: -12, y: -12 }, // Top Left
+            { x: 12, y: -12 },  // Top Right
+            { x: -12, y: 12 },  // Bottom Left
+            { x: 12, y: 12 }    // Bottom Right
         ];
 
-        return offsets[playerIndex] || {x:0, y:0};
+        return offsets[playerIndex] || { x: 0, y: 0 };
+    }
+
+    // Method to calculate player positions dynamically
+    updateVisualPosition() {
+        if (!this.isOnBoard) return;
+        const square = this.board.board.querySelector(`[data-index='${this.currentSquare}']`);
+        if (!square) return;
+
+        const boardRect = this.board.board.getBoundingClientRect();
+        const squareRect = square.getBoundingClientRect();
+
+        // 1. Find all other players sharing this exact square
+        const sharingPlayers = game.players.filter(p => p.isOnBoard && p.currentSquare === this.currentSquare);
+        const playerIndex = sharingPlayers.indexOf(this);
+
+        // 2. Get the offset values based on its position index
+        const offset = this.getPawnOffset(sharingPlayers.length, playerIndex);
+
+        // 3. Calculate the center position and add the unique offset shift
+        const x = squareRect.left - boardRect.left + (squareRect.width / 2) - (this.element.offsetWidth / 2) + offset.x;
+        const y = squareRect.top - boardRect.top + (squareRect.height / 2) - (this.element.offsetHeight / 2) + offset.y;
+
+        this.element.style.position = 'absolute';
+        this.element.style.left = `${x}px`;
+        this.element.style.top = `${y}px`;
     }
 
     // Method to Move a Pawn to the board from Waiting Lobby
@@ -369,6 +406,43 @@ class GameState{
         })
     }
 
+    // Game initializer.
+    startGame(){
+        document.querySelector('.player-lobby').innerHTML = '';
+        this.players = [];
+        this.currentPlayerIndex = 0;
+        this.gameOver = false;
+        this.canRoll = true;
+
+        const humanCount = parseInt(document.getElementById('humanNumber').value) || 1;
+        const computerCount = parseInt(document.getElementById('computerNumber').value) || 0;
+        
+        let colorIndex = 0;
+
+        // Instantiate Humans
+        for (let i = 1; i <= humanCount; i++) {
+            const color = colors[colorIndex % colors.length];
+            this.players.push(new Player(this.board, color, false, `Human ${i}`));
+            colorIndex++;
+        }
+
+        // Instantiate AI Bots
+        for (let i = 1; i <= computerCount; i++) {
+            const color = colors[colorIndex % colors.length];
+            this.players.push(new Player(this.board, color, true, `Bot ${i}`));
+            colorIndex++;
+        }
+
+        // UI Panel Screen Shifts
+        document.getElementById('welcome-screen').style.display = 'none';
+        document.getElementById('game-ui').style.display = 'grid';
+
+        this.board.drawAllJumps();
+
+        this.updateTurnIndicator();
+        this.updatePlayerStat();
+    }
+
     checkWin(player){
          if(player.currentSquare === 100){
             this.gameOver = true;
@@ -441,6 +515,10 @@ class GameState{
         if (diceValue === 6 && !this.gameOver) {
             console.log(`Player ${this.currentPlayerIndex + 1} rolled a 6! Roll again.`);
             this.canRoll = true;
+
+            if(player.isComputer){
+                setTimeout(() => this.handleDiceRoll(), 1200);
+            }
         } else {
             this.switchTurn();
         }
@@ -451,6 +529,7 @@ class GameState{
         currentPlayer.style.backgroundColor = player.element.style.backgroundColor;
     }
 
+    // Player Statistics UI Update
     updatePlayerStat(){
         const list = document.getElementById('player-list');
 
@@ -464,6 +543,7 @@ class GameState{
             list.appendChild(div);
         });
     }
+
     // Method For Turn Switching.
     switchTurn() {
         this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
@@ -488,26 +568,31 @@ board.createBoard();
 
 const rules = new GameRules();
 
-rules.jumps.ladders.forEach(([start, end]) => {
-    board.drawLadder(start, end);
-});
-rules.jumps.snakes.forEach(([start, end]) => {
-    board.drawSnake(start, end);
-});
-
 const myDice = new Dice(diceElement);
 myDice.renderDiceDots(1);
 
-const player1 = new Player(board, 'blue');
-const player2 = new Player(board, 'red');
-const player3 = new Player(board, 'yellow');
+// Color Palette
+const colors = ['blue', 'red', 'gold', 'purple', 'orange', 'teal'];
+const game = new GameState(board, myDice, rules);
 
-const currentPlayers = [player1, player2, player3];
-const game = new GameState(board, myDice, rules, currentPlayers);
-game.updateTurnIndicator();
-game.updatePlayerStat();
+document.getElementById('start-game-btn').addEventListener('click', () => {
+    game.startGame();
+});
+
+window.addEventListener('resize', () => {
+    if (board && rules) {
+        board.drawAllJumps(); 
+    }
+    // Snap any active pawns onto their targets correctly
+    if (game && game.players) {
+        game.players.forEach(player => player.updateVisualPosition());
+    }
+});
+
+
 //https://www.joshwcomeau.com/svg/friendly-introduction-to-svg/
 
+// DEBUG SCRIPT
 const debug_Mode = true;
 
 if (debug_Mode) {
@@ -640,4 +725,19 @@ updatePawnPosition(player){
     player.element.style.left = `${squareRect.left - boardRect.left}px`;
 
     player.element.style.top = `${squareRect.top - boardRect.top}px`;
-}*/
+}
+    
+// Inside handleDiceRoll() ...
+
+const player = this.players[this.currentPlayerIndex];
+const oldSquare = player.currentSquare; // Remember where they started
+
+await player.move(diceValue);
+
+// Rearrange any left-behind players on the old square
+this.players.forEach(p => {
+    if (p.currentSquare === oldSquare) p.updateVisualPosition();
+    if (p.currentSquare === player.currentSquare) p.updateVisualPosition();
+});
+
+*/
