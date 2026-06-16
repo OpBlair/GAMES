@@ -9,18 +9,25 @@
 </head>
 <body>
     <main class="game-container">
-        <div class="welcome" style="display: none;">
+        <div class="welcome" id="welcome-screen">
             <h1>Snake & Ladder</h1>
-            <p class="subtitle">Morales. Luck. Chaos.</p>
-            <p class="description">welcome to Snake & Ladder game.</p>
-            <button>new game against human</button>
-            <label for="playerNumber"></label>
-            <input type="number" name="playerNumber" id="playerNumber" placeholder="enter number of players">
-            <button>new game against computer</button>
+            <p class="subtitle">Morals. Luck. Chaos.</p>
+                
+            <div class="setup-group">
+               <label for="humanNumber">Human Players:</label>
+                <input type="number" id="humanNumber" min="1" max="4" value="1">
+            </div>
+
+            <div class="setup-group">
+                <label for="computerNumber">Computer Bots:</label>
+                <input type="number" id="computerNumber" min="0" max="3" value="1">
+            </div>
+
+            <button id="start-game-btn" style="padding: 10px 20px; cursor: pointer;">Start Game</button>
         </div>
         
         <!-- Game UI -->
-        <div class="game-ui" id="game-ui">
+        <div class="game-ui" id="game-ui" style="display: none;">
             <header class="top-bar">
                 <h1>Snake & Ladder</h1>
             </header>
