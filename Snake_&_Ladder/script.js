@@ -476,6 +476,7 @@ class GameState{
                 console.log('Roll again!');
 
                 this.canRoll = true;
+                this.checkBotTurn();
                 return;
             }
 
@@ -542,6 +543,16 @@ class GameState{
 
             list.appendChild(div);
         });
+    }
+
+    // Method to check for Bot's Turn
+    checkBotTurn(){
+        if (this.gameOver) return;
+        const nextPlayer = this.players[this.currentPlayerIndex];
+        
+        if (nextPlayer && nextPlayer.isComputer && this.canRoll) {
+            setTimeout(() => this.handleDiceRoll(), 1000);
+        }
     }
 
     // Method For Turn Switching.
@@ -622,77 +633,54 @@ if (debug_Mode) {
     };
 
     window.devTools = {
-        
-        release(color){
-            const player = currentPlayers.find(p => p.element.style.backgroundColor === color);
-            if(!player){
-                console.error(`Player with color "${color}" not found`);
-                return;
-            }
-            if(player.isOnBoard){
-                console.log(`Player "${color}" is already on the board, can't release, move player instead.`);
-                return;
-            }
+        release(color) {
+            const player = game.players.find(p => p.color.toLowerCase() === color.toLowerCase());
+            if (!player) return console.error(`Player with color "${color}" not found`);
+            if (player.isOnBoard) return console.log("Already on board.");
             player.moveToBoard();
-            console.log(`Player "${color}" has been released successfully from the waiting lobby.`);
+            game.rearrangeSquares(1);
+            game.updatePlayerStat();
         },
 
         async move(color, steps) {
-            const player = currentPlayers.find(p => p.element.style.backgroundColor === color);
-            if (!player) {
-                console.error(`Player with color '${color}' not found.`);
-                return;
-            }
-            if (!player.isOnBoard) {
-                console.log(`Player ${color} is not on the board yet. Teleporting to square 1 first.`);
-                player.moveToBoard();
-            }
-            console.log(`Moving ${color} forward by ${steps} steps...`);
-            
+            const player = game.players.find(p => p.color.toLowerCase() === color.toLowerCase());
+            if (!player) return console.error("Player not found");
+            const oldSquare = player.currentSquare;
+            if (!player.isOnBoard) player.moveToBoard();
             await player.move(steps);
+            game.rearrangeSquares(oldSquare, player.currentSquare);
             
-            await handleDebugJumpCheck(player);
-
+            const jump = game.rules.checkForJump(player.currentSquare);
+            if (jump) {
+                const preSq = player.currentSquare;
+                player.currentSquare = jump.endSquare;
+                player.updateVisualPosition();
+                game.rearrangeSquares(preSq, player.currentSquare);
+            }
             game.checkWin(player);
+            game.updatePlayerStat();
         },
 
         async teleport(color, targetSquare) {
-            if (targetSquare < 1 || targetSquare > 100) {
-                console.error("Target square must be between 1 and 100");
-                return;
-            }
+            if (targetSquare < 1 || targetSquare > 100) return console.error("Range error");
+            const player = game.players.find(p => p.color.toLowerCase() === color.toLowerCase());
+            if (!player) return console.error("Player not found");
+            const oldSquare = player.currentSquare;
+            if (!player.isOnBoard) player.isOnBoard = true;
             
-            const player = currentPlayers.find(p => p.element.style.backgroundColor === color);
-            if (!player) {
-                console.error(`Player with color '${color}' not found.`);
-                return;
-            }
-
-            if (!player.isOnBoard) {
-                player.moveToBoard();
-            }
-
             player.currentSquare = targetSquare;
-            const targetSquareEl = board.board.querySelector(`[data-index='${targetSquare}']`);
+            board.board.appendChild(player.element);
+            player.updateVisualPosition();
+            game.rearrangeSquares(oldSquare, targetSquare);
             
-            if (targetSquareEl) {
-                const boardRect = board.board.getBoundingClientRect();
-                const squareRect = targetSquareEl.getBoundingClientRect();
-                const x = squareRect.left - boardRect.left + (squareRect.width / 2) - (player.element.offsetWidth / 2);
-                const y = squareRect.top - boardRect.top + (squareRect.height / 2) - (player.element.offsetHeight / 2);
-                
-                player.element.style.transition = 'left 0.4s ease, top 0.4s ease';
-                player.element.style.left = `${x}px`;
-                player.element.style.top = `${y}px`;
-                
-                await new Promise(resolve => setTimeout(resolve, 400));
-                player.element.style.transition = '';
-                console.log(`Teleported ${color} to square ${targetSquare}`);
-                
-                await handleDebugJumpCheck(player);
-                
-                game.checkWin(player);
+            const jump = game.rules.checkForJump(player.currentSquare);
+            if (jump) {
+                player.currentSquare = jump.endSquare;
+                player.updateVisualPosition();
+                game.rearrangeSquares(targetSquare, jump.endSquare);
             }
+            game.checkWin(player);
+            game.updatePlayerStat();
         }
     };
     console.log("DevTools Active! Use devTools.dice(), devTools.move(), or devTools.teleport() in the console.");
