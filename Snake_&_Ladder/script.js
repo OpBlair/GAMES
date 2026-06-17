@@ -414,7 +414,7 @@ class GameState{
         this.gameOver = false;
         this.canRoll = true;
 
-        const humanCount = parseInt(document.getElementById('humanNumber').value) || 1;
+        const humanCount = parseInt(document.getElementById('humanNumber').value) || 0;
         const computerCount = parseInt(document.getElementById('computerNumber').value) || 0;
         
         let colorIndex = 0;
@@ -441,6 +441,7 @@ class GameState{
 
         this.updateTurnIndicator();
         this.updatePlayerStat();
+        this.checkBotTurn();
     }
 
     checkWin(player){
@@ -605,33 +606,7 @@ window.addEventListener('resize', () => {
 
 // DEBUG SCRIPT
 const debug_Mode = true;
-
 if (debug_Mode) {
-    // Helper function to handle jumps manually
-    const handleDebugJumpCheck = async (player) => {
-        const jump = game.rules.checkForJump(player.currentSquare);
-        if (jump) {
-            console.log(`[DEBUG TRIGGER] Hit a ${jump.type}! Moving from ${jump.startSquare} to ${jump.endSquare}`);
-            player.currentSquare = jump.endSquare;
-
-            const targetSquareEl = game.board.board.querySelector(`[data-index='${player.currentSquare}']`);
-            if (targetSquareEl) {
-                const boardRect = game.board.board.getBoundingClientRect();
-                const squareRect = targetSquareEl.getBoundingClientRect();
-
-                const x = squareRect.left - boardRect.left + (squareRect.width / 2) - (player.element.offsetWidth / 2);
-                const y = squareRect.top - boardRect.top + (squareRect.height / 2) - (player.element.offsetHeight / 2);
-
-                player.element.style.transition = 'left 0.6s ease, top 0.6s ease';
-                player.element.style.left = `${x}px`;
-                player.element.style.top = `${y}px`;
-                
-                await new Promise(resolve => setTimeout(resolve, 600));
-                player.element.style.transition = '';
-            }
-        }
-    };
-
     window.devTools = {
         release(color) {
             const player = game.players.find(p => p.color.toLowerCase() === color.toLowerCase());
@@ -683,49 +658,4 @@ if (debug_Mode) {
             game.updatePlayerStat();
         }
     };
-    console.log("DevTools Active! Use devTools.dice(), devTools.move(), or devTools.teleport() in the console.");
 }
-
-// redrawing the board
-window.addEventListener('resize', () => {
-    board.svg.innerHTML = '';
-
-    rules.jumps.ladders.forEach(([s,e]) =>
-        board.drawLadder(s,e)
-    );
-
-    rules.jumps.snakes.forEach(([s,e]) =>
-        board.drawSnake(s,e)
-    );
-});
-
-// updating pawn position
-/*
-updatePawnPosition(player){
-    const square = this.board.board.querySelector(`[data-index='${player.currentSquare}']`);
-
-    if(!square) return;
-
-    const boardRect = this.board.board.getBoundingClientRect();
-
-    const squareRect = square.getBoundingClientRect();
-
-    player.element.style.left = `${squareRect.left - boardRect.left}px`;
-
-    player.element.style.top = `${squareRect.top - boardRect.top}px`;
-}
-    
-// Inside handleDiceRoll() ...
-
-const player = this.players[this.currentPlayerIndex];
-const oldSquare = player.currentSquare; // Remember where they started
-
-await player.move(diceValue);
-
-// Rearrange any left-behind players on the old square
-this.players.forEach(p => {
-    if (p.currentSquare === oldSquare) p.updateVisualPosition();
-    if (p.currentSquare === player.currentSquare) p.updateVisualPosition();
-});
-
-*/
