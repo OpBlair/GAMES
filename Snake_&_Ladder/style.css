@@ -195,3 +195,15 @@ footer{
         gap:1rem;
     }
 }
+/* Hide default spinner arrows in Chrome, Safari, Edge, and Opera */
+.number-wrapper input::-webkit-outer-spin-button,
+.number-wrapper input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Hide default spinner arrows in Firefox */
+.number-wrapper input[type=number] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
