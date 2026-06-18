@@ -10,21 +10,46 @@
 <body>
     <main class="game-container">
         <div class="welcome" id="welcome-screen">
-            <h1>Snake & Ladder</h1>
+        <div class="brand-header">
+            <h1>Snake &amp; Ladder</h1>
             <p class="subtitle">Morals. Luck. Chaos.</p>
-                
-            <div class="setup-group">
-               <label for="humanNumber">Human Players:</label>
-                <input type="number" id="humanNumber" min="0" max="4" value="1">
-            </div>
-
-            <div class="setup-group">
-                <label for="computerNumber">Computer Bots:</label>
-                <input type="number" id="computerNumber" min="0" max="3" value="1">
-            </div>
-
-            <button id="start-game-btn" style="padding: 10px 20px; cursor: pointer;">Start Game</button>
         </div>
+            
+        <div class="setup-container">
+            <div class="setup-card">
+                <div class="card-icon">👤</div>
+                <div class="card-controls">
+                    <label for="humanNumber">Human Players</label>
+                    <div class="number-wrapper">
+                        <input type="number" id="humanNumber" min="0" max="4" value="1" readonly>
+                        <div class="stepper-buttons">
+                            <button type="button" onclick="document.getElementById('humanNumber').stepUp()">▲</button>
+                            <button type="button" onclick="document.getElementById('humanNumber').stepDown()">▼</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="setup-card">
+                <div class="card-icon">🤖</div>
+                <div class="card-controls">
+                    <label for="computerNumber">Computer Bots</label>
+                    <div class="number-wrapper">
+                        <input type="number" id="computerNumber" min="0" max="3" value="1" readonly>
+                        <div class="stepper-buttons">
+                            <button type="button" onclick="document.getElementById('computerNumber').stepUp()">▲</button>
+                            <button type="button" onclick="document.getElementById('computerNumber').stepDown()">▼</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button id="start-game-btn">
+            <span>Start Match</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+    </div>
         
         <!-- Game UI -->
         <div class="game-ui" id="game-ui" style="display: none;">
