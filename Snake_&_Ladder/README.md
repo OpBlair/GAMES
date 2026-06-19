@@ -10,7 +10,7 @@ It uses a **lightweight object-oriented architecture** to manage:
 * Dice system
 * Player movement
 * Snakes & ladders logic
-* Turn-based gameplay
+* Turn-based gameplay with local AI Bot automation
 
 No frameworks, no libraries — pure DOM + SVG rendering.
 
@@ -18,9 +18,9 @@ No frameworks, no libraries — pure DOM + SVG rendering.
 
 # 🧱 Tech Stack
 
-* HTML5 (UI structure)
-* CSS3 (grid board + animations)
-* JavaScript (game engine logic)
+* HTML5 (UI structure + custom modal layout)
+* CSS3 (grid board + modern setup layout + custom transitions)
+* JavaScript (game engine logic, OOP architecture)
 * SVG (snakes, ladders overlay rendering)
 
 ---
@@ -37,7 +37,6 @@ Responsible for:
 * Creating square elements dynamically
 * Calculating square positions
 * Rendering:
-
   * ladders (SVG lines)
   * snakes (SVG Bézier curves + head)
 
@@ -48,7 +47,7 @@ Responsible for:
 Responsible for:
 
 * Random number generation (1–6)
-* Dice UI rendering (dot pattern system)
+* Dice UI rendering (3×3 dot pattern system)
 * Roll animation state (`rolling`)
 * Sound effect trigger (roll.mp3)
 
@@ -58,11 +57,11 @@ Responsible for:
 
 Responsible for:
 
-* Pawn creation
+* Pawn creation & local state initialization
+* Core classification (**Human vs. Computer Bot profiles**)
 * Base → board entry logic
 * Step-by-step movement animation
 * Position tracking (`currentSquare`)
-* Basic DOM-based state
 
 ---
 
@@ -70,10 +69,10 @@ Responsible for:
 
 Responsible for:
 
-* Turn management
-* Dice control flow
-* Player sequencing
-* Game flow coordination
+* Turn management and player sequencing
+* Dice control flow locks (`canRoll`)
+* **AI Orchestration** (automatically triggering asynchronous bot moves when an AI turn is active)
+* Game flow coordination, win execution, and status UI logging
 
 ---
 
@@ -85,43 +84,46 @@ Responsible for:
 * [x] Turn-based system (multi-player support)
 * [x] Roll restriction (canRoll lock)
 * [x] Roll animation + UI feedback
+* [x] Win condition checking (reaching square 100)
 
 ---
 
-## 🧍 Player System
+## 🧍 Player & Bot System
 
-* [x] Player creation (dynamic colors)
-* [x] Player lobby (base area)
-* [x] Move from base → board (on rolling 6)
-* [x] Step-by-step movement animation
+* [x] Dynamic player configuration (Configure up to 4 Humans & 3 Computer Bots)
+* [x] Automated AI Player logic (Bots auto-roll and move asynchronously on their turn)
+* [x] Player lobby (base area visual management)
+* [x] Move from base → board (on rolling a 6)
+* [x] Step-by-step sequential movement animation
 
 ---
 
 ## 🧩 Board System
 
 * [x] 10×10 grid generation (100 squares)
-* [x] Alternating row numbering layout
+* [x] Alternating row numbering layout (Boustrophedon style mapping)
 * [x] Square indexing system (`data-index`)
-* [x] SVG overlay layer setup
+* [x] SVG overlay layer setup for assets
 
 ---
 
 ## 🐍 Snakes & Ladders
 
-* [x] Ladder rendering (rails + steps)
-* [x] Snake rendering (Bezier curve)
+* [x] Ladder rendering (rails + steps dynamically calculated)
+* [x] Snake rendering (Bezier curve paths)
 * [x] Snake head + eyes + tongue graphics
-* [x] Visual-only placement (no gameplay effect yet)
+* [x] Board jump logic integration (players automatically slide down snakes/climb ladders)
 
 ---
 
 ## 🎨 UI / UX
 
+* [x] Premium Dark-themed Welcome Screen with custom-designed input pickers
+* [x] Custom CSS logic hiding raw native browser input arrows
 * [x] Dice UI (3×3 dot system)
-* [x] Rolling animation
-* [x] Pawn hopping animation
-* [x] Responsive board scaling
-* [x] Player lobby UI
+* [x] Interactive turn tracking indicators
+* [x] Rolling animation & Pawn hopping effects
+* [x] Responsive canvas scaling via window resize tracking
 
 ---
 
@@ -129,8 +131,7 @@ Responsible for:
 
 ## ⚠️ Game Rules Engine (missing logic layer)
 
-* [ ] Win condition (reach 100)
-* [ ] Exact-roll-to-finish rule
+* [ ] Exact-roll-to-finish bounding rule (overshooting bounces back)
 
 ---
 
@@ -144,8 +145,7 @@ Responsible for:
 
 ## ⚠️ Advanced Gameplay
 
-* [ ] Capturing / blocking system (not needed for Snakes & Ladder but future reuse)
-* [ ] AI player (bot)
+* [ ] Capturing / blocking system (optional feature variants)
 * [ ] Multiplayer online sync (future scope)
 
 ---
@@ -153,6 +153,5 @@ Responsible for:
 ## ⚠️ Visual Improvements
 
 * [ ] Dice shake realism (physics feel)
-* [ ] Snake slide animation (smooth travel, not teleport)
+* [ ] Snake slide animation (smooth travel along curve, not instant slide)
 * [ ] Ladder climb animation
-* [ ] Highlight active player turn
