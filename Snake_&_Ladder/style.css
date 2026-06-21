@@ -1,222 +1,36 @@
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+
 body {
     min-height: 100vh;
     display: grid;
     place-items: center;
-    background: #f4f4f4;
     padding: 20px 20px;
-    font-family: sans-serif;
+    background: radial-gradient(circle at center, #1e1e2f 0%, #0f0f16 100%);
+    color: #f3f4f6;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    overflow-x: hidden;
 }
-main { gap: 10px; padding: 10px; }
+
+main { 
+    gap: 10px; 
+    padding: 10px; 
+}
+
 .game-container {
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
-}
-.welcome{
-    display: flex; 
-    flex-direction: column; 
-    gap: 1rem; 
-    align-items: center;
-}
-.setup-group {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    font-size: 1rem;
-}
-.setup-group input {
-    width: 60px;
-    padding: 5px;
-    text-align: center;
-}
-.game-ui { 
-    width: min(95vw, 35rem); 
-    display: grid; 
-    gap: 0.5rem; 
-    grid-template-areas: "header" "sidebar" "board" "footer";
-}
-.top-bar{ grid-area: header; }
-.game-sidebar{ grid-area: sidebar; }
-.board-area{ grid-area: board; }
-.controls { grid-area: footer; }
-/* BOARD */
-.board-wrapper {
-    position: relative;
-    aspect-ratio: 1/1;
     width: 100%;
-    max-width: 600px;
-    margin-inline: auto;
-}
-#game-board {
-    background-color: whitesmoke;
-    display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    grid-template-rows: repeat(10, 1fr);
-    width: 100%;
-    height: 100%;
-    border: 2px solid #333;
-}
-.square {
-    border: 0.5px solid rgba(0, 0, 0, 0.1);
-    display: flex;
-    padding: 2px;
-    text-align: left;
-    font-size: clamp(0.45rem, 1vw, 0.75rem);
-    position: relative;
-}
-/* TURN INDICATOR */
-.turn-indicator{
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-}
-/*  PLAYER LOBBY */
-.player-lobby-section{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.player-lobby {
-    bottom: clamp(-60px, -6vw, -35px);
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    align-items: center;
-    background: rgba(0, 0, 0, 0.05);
-    padding: 6px 16px;
-    border-radius: 20px;
-    border: 2px dashed #999;
-    min-width: 120px;
-    justify-content: center;
-    gap: clamp(4px, 1vw, 12px);
-    z-index: 10;
-}
-/*  PLAYER PAWNS  */
-.pawn {
-    width: clamp(18px, 4vw, 40px);
-    aspect-ratio: 1/1;
-    border-radius: 50%;
-    border: 2px solid white;
-    z-index: 20;
-    transition: all 0.4s ease-in-out;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-}
-.pawn-preview{
-    width: clamp(18px, 4vw, 30px);
-    aspect-ratio: 1;
-    border-radius: 50%;
-    border: 2px solid white;
-    box-shadow: 0 2px 4px rgba(0,0,0,.3);
-}
-/* SVG OVERLAY */
-#svg-overlay {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 5;
-}
-/* Footer */
-footer{
-    display: flex;
-    justify-content: center;
-}
-/*   DICE  */
-#dice {
-    background-color: white;
-    border: 2px solid #333;
-    border-radius: 5px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    padding: 5px;
-    gap: 2px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    transform-style: preserve-3d;
-    transition: transform 0.1s linear;
-    position: relative;
-    width: clamp(50px, 12vw, 70px);
-    aspect-ratio: 1/1;
-}
-#dice:active { transform: scale(0.9) rotate(15deg); }
-#dice:hover { cursor: pointer; }
-.dot {
-    background-color: #333;
-    border-radius: 50%;
-    width: clamp(6px, 1.5vw, 10px);
-    aspect-ratio: 1/1;
-    align-self: center;
-    justify-self: center;
-}
-.rolling { animation: spin 0.4s linear infinite; }
-@keyframes spin {
-    0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
-    25% { transform: rotateX(110deg) rotateY(45deg) rotateX(30deg) scale(1.1); }
-    50% { transform: rotateX(180deg) rotateY(180deg) rotateZ(90deg) scale(1.2); }
-    75% { transform: rotateX(310deg) rotateY(270deg) rotateX(160deg) scale(1.1); }
-    100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
-}
-.hopping{
-    animation: hop 0.3s ease-in-out;
-    z-index: 20;
-}
-@keyframes hop{
-    0%, 100% {transform: translateY(0) scale(1);}
-    50% {transform: translateY(-20px) scale(1.2);}
 }
 
-/* LAPTOP UI LAYOUT */
-@media (min-width: 780px){
-    body{
-        overflow: hidden;
-    }
-    .game-ui{
-        width: min(95vw, 1200px);
-        min-height: 100vh;
-        display: grid;
-        grid-template-columns: minmax(450px, 650px) 25rem;
-        grid-template-areas:
-            "header header"
-            "board sidebar"
-            "board footer";
-        gap: 1rem;
-    }
-    .board-wrapper{
-        width: min(80vh, 800px);
-        aspect-ratio: 1;
-    }
-    .game-sidebar{
-        display:flex;
-        flex-direction:column;
-        gap:1rem;
-    }
-}
-/* Hide default spinner arrows in Chrome, Safari, Edge, and Opera */
-.number-wrapper input::-webkit-outer-spin-button,
-.number-wrapper input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-/* Hide default spinner arrows in Firefox */
-.number-wrapper input[type=number] {
-    -moz-appearance: textfield;
-    appearance: textfield;
-}
-
-
-/* Modern Background Refresh for the Screen Container */
-body {
-    background: radial-gradient(circle at center, #1e1e2f 0%, #0f0f16 100%);
-    color: #f3f4f6;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-}
-
-/* Master Welcome Screen Wrap */
+/* ==========================================================================
+   WELCOME SCREEN & BRANDING
+   ========================================================================== */
 .welcome {
     display: flex; 
     flex-direction: column; 
@@ -233,7 +47,6 @@ body {
     text-align: center;
 }
 
-/* Branding Elements */
 .brand-header h1 {
     font-size: 2.5rem;
     font-weight: 800;
@@ -252,7 +65,7 @@ body {
     font-weight: 500;
 }
 
-/* Config Deck Card Grid */
+/* SETUP CONFIGURATION CARDS */
 .setup-container {
     display: flex;
     flex-direction: column;
@@ -300,7 +113,7 @@ body {
     font-weight: 600;
 }
 
-/* Integrated Custom Custom Stepper */
+/* CUSTOM STEPPER */
 .number-wrapper {
     position: relative;
     display: flex;
@@ -323,11 +136,15 @@ body {
     padding: 6px 0;
 }
 
-/* Strip default inputs spinners */
 .number-wrapper input::-webkit-outer-spin-button,
 .number-wrapper input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
+}
+
+.number-wrapper input[type=number] {
+    -moz-appearance: textfield;
+    appearance: textfield;
 }
 
 .stepper-buttons {
@@ -358,7 +175,6 @@ body {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Action Execution Button */
 #start-game-btn {
     all: unset;
     display: flex;
@@ -395,4 +211,216 @@ body {
 
 #start-game-btn:hover svg {
     transform: translateX(4px);
+}
+
+/* ==========================================================================
+   GAME PLAYGROUND MAIN UI LAYOUT
+   ========================================================================== */
+.game-ui { 
+    width: min(95vw, 35rem); 
+    display: grid; 
+    gap: 1rem; 
+    grid-template-areas: 
+        "header" 
+        "sidebar" 
+        "board" 
+        "footer";
+}
+
+.top-bar { 
+    grid-area: header; 
+    text-align: center;
+    background: linear-gradient(135deg, #ff7676, #f39c12);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.game-sidebar { 
+    grid-area: sidebar; 
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.board-area { 
+    grid-area: board; 
+}
+
+.controls { 
+    grid-area: footer; 
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+}
+
+/* ==========================================================================
+   GAME BOARD & GRIDS
+   ========================================================================== */
+.board-wrapper {
+    position: relative;
+    aspect-ratio: 1/1;
+    width: 100%;
+    max-width: 600px;
+    margin-inline: auto;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+}
+
+#game-board {
+    background-color: #242533;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+    width: 100%;
+    height: 100%;
+    border: 3px solid #4a4b66;
+}
+
+.square {
+    border: 0.5px solid rgba(255, 255, 255, 0.07);
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 4px;
+    font-size: clamp(0.55rem, 1.2vw, 0.85rem);
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.4);
+    position: relative;
+}
+
+/* Light/Dark Checkerboard Variant for Better Visual Clarity */
+.square:nth-child(odd) {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* ==========================================================================
+   LOBBY, PAWNS AND TOKENS
+   ========================================================================== */
+.turn-indicator {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.player-lobby-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+}
+
+.player-lobby {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 8px 16px;
+    border-radius: 12px;
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    min-width: 140px;
+    justify-content: center;
+    gap: 10px;
+}
+
+.pawn {
+    width: clamp(20px, 3.5vw, 36px);
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    border: 2px solid white;
+    z-index: 20;
+    transition: left 0.4s cubic-bezier(0.25, 1, 0.5, 1), top 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+}
+
+.pawn-preview {
+    width: 25px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0,0,0,.3);
+}
+
+/* ==========================================================================
+   OVERLAYS & INTERACTIVE COMPONENTS
+   ========================================================================== */
+#svg-overlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+}
+
+#dice {
+    background-color: #ffffff;
+    border: 3px solid #333;
+    border-radius: 12px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    padding: 6px;
+    gap: 4px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    transform-style: preserve-3d;
+    transition: transform 0.1s linear;
+    width: clamp(55px, 12vw, 75px);
+    aspect-ratio: 1/1;
+}
+
+#dice:active { transform: scale(0.9) rotate(15deg); }
+#dice:hover { cursor: pointer; }
+
+.dot {
+    background-color: #1a1a24;
+    border-radius: 50%;
+    width: clamp(7px, 1.6vw, 11px);
+    aspect-ratio: 1/1;
+    align-self: center;
+    justify-self: center;
+}
+
+/* ANIMATIONS */
+.rolling { animation: spin 0.4s linear infinite; }
+@keyframes spin {
+    0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+    50% { transform: rotateX(180deg) rotateY(180deg) rotateZ(90deg) scale(1.15); }
+    100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
+}
+
+.hopping {
+    animation: hop 0.3s ease-in-out;
+    z-index: 25;
+}
+@keyframes hop {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-16px) scale(1.25); }
+}
+
+/* ==========================================================================
+   LAPTOP / SCREEN UI MEDIA BREAKPOINTS
+   ========================================================================== */
+@media (min-width: 780px) {
+    body {
+        overflow: hidden;
+    }
+    .game-ui {
+        width: min(95vw, 1200px);
+        min-height: 85vh;
+        grid-template-columns: minmax(450px, 1fr) 22rem;
+        grid-template-areas:
+            "header header"
+            "board sidebar"
+            "board footer";
+        gap: 1.5rem;
+        align-items: center;
+    }
+    .board-wrapper {
+        width: min(78vh, 600px);
+    }
 }
