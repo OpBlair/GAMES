@@ -155,3 +155,7 @@ Responsible for:
 * [ ] Dice shake realism (physics feel)
 * [ ] Snake slide animation (smooth travel along curve, not instant slide)
 * [ ] Ladder climb animation
+
+## Author
+
+* OpBlair
